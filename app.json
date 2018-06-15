@@ -1,5 +1,7 @@
 {
   "expo": {
     "sdkVersion": "27.0.0"
-  }
+  },
+  "name": "CallYourMom",
+  "displayName": "Call Your Mom"
 }
