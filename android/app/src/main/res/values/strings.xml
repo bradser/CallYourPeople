@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Call Your Mom</string>
+    <string name="facebook_app_id">187213381878714</string>
+    <string name="fb_login_protocol_scheme">fb187213381878714</string>
 </resources>

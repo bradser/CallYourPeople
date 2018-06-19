@@ -1,0 +1,5 @@
+# debug hash
+keytool -exportcert -alias androiddebugkey -keystore ~/.android/debug.keystore | openssl sha1 -binary | openssl base64
+
+# release hash
+keytool -exportcert -alias <debug hash> -keystore ~/.android/release.keystore | openssl sha1 -binary | openssl base64
