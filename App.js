@@ -1,23 +1,35 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { createSwitchNavigator, createStackNavigator } from 'react-navigation';
+import { HomeScreen } from './HomeScreen';
+import { DetailsScreen } from './DetailsScreen';
+import { AuthLoadingScreen } from './AuthLoadingScreen';
+import { SignInScreen } from './SignInScreen';
+
+const AppStack = createStackNavigator({ Home: HomeScreen, Details: DetailsScreen });
+
+const AuthStack = createStackNavigator({ SignIn: SignInScreen });
+
+const RootStack = createSwitchNavigator(
+  {
+    AuthLoading: AuthLoadingScreen,
+    App: AppStack,
+    Auth: AuthStack,
+  },
+  {
+    initialRouteName: 'AuthLoading',
+    headerStyle: {
+      backgroundColor: '#f4511e',
+    },
+    headerTintColor: '#fff',
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    },
+  }
+);
+
 
 export default class App extends React.Component {
   render() {
-    return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <Text>Changes you make will automatically reload.</Text>
-        <Text>Shake your phone to open the developer menu.</Text>
-      </View>
-    );
+    return <RootStack />;
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
