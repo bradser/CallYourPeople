@@ -1,5 +1,6 @@
 import React from 'react';
 import { createSwitchNavigator, createStackNavigator } from 'react-navigation';
+
 import { HomeScreen } from './HomeScreen';
 import { DetailsScreen } from './DetailsScreen';
 import { AuthLoadingScreen } from './AuthLoadingScreen';
