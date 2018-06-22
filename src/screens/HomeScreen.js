@@ -1,5 +1,10 @@
 import React from 'react';
-import { AsyncStorage, View, Button } from 'react-native';
+import { AsyncStorage, Button, View } from 'react-native';
+
+const FBSDK = require('react-native-fbsdk');
+const {
+  LoginManager,
+} = FBSDK;
 
 export class HomeScreen extends React.Component {
     static navigationOptions = {
@@ -20,7 +25,10 @@ export class HomeScreen extends React.Component {
     };
   
     _signOutAsync = async () => {
+      LoginManager.logOut();
+
       await AsyncStorage.clear();
+      
       this.props.navigation.navigate('Auth');
     };
   }

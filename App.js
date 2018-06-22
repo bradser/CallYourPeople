@@ -1,10 +1,10 @@
 import React from 'react';
 import { createSwitchNavigator, createStackNavigator } from 'react-navigation';
 
-import { HomeScreen } from './HomeScreen';
-import { DetailsScreen } from './DetailsScreen';
-import { AuthLoadingScreen } from './AuthLoadingScreen';
-import { SignInScreen } from './SignInScreen';
+import { HomeScreen } from './src/screens/HomeScreen';
+import { DetailsScreen } from './src/screens/DetailsScreen';
+import { AuthLoadingScreen } from './src/screens/AuthLoadingScreen';
+import { SignInScreen } from './src/screens/SignInScreen';
 
 const AppStack = createStackNavigator({ Home: HomeScreen, Details: DetailsScreen });
 
