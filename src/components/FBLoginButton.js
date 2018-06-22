@@ -15,7 +15,7 @@ export default class FBLoginButton extends Component {
               } else if (result.isCancelled) {
                 alert("Login was cancelled");
               } else {
-                AsyncStorage.setItem('userToken', result.grantedPermissions);
+                AsyncStorage.setItem('loggedIn', 'true');
                 this.props.navigation.navigate('App');
 
                 alert("Login was successful with permissions: " + result.grantedPermissions)

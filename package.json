@@ -21,6 +21,7 @@
     "react": "16.3.1",
     "react-native": "~0.55.2",
     "react-native-fbsdk": "^0.7.0",
+    "react-native-sms-android": "^0.4.1",
     "react-navigation": "^2.3.1"
   }
 }
