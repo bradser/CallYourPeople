@@ -1,4 +1,6 @@
 rootProject.name = 'CallYourMom'
+include ':react-native-call-log'
+project(':react-native-call-log').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-call-log/android')
 include ':react-native-fbsdk'
 project(':react-native-fbsdk').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-fbsdk/android')
 include ':react-native-sms-android'

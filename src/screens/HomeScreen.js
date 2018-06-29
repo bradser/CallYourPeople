@@ -1,5 +1,5 @@
 import React from 'react';
-import { AsyncStorage, Button, View } from 'react-native';
+import { AsyncStorage, Button, Text, View } from 'react-native';
 
 const FBSDK = require('react-native-fbsdk');
 const {
@@ -8,12 +8,16 @@ const {
 
 export class HomeScreen extends React.Component {
     static navigationOptions = {
-      title: 'Welcome to the app!',
+      title: 'Call Your Mom!',
     };
   
     render() {
       return (
         <View>
+          <Text>Call Me</Text>
+          <Text>Grid Placeholder</Text>
+          <Button title="Add"></Button>
+          <Button title="Delete"></Button>
           <Button title="Show me more of the app" onPress={this._showMoreApp} />
           <Button title="Actually, sign me out :)" onPress={this._signOutAsync} />
         </View>
