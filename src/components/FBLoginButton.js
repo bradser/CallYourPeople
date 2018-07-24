@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { AsyncStorage, View } from 'react-native';
 import { LoginButton } from 'react-native-fbsdk';
 
-export default class FBLoginButton extends Component {
+export default class FBLoginButton extends React.Component {
   render() {
     return (
       <View>
