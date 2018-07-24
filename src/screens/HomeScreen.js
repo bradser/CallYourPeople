@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
-import { AsyncStorage, Button, Text, View, StyleSheet, TouchableOpacity,
-          Alert, TextInput } from 'react-native';
-import { Table, Row, Rows, Cell, TableWrapper } from 'react-native-table-component';
+import React from 'react';
+import { AsyncStorage, Button, Text, View } from 'react-native';
+import { Col, Row, Grid } from "react-native-easy-grid";
 
+const colStyle = {height: 50, justifyContent: 'center', alignItems: 'center'};
 const FBSDK = require('react-native-fbsdk');
 const {
   LoginManager,
@@ -59,14 +59,23 @@ export class HomeScreen extends Component {
         confirmButton = <Button title="Confirm" onPress={this._addPersonCheck}></Button>
       }
       return (
-        <View style={styles.container}>
-          <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
-            <Row data={state.tableHead} style={styles.head} textStyle={styles.text}/>
-            <Rows data={state.tableData} textStyle={styles.text}/>
-          </Table>
-
-
-          <Button title="Add" onPress={this._addPersonCheck}></Button>
+        <View style={{ flex: 1, alignItems: 'center'}}>
+          <Text>Call Me</Text>
+          <Text>Grid Placeholder</Text>
+          
+            <Grid>
+              <Col style={{  backgroundColor: 'red', ...colStyle }}>
+                <Text>Name</Text>
+              </Col>
+              <Col style={{ backgroundColor: 'blue', ...colStyle }}>
+                <Text>Time Until Contact</Text>
+              </Col>
+              <Col style={{ backgroundColor: 'green', ...colStyle }}>
+                <Text>Edit</Text>
+              </Col>
+            </Grid>
+          
+          <Button title="Add"></Button>
           <Button title="Delete"></Button>
           <Button title="Show me more of the app" onPress={this._showMoreApp} />
           <Button title="Actually, sign me out :)" onPress={this._signOutAsync} />
