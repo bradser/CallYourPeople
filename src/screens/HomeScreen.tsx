@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { AsyncStorage, Button, Text, View, StyleSheet, TouchableOpacity,
-          Alert, TextInput, ScrollView } from 'react-native';
+          Alert, TextInput, ScrollView, Picker } from 'react-native';
 import { Table, Row, Rows, Cell, TableWrapper } from 'react-native-table-component';
 import  moment  from 'moment';
 
@@ -16,7 +16,7 @@ const editButton = () => (
     </View>
   </TouchableOpacity>
 );
-let personListHeader = ['Name', 'Phone Number', 'Days Remaining', 'Frequency'];
+let personListHeader = ['Name', 'Days Remaining', 'Frequency', 'Edit'];
 
 
 enum frequency {
@@ -52,7 +52,7 @@ interface State {
   addPerson: boolean;
   deletePerson: boolean;
   userInput: boolean;
-  text: string[];
+  text: Object[];
   index: number;
 }
 
@@ -65,7 +65,7 @@ export class HomeScreen extends Component<Props, State> {
       addPerson: false,
       deletePerson: false,
       userInput: false,
-      text: ['Tap Here', 'Tap Here', 'Tap Here', 'Tap Here'],
+      text: ['Tap Here', 'Tap Here', frequency.once_A_Week],
       index: 0,
     }
   }
@@ -81,13 +81,30 @@ export class HomeScreen extends Component<Props, State> {
     let submitButton;
     let changeText;
 
-    const button = (data, index) => (
+    const button = (data: String, index: number): JSX.Element => (
       <TouchableOpacity onPress={() => this._userInput(index)}>
         <View style={addPersonStyles.btn}>
           <Text style={addPersonStyles.btnText}>{data}</Text>
         </View>
       </TouchableOpacity>
     );
+
+    const picker = () => (
+      
+      <Picker
+        onValueChange={(itemValue, itemIndex) => this.setState(prevState => {
+        prevState.text[prevState.index] = itemValue;
+        return prevState;
+        })}>
+
+        <Picker.Item label="Twice A Week" value={frequency.twice_A_Week} />
+        <Picker.Item label="Once A Week" value={frequency.once_A_Week} />
+        <Picker.Item label="Once Every Two Weeks" value={frequency.once_Every_Two_Weeks} />
+        <Picker.Item label="Once Every Three Weeks" value={frequency.once_Every_Three_Weeks} />
+        <Picker.Item label="Once Every Four Weeks" value={frequency.once_Every_Four_Weeks} />
+
+        </Picker>  
+    )
     
     if (this.state.addPerson) {
      
@@ -111,6 +128,9 @@ export class HomeScreen extends Component<Props, State> {
     }
 
     if (this.state.userInput) {
+      if (this.state.index === 2) {
+        changeText = picker()
+      } else {
       changeText = 
       <TextInput
         style={{height: 40}}
@@ -121,14 +141,15 @@ export class HomeScreen extends Component<Props, State> {
         })}
         value={this.state.text[this.state.index]}
       />
+      }
 
-      submitButton = <Button title="Submit" onPress={(index) => this._submit(index)}></Button>
+      submitButton = <Button title="Submit" onPress={(index) => this._submit()}></Button>
     }
 
 
     let displayPersonTableData = state.personTableData.map(person => {
       const daysRemaining = this._daysLeft(person);
-      return [person.name, person.phoneNumber, daysRemaining, person.frequency,];
+      return [person.name, daysRemaining, person.frequency, 'Edit'];
     });
 
     // console.log(JSON.stringify(displayPersonTableData));
@@ -155,11 +176,11 @@ export class HomeScreen extends Component<Props, State> {
     );
   }
 
-  _alertIndex(index) {
+  _alertIndex = (index: number): void => {
     Alert.alert(`This is col ${index + 1}`);
   }
 
-  _userInput(index) {
+  _userInput = (index: number): void => {
     if (!this.state.userInput) {
       this.setState({
         userInput: true,
@@ -172,31 +193,22 @@ export class HomeScreen extends Component<Props, State> {
     }
   }
 
-  _confirm = (index) => {
+  _confirm = (): void => {
 
-
-    const newPerson = {
+      const newPerson = {
       name: this.state.text[0], 
       phoneNumber: this.state.text[1],
       lastCall: new Date(this.state.text[2]),
       frequency: frequency.once_A_Week,
     }
 
-
-
     let newPTD = this.state.personTableData;
     newPTD.push(newPerson);
 
     this.setState({personTableData: newPTD})
-    /*this.state.text
-
-    into
-
-    this.state.personTableData*/
-
   }
 
-  _daysLeft(newPerson) {
+  _daysLeft = (newPerson: Person): number => {
     const daysSinceLastCall = moment(newPerson.lastCall).diff(moment(), 'days');
     const frequencyNum = this._frequencyConverter(newPerson.frequency);
     const daysRemaining = frequencyNum - daysSinceLastCall;
@@ -217,7 +229,7 @@ export class HomeScreen extends Component<Props, State> {
     }
   }
 
-  _submit(index: number) {
+  _submit() {
     this.setState({
       userInput: false,
     })
