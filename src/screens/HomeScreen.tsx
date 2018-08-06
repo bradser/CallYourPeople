@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import { AsyncStorage, Button, Text, View, StyleSheet, TouchableOpacity,
           Alert, TextInput, ScrollView } from 'react-native';
 import { Table, Row, Rows, Cell, TableWrapper } from 'react-native-table-component';
+import  moment  from 'moment';
 
 const FBSDK = require('react-native-fbsdk');
 const {
@@ -15,7 +16,7 @@ const editButton = () => (
     </View>
   </TouchableOpacity>
 );
-let personListHeader = ['Name', 'Days Remaining', 'Frequency', 'edit'];
+let personListHeader = ['Name', 'Phone Number', 'Days Remaining', 'Frequency'];
 
 
 enum frequency {
@@ -37,7 +38,7 @@ interface Person {
 let people: Person[] = [];
 let addPersonHeader = ['Add Person'];
 let defaultData: Person[] = [
-  {name: "Fake nAME", phoneNumber: "FAKE NUMBER",
+  {name: "Fake Name", phoneNumber: "Fake Number",
   lastCall: new Date(), frequency: frequency.once_Every_Two_Weeks,}
 ];
 
@@ -64,7 +65,7 @@ export class HomeScreen extends Component<Props, State> {
       addPerson: false,
       deletePerson: false,
       userInput: false,
-      text: ['Type Here', 'Type Here', 'Type Here', 'Type Here'],
+      text: ['Tap Here', 'Tap Here', 'Tap Here', 'Tap Here'],
       index: 0,
     }
   }
@@ -126,7 +127,8 @@ export class HomeScreen extends Component<Props, State> {
 
 
     let displayPersonTableData = state.personTableData.map(person => {
-      return [person.name, person.phoneNumber, person.lastCall.toString(), person.frequency,];
+      const daysRemaining = this._daysLeft(person);
+      return [person.name, person.phoneNumber, daysRemaining, person.frequency,];
     });
 
     // console.log(JSON.stringify(displayPersonTableData));
@@ -164,24 +166,58 @@ export class HomeScreen extends Component<Props, State> {
         index: index,
       })
     } else {
-      if (this.state.index === 0) {
-        this._alertIndex(this.state.index)
-      }
       this.setState({
         userInput: false,
       })
     }
   }
 
-  _confirm(index) {
+  _confirm = (index) => {
+
+
+    const newPerson = {
+      name: this.state.text[0], 
+      phoneNumber: this.state.text[1],
+      lastCall: new Date(this.state.text[2]),
+      frequency: frequency.once_A_Week,
+    }
+
+
+
+    let newPTD = this.state.personTableData;
+    newPTD.push(newPerson);
+
+    this.setState({personTableData: newPTD})
     /*this.state.text
 
     into
 
     this.state.personTableData*/
+
   }
 
-  _submit(index) {
+  _daysLeft(newPerson) {
+    const daysSinceLastCall = moment(newPerson.lastCall).diff(moment(), 'days');
+    const frequencyNum = this._frequencyConverter(newPerson.frequency);
+    const daysRemaining = frequencyNum - daysSinceLastCall;
+    return daysRemaining;
+  }
+
+  _frequencyConverter = (personFrequency: frequency): number => {
+    if (personFrequency === frequency.twice_A_Week) {
+      return 7/2;
+    } else if (personFrequency === frequency.once_A_Week) {
+      return 7;
+    } else if (personFrequency === frequency.once_Every_Two_Weeks) {
+      return 14;
+    } else if (personFrequency === frequency.once_Every_Three_Weeks) {
+      return 21;
+    } else {
+      return 28;
+    }
+  }
+
+  _submit(index: number) {
     this.setState({
       userInput: false,
     })
