@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { AsyncStorage, Button, Text, View, StyleSheet, TouchableOpacity,
-          Alert, TextInput } from 'react-native';
+          Alert, TextInput, ScrollView } from 'react-native';
 import { Table, Row, Rows, Cell, TableWrapper } from 'react-native-table-component';
 
 const FBSDK = require('react-native-fbsdk');
@@ -51,9 +51,8 @@ interface State {
   addPerson: boolean;
   deletePerson: boolean;
   userInput: boolean;
-  text: string;
+  text: string[];
   index: number;
-  addPersonTableData: Person[];
 }
 
 export class HomeScreen extends Component<Props, State> {
@@ -61,167 +60,169 @@ export class HomeScreen extends Component<Props, State> {
     super(props);
     
     this.state = {
-      personTableData: people,
+      personTableData: defaultData,
       addPerson: false,
       deletePerson: false,
       userInput: false,
-      text: 'Type Here',
+      text: ['Type Here', 'Type Here', 'Type Here', 'Type Here'],
       index: 0,
-      addPersonTableData: defaultData,
-      
     }
   }
   
   static navigationOptions = {
     title: 'Call Your Mom!',
   };
-  
- 
+
+  render() {
+    const state = this.state;
+    let addTable;
+    let confirmButton;
+    let submitButton;
+    let changeText;
+
+    const button = (data, index) => (
+      <TouchableOpacity onPress={() => this._userInput(index)}>
+        <View style={addPersonStyles.btn}>
+          <Text style={addPersonStyles.btnText}>{data}</Text>
+        </View>
+      </TouchableOpacity>
+    );
     
-    render() {
-      const state = this.state;
-      let addTable;
-      let confirmButton;
-      let submitButton;
-      let changeText;
-
-      const element = (data, index) => (
-        <TouchableOpacity onPress={() => this._userInput(index)}>
-          <View style={addPersonStyles.btn}>
-            <Text style={addPersonStyles.btnText}>{data}</Text>
-          </View>
-        </TouchableOpacity>
-      );
-      
-
-      if (this.state.addPerson) {
-        let displayAddPersonTableData = state.addPersonTableData.map(person => {
-          return [person.name, person.phoneNumber, person.lastCall.toString(), person.frequency,];
-        });
-        
-        addTable = 
-        
+    if (this.state.addPerson) {
+     
+      addTable = 
         <Table borderStyle={{borderColor: 'transparent'}}>
           <Row data={addPersonHeader} style={addPersonStyles.head} textStyle={addPersonStyles.text}/>
           {
-              displayAddPersonTableData.map((rowData, index) => (
+              [this.state.text].map((rowData, index) => (
               <TableWrapper key={index} style={addPersonStyles.row}>
                 {
                   rowData.map((cellData, cellIndex) => (
-                    <Cell key={cellIndex} data={cellIndex !== 5 ? element(cellData, cellIndex) : cellData} textStyle={styles.text}/>
+                    <Cell key={cellIndex} data={cellIndex !== 5 ? button(cellData, cellIndex) : cellData} textStyle={styles.text}/>
                   ))
                 }
               </TableWrapper>
             ))
           }
         </Table>
-        
-
-        confirmButton = <Button title="Confirm" onPress={this._addPersonCheck}></Button>
-      }
-
-      if (this.state.userInput) {
-        changeText = 
-        <TextInput
-          style={{height: 40}}
-          onChangeText={(text) => this.setState({text})}
-          value={this.state.text}
-        />
-
-        submitButton = <Button title="Submit" onPress={(index) => this._userInput(index)}></Button>
-      }
-  
-
-      let displayPersonTableData = state.personTableData.map(person => {
-        return [person.name, person.phoneNumber, person.lastCall.toString(), person.frequency,];
-      });
-
-     // console.log(JSON.stringify(displayPersonTableData));
-
-      return (
-        <View style={styles.container}>
-          <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
-            <Row data={personListHeader} style={styles.head} textStyle={styles.text}/>
-            <Rows data={displayPersonTableData} textStyle={styles.text}/>
-          </Table>
-
-
-          <Button title="Add" onPress={this._addPersonCheck}></Button>
-          <Button title="Delete" onPress={this._deletePersonCheck}></Button>
-          <Button title="Show me more of the app" onPress={this._showMoreApp} />
-          <Button title="Actually, sign me out :)" onPress={this._signOutAsync} />
-
-          {addTable}
-          {changeText}
-          {submitButton}
-          {confirmButton}
-        
-          
-        </View>
-        
-      );
-    }
-
-    _alertIndex(index) {
-      Alert.alert(`This is col ${index + 1}`);
-    }
-
-    _userInput(index) {
-      if (!this.state.userInput) {
-        this.setState({
-          userInput: true,
-          index: index,
-        })
-      } else {
-        if (this.state.index === 0) {
-          this._alertIndex(this.state.index)
-        }
-        this.setState({
-          userInput: false,
-        })
-      }
-    }
-
-    _addPersonCheck = () => {
-      if (!this.state.addPerson) {
-        this.setState({
-          addPerson: true,
-        })
-      } else {
-        for (let i = 0; i < this.state.addPersonTableData.length; i++) {
-          people.push(this.state.addPersonTableData[i]);
-        }
-        this.setState({
-          personTableData: people,
-          addPerson: false,
-        })
-      }
-    }
-  
-    _deletePersonCheck = () => {
-      if (!this.state.deletePerson){
-        this.setState({
-          deletePerson: true,
-        })
-      } else {
-        this.setState({
-          deletePerson: false,
-        })
-      }
-    }
-
-    _showMoreApp = () => {
-      this.props.navigation.navigate('Details');
-    };
-  
-    _signOutAsync = async () => {
-      LoginManager.logOut();
-
-      await AsyncStorage.clear();
       
-      this.props.navigation.navigate('Auth');
-    };
+      confirmButton = <Button title="Confirm" onPress={this._confirm}></Button>
+    }
+
+    if (this.state.userInput) {
+      changeText = 
+      <TextInput
+        style={{height: 40}}
+        onChangeText={(text) => this.setState(prevState => {
+          prevState.text[prevState.index] = text;
+
+          return prevState;
+        })}
+        value={this.state.text[this.state.index]}
+      />
+
+      submitButton = <Button title="Submit" onPress={(index) => this._submit(index)}></Button>
+    }
+
+
+    let displayPersonTableData = state.personTableData.map(person => {
+      return [person.name, person.phoneNumber, person.lastCall.toString(), person.frequency,];
+    });
+
+    // console.log(JSON.stringify(displayPersonTableData));
+
+    return (
+      <ScrollView style={styles.container}>
+        <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
+          <Row data={personListHeader} style={styles.head} textStyle={styles.text}/>
+          <Rows data={displayPersonTableData} textStyle={styles.text}/>
+        </Table>
+
+
+        <Button title="Add" onPress={this._addPersonCheck}></Button>
+        <Button title="Delete" onPress={this._deletePersonCheck}></Button>
+        <Button title="Show me more of the app" onPress={this._showMoreApp} />
+        <Button title="Actually, sign me out :)" onPress={this._signOutAsync} />
+
+        {addTable}
+        {changeText}
+        {submitButton}
+        {confirmButton}
+      
+      </ScrollView>  
+    );
   }
+
+  _alertIndex(index) {
+    Alert.alert(`This is col ${index + 1}`);
+  }
+
+  _userInput(index) {
+    if (!this.state.userInput) {
+      this.setState({
+        userInput: true,
+        index: index,
+      })
+    } else {
+      if (this.state.index === 0) {
+        this._alertIndex(this.state.index)
+      }
+      this.setState({
+        userInput: false,
+      })
+    }
+  }
+
+  _confirm(index) {
+    /*this.state.text
+
+    into
+
+    this.state.personTableData*/
+  }
+
+  _submit(index) {
+    this.setState({
+      userInput: false,
+    })
+  }
+
+  _addPersonCheck = () => {
+    if (!this.state.addPerson) {
+      this.setState({
+        addPerson: true,
+      })
+    } else {
+      this.setState({
+        addPerson: false,
+      })
+    }
+  }
+
+  _deletePersonCheck = () => {
+    if (!this.state.deletePerson){
+      this.setState({
+        deletePerson: true,
+      })
+    } else {
+      this.setState({
+        deletePerson: false,
+      })
+    }
+  }
+
+  _showMoreApp = () => {
+    this.props.navigation.navigate('Details');
+  };
+
+  _signOutAsync = async () => {
+    LoginManager.logOut();
+
+    await AsyncStorage.clear();
+    
+    this.props.navigation.navigate('Auth');
+  };
+}
 
   const styles = StyleSheet.create({
     container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff' },
