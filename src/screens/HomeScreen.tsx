@@ -8,8 +8,15 @@ const {
   LoginManager,
 } = FBSDK;
 
+const editButton = () => (
+  <TouchableOpacity>
+    <View style={styles.btn}>
+      <Text style={styles.btnText}>Edit</Text>
+    </View>
+  </TouchableOpacity>
+);
+let personListHeader = ['Name', 'Days Remaining', 'Frequency', 'edit'];
 
-let personListHeader = ['Name', 'Days Remaining', 'Frequency', 'Edit'];
 
 enum frequency {
   twice_A_Week,
@@ -31,7 +38,7 @@ let people: Person[] = [];
 let addPersonHeader = ['Add Person'];
 let defaultData: Person[] = [
   {name: "Fake nAME", phoneNumber: "FAKE NUMBER",
-  lastCall: new Date(), frequency: frequency.once_Every_Two_Weeks}
+  lastCall: new Date(), frequency: frequency.once_Every_Two_Weeks,}
 ];
 
 
@@ -43,6 +50,9 @@ interface State {
   personTableData: Person[];
   addPerson: boolean;
   deletePerson: boolean;
+  userInput: boolean;
+  text: string;
+  index: number;
   addPersonTableData: Person[];
 }
 
@@ -54,43 +64,76 @@ export class HomeScreen extends Component<Props, State> {
       personTableData: people,
       addPerson: false,
       deletePerson: false,
+      userInput: false,
+      text: 'Type Here',
+      index: 0,
       addPersonTableData: defaultData,
+      
     }
   }
   
   static navigationOptions = {
     title: 'Call Your Mom!',
   };
-
-    
+  
+ 
     
     render() {
       const state = this.state;
       let addTable;
       let confirmButton;
-      let deleteTable;
+      let submitButton;
+      let changeText;
+
+      const element = (data, index) => (
+        <TouchableOpacity onPress={() => this._userInput(index)}>
+          <View style={addPersonStyles.btn}>
+            <Text style={addPersonStyles.btnText}>{data}</Text>
+          </View>
+        </TouchableOpacity>
+      );
+      
 
       if (this.state.addPerson) {
         let displayAddPersonTableData = state.addPersonTableData.map(person => {
-          return [person.name, person.phoneNumber, person.lastCall.toString(), person.frequency];
+          return [person.name, person.phoneNumber, person.lastCall.toString(), person.frequency,];
         });
         
         addTable = 
-        <TouchableOpacity onPress={this._alertIndex}>
-        <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
+        
+        <Table borderStyle={{borderColor: 'transparent'}}>
           <Row data={addPersonHeader} style={addPersonStyles.head} textStyle={addPersonStyles.text}/>
-          <Rows data={displayAddPersonTableData} textStyle={addPersonStyles.text} />
+          {
+              displayAddPersonTableData.map((rowData, index) => (
+              <TableWrapper key={index} style={addPersonStyles.row}>
+                {
+                  rowData.map((cellData, cellIndex) => (
+                    <Cell key={cellIndex} data={cellIndex !== 5 ? element(cellData, cellIndex) : cellData} textStyle={styles.text}/>
+                  ))
+                }
+              </TableWrapper>
+            ))
+          }
         </Table>
-        </TouchableOpacity>
+        
 
         confirmButton = <Button title="Confirm" onPress={this._addPersonCheck}></Button>
       }
-      if (this.state.deletePerson) {
-        deleteTable;
+
+      if (this.state.userInput) {
+        changeText = 
+        <TextInput
+          style={{height: 40}}
+          onChangeText={(text) => this.setState({text})}
+          value={this.state.text}
+        />
+
+        submitButton = <Button title="Submit" onPress={(index) => this._userInput(index)}></Button>
       }
+  
 
       let displayPersonTableData = state.personTableData.map(person => {
-        return [person.name, person.phoneNumber, person.lastCall.toString(), person.frequency];
+        return [person.name, person.phoneNumber, person.lastCall.toString(), person.frequency,];
       });
 
      // console.log(JSON.stringify(displayPersonTableData));
@@ -109,16 +152,34 @@ export class HomeScreen extends Component<Props, State> {
           <Button title="Actually, sign me out :)" onPress={this._signOutAsync} />
 
           {addTable}
+          {changeText}
+          {submitButton}
           {confirmButton}
-         
+        
           
         </View>
         
       );
     }
 
-    _alertIndex() {
-      Alert.alert(`Yay`);
+    _alertIndex(index) {
+      Alert.alert(`This is col ${index + 1}`);
+    }
+
+    _userInput(index) {
+      if (!this.state.userInput) {
+        this.setState({
+          userInput: true,
+          index: index,
+        })
+      } else {
+        if (this.state.index === 0) {
+          this._alertIndex(this.state.index)
+        }
+        this.setState({
+          userInput: false,
+        })
+      }
     }
 
     _addPersonCheck = () => {
@@ -165,15 +226,17 @@ export class HomeScreen extends Component<Props, State> {
   const styles = StyleSheet.create({
     container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff' },
     head: { height: 40, backgroundColor: '#f1f8ff' },
-    text: { margin: 6, textAlign: 'center' }
+    text: { margin: 6, textAlign: 'center' },
+    btn: { width: 58, height: 18, backgroundColor: '#78B7BB',  borderRadius: 2 },
+    btnText: { textAlign: 'center', color: '#fff' }
   });
 
   const addPersonStyles = StyleSheet.create({
     container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff' },
     head: { height: 40, backgroundColor: 'orange' },
     text: { margin: 6, textAlign: 'center', color: 'black' },
-    row: { flexDirection: 'row', backgroundColor: '#FFF1C1' },
-    btn: { width: 58, height: 18, backgroundColor: '#78B7BB',  borderRadius: 2 },
+    row: { flexDirection: 'row', backgroundColor: '#FFF1C1',},
+    btn: { width: 58, height: 40, backgroundColor: '#78B7BB',  borderRadius: 2 },
     btnText: { textAlign: 'center', color: '#fff' }
   });
   
