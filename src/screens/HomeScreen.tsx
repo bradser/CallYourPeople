@@ -41,6 +41,7 @@ let defaultData: Person[] = [
   {name: "Fake Name", phoneNumber: "Fake Number",
   lastCall: new Date(), frequency: frequency.once_Every_Two_Weeks,}
 ];
+let defaultText = ['Tap Here', 'Tap Here', frequency.once_A_Week];
 
 
 interface Props {
@@ -65,7 +66,7 @@ export class HomeScreen extends Component<Props, State> {
       addPerson: false,
       deletePerson: false,
       userInput: false,
-      text: ['Tap Here', 'Tap Here', frequency.once_A_Week],
+      text: defaultText,
       index: 0,
     }
   }
@@ -77,8 +78,8 @@ export class HomeScreen extends Component<Props, State> {
   render() {
     const state = this.state;
     let addTable;
+    let doneButton;
     let confirmButton;
-    let submitButton;
     let changeText;
 
     const button = (data: String, index: number): JSX.Element => (
@@ -119,14 +120,14 @@ export class HomeScreen extends Component<Props, State> {
                   rowData.map((cellData, cellIndex) => (
                     <Cell key={cellIndex} data={cellIndex !== 5 ? button(cellData, cellIndex) : cellData} textStyle={styles.text}/>
                   ))
-                }
+                } 
               </TableWrapper>
             ))
           }
         </Table>
       
-      confirmButton = <Button title="Confirm" onPress={this._confirm}></Button>
-    }
+      doneButton = <Button title="Done" onPress={this._done}></Button>
+    } 
 
     if (this.state.userInput) {
       if (this.state.index === 2) {
@@ -144,7 +145,7 @@ export class HomeScreen extends Component<Props, State> {
       />
       }
 
-      submitButton = <Button title="Submit" onPress={(index) => this._submit()}></Button>
+      confirmButton = <Button title="Confirm" onPress={(index) => this._confirm()}></Button>
     }
 
 
@@ -170,8 +171,8 @@ export class HomeScreen extends Component<Props, State> {
 
         {addTable}
         {changeText}
-        {submitButton}
         {confirmButton}
+        {doneButton}
       
       </ScrollView>  
     );
@@ -185,28 +186,18 @@ export class HomeScreen extends Component<Props, State> {
     if (!this.state.userInput) {
       this.setState({
         userInput: true,
-        index: index,
-      })
-    } else {
-      this.setState({
-        userInput: false,
       })
     }
+    this.setState({
+      index: index,
+    }) 
   }
 
-  _confirm = (): void => {
-
-      const newPerson = {
-      name: this.state.text[0], 
-      phoneNumber: this.state.text[1],
-      lastCall: new Date(this.state.text[2]),
-      frequency: frequency.once_A_Week,
-    }
-
-    let newPTD = this.state.personTableData;
-    newPTD.push(newPerson);
-
-    this.setState({personTableData: newPTD})
+  _done = (): void => {
+    this.setState({
+      userInput: false,
+      addPerson: false,
+    })
   }
 
   _daysLeft = (newPerson: Person): number => {
@@ -230,9 +221,21 @@ export class HomeScreen extends Component<Props, State> {
     }
   }
 
-  _submit() {
+  _confirm = (): void => {
+    const newPerson = {
+      name: this.state.text[0], 
+      phoneNumber: this.state.text[1],
+      lastCall: new Date(this.state.text[2]),
+      frequency: frequency.once_A_Week,
+    }
+
+    let newPTD = this.state.personTableData;
+    newPTD.push(newPerson);
+
     this.setState({
+      personTableData: newPTD,
       userInput: false,
+      text: defaultText
     })
   }
 
