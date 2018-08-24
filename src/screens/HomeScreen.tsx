@@ -3,6 +3,12 @@ import { AsyncStorage, Button, Text, View, StyleSheet, TouchableOpacity,
           Alert, TextInput, ScrollView, Picker } from 'react-native';
 import { Table, Row, Rows, Cell, TableWrapper } from 'react-native-table-component';
 import  moment  from 'moment';
+import BackgroundTask from 'react-native-background-task';
+
+BackgroundTask.define(() => {
+  alert('Hello from a background task')
+  BackgroundTask.finish()
+})
 
 const FBSDK = require('react-native-fbsdk');
 const {
@@ -58,6 +64,11 @@ interface State {
 }
 
 export class HomeScreen extends Component<Props, State> {
+
+  componentDidMount() {
+    BackgroundTask.schedule()
+  }
+  
   constructor(props: Props) {
     super(props);
     

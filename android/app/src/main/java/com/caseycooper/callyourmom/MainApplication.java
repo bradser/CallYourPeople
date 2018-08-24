@@ -3,6 +3,7 @@ package com.caseycooper.callyourmom;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.jamesisaac.rnbackgroundtask.BackgroundTaskPackage;
 import com.wscodelabs.callLogs.CallLogPackage;
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.facebook.react.ReactNativeHost;
@@ -35,6 +36,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new BackgroundTaskPackage(),
             new CallLogPackage(),
           new FBSDKPackage(mCallbackManager),
               new RNSmsAndroidPackage()
@@ -60,5 +62,7 @@ public class MainApplication extends Application implements ReactApplication {
     FacebookSdk.sdkInitialize(getApplicationContext());
 
     AppEventsLogger.activateApp(this);
+
+    BackgroundTaskPackage.useContext(this);
   }
 }
