@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import { AsyncStorage, Button, Text, View, StyleSheet, TouchableOpacity,
           Alert, TextInput, ScrollView, Picker } from 'react-native';
 import { Table, Row, Rows, Cell, TableWrapper } from 'react-native-table-component';
-import  moment  from 'moment';
+import moment from 'moment';
 import BackgroundTask from 'react-native-background-task';
 import { Frequency, Person } from '../Types';
 import { frequencyConverter, daysLeft } from '../AppLogic';
@@ -29,9 +29,25 @@ let personListHeader = ['Name', 'Days Remaining', 'Frequency', 'Edit'];
 
 let people: Person[] = [];
 let addPersonHeader = ['Add Person'];
+
 let defaultData: Person[] = [
-  {name: "Fake Name", phoneNumber: "Fake Number",
-  lastCall: new Date(), frequency: Frequency.once_Every_Two_Weeks,}
+  { name: "Fake Name 1", phoneNumber: "Fake Number",
+  lastCall: moment('2013-02-08'), frequency: Frequency.once_Every_Two_Weeks, shouldAlert: false },
+
+  { name: "Fake Name 2", phoneNumber: "Fake Number",
+  lastCall: moment('2013-02-08'), frequency: Frequency.once_Every_Two_Weeks, shouldAlert: false },
+
+  { name: "Fake Name 3", phoneNumber: "Fake Number",
+  lastCall: moment('2013-02-08'), frequency: Frequency.once_Every_Two_Weeks, shouldAlert: false },
+
+  { name: "Fake Name 3", phoneNumber: "Fake Number",
+  lastCall: moment('2013-02-08'), frequency: Frequency.once_Every_Two_Weeks, shouldAlert: false },
+
+  { name: "Fake Name 4", phoneNumber: "Fake Number",
+  lastCall: moment('2013-02-08'), frequency: Frequency.once_Every_Two_Weeks, shouldAlert: false },
+
+  { name: "Fake Name 5", phoneNumber: "Fake Number",
+  lastCall: moment('2013-02-08'), frequency: Frequency.once_Every_Two_Weeks, shouldAlert: false },
 ];
 let defaultText = ['Tap Here', 'Tap Here', Frequency.once_A_Week];
 

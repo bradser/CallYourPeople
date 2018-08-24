@@ -4,6 +4,7 @@ export interface Person {
     phoneNumber: string;
     lastCall: Date;
     frequency: Frequency;
+    shouldAlert: boolean;
 }
 
 
