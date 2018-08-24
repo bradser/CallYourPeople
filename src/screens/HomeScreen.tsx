@@ -5,7 +5,7 @@ import { Table, Row, Rows, Cell, TableWrapper } from 'react-native-table-compone
 import  moment  from 'moment';
 import BackgroundTask from 'react-native-background-task';
 import { Frequency, Person } from '../Types';
-import { frequencyConverter, daysLeft } from '../CheckLogic';
+import { frequencyConverter, daysLeft } from '../AppLogic';
 
 BackgroundTask.define(() => {
   alert('Hello from a background task')
