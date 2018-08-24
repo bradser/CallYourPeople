@@ -32,22 +32,22 @@ let addPersonHeader = ['Add Person'];
 
 let defaultData: Person[] = [
   { name: "Fake Name 1", phoneNumber: "Fake Number",
-  lastCall: moment('2013-02-08'), frequency: Frequency.once_Every_Two_Weeks, shouldAlert: false },
+  lastCall: moment('2013-02-11 12:00'), frequency: Frequency.twice_A_Week, shouldAlert: true},
 
   { name: "Fake Name 2", phoneNumber: "Fake Number",
-  lastCall: moment('2013-02-08'), frequency: Frequency.once_Every_Two_Weeks, shouldAlert: false },
+  lastCall: moment('2013-02-08'), frequency: Frequency.twice_A_Week, shouldAlert: true },
 
   { name: "Fake Name 3", phoneNumber: "Fake Number",
-  lastCall: moment('2013-02-08'), frequency: Frequency.once_Every_Two_Weeks, shouldAlert: false },
-
-  { name: "Fake Name 3", phoneNumber: "Fake Number",
-  lastCall: moment('2013-02-08'), frequency: Frequency.once_Every_Two_Weeks, shouldAlert: false },
+  lastCall: moment('2013-01-01'), frequency: Frequency.once_Every_Two_Weeks, shouldAlert: true },
 
   { name: "Fake Name 4", phoneNumber: "Fake Number",
-  lastCall: moment('2013-02-08'), frequency: Frequency.once_Every_Two_Weeks, shouldAlert: false },
+  lastCall: moment('2013-01-31'), frequency: Frequency.once_Every_Two_Weeks, shouldAlert: true },
 
   { name: "Fake Name 5", phoneNumber: "Fake Number",
-  lastCall: moment('2013-02-08'), frequency: Frequency.once_Every_Two_Weeks, shouldAlert: false },
+  lastCall: moment('2013-02-02'), frequency: Frequency.once_Every_Two_Weeks, shouldAlert: false },
+
+  { name: "Fake Name 6", phoneNumber: "Fake Number",
+  lastCall: moment('1998-11-24'), frequency: Frequency.once_Every_Two_Weeks, shouldAlert: true },
 ];
 let defaultText = ['Tap Here', 'Tap Here', Frequency.once_A_Week];
 

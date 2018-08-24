@@ -1,16 +1,18 @@
 import { Frequency, Person } from './Types';
 import moment from 'moment';
+import { HomeScreen } from './screens/HomeScreen';
 
-const now = moment('2013-02-10'); // temporary for testing
+const now = moment('2013-02-15'); // temporary for testing
 
-const check = (frequency: Frequency, lastCall: Date): boolean => {
-    return false;
+const check = (person: Person): boolean => {
+  const daysLeftToCall = daysLeft(person);
+  return daysLeftToCall <= 0;
 }
 
 export const checkPeople = (people: Person[]): boolean[] => {
 
     const sendAlertToPeople = people.map(person => {
-        const sendAlertToPerson = check(person.frequency, person.lastCall);
+        const sendAlertToPerson = check(person);
 
         if (sendAlertToPerson != person.shouldAlert) alert(person.name);
 
@@ -35,7 +37,7 @@ export const frequencyConverter = (personFrequency: Frequency): number => {
   }
 
 export const daysLeft = (newPerson: Person): number => {
-    const daysSinceLastCall = moment(newPerson.lastCall).diff(now, 'days');
+    const daysSinceLastCall = Math.abs(moment(newPerson.lastCall).diff(now, 'minutes')) / (60*24);
     const frequencyNum = frequencyConverter(newPerson.frequency);
     const daysRemaining = frequencyNum - daysSinceLastCall;
     return daysRemaining;
