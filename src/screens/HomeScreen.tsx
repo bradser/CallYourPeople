@@ -4,6 +4,8 @@ import { AsyncStorage, Button, Text, View, StyleSheet, TouchableOpacity,
 import { Table, Row, Rows, Cell, TableWrapper } from 'react-native-table-component';
 import  moment  from 'moment';
 import BackgroundTask from 'react-native-background-task';
+import { Frequency, Person } from '../Types';
+import { frequencyConverter, daysLeft } from '../CheckLogic';
 
 BackgroundTask.define(() => {
   alert('Hello from a background task')
@@ -25,29 +27,13 @@ const editButton = () => (
 let personListHeader = ['Name', 'Days Remaining', 'Frequency', 'Edit'];
 
 
-enum frequency {
-  twice_A_Week,
-  once_A_Week,
-  once_Every_Two_Weeks,
-  once_Every_Three_Weeks,
-  once_Every_Four_Weeks
-}
-
-
-interface Person {
-  name: string;
-  phoneNumber: string;
-  lastCall: Date;
-  frequency: frequency;
-}
-
 let people: Person[] = [];
 let addPersonHeader = ['Add Person'];
 let defaultData: Person[] = [
   {name: "Fake Name", phoneNumber: "Fake Number",
-  lastCall: new Date(), frequency: frequency.once_Every_Two_Weeks,}
+  lastCall: new Date(), frequency: Frequency.once_Every_Two_Weeks,}
 ];
-let defaultText = ['Tap Here', 'Tap Here', frequency.once_A_Week];
+let defaultText = ['Tap Here', 'Tap Here', Frequency.once_A_Week];
 
 
 interface Props {
@@ -110,11 +96,11 @@ export class HomeScreen extends Component<Props, State> {
         return prevState;
         })}>
 
-        <Picker.Item label="Twice A Week" value={frequency.twice_A_Week} />
-        <Picker.Item label="Once A Week" value={frequency.once_A_Week} />
-        <Picker.Item label="Once Every Two Weeks" value={frequency.once_Every_Two_Weeks} />
-        <Picker.Item label="Once Every Three Weeks" value={frequency.once_Every_Three_Weeks} />
-        <Picker.Item label="Once Every Four Weeks" value={frequency.once_Every_Four_Weeks} />
+        <Picker.Item label="Twice A Week" value={Frequency.twice_A_Week} />
+        <Picker.Item label="Once A Week" value={Frequency.once_A_Week} />
+        <Picker.Item label="Once Every Two Weeks" value={Frequency.once_Every_Two_Weeks} />
+        <Picker.Item label="Once Every Three Weeks" value={Frequency.once_Every_Three_Weeks} />
+        <Picker.Item label="Once Every Four Weeks" value={Frequency.once_Every_Four_Weeks} />
 
         </Picker>  
     )
@@ -161,7 +147,7 @@ export class HomeScreen extends Component<Props, State> {
 
 
     let displayPersonTableData = state.personTableData.map(person => {
-      const daysRemaining = this._daysLeft(person);
+      const daysRemaining = daysLeft(person);
       return [person.name, daysRemaining, person.frequency, 'Edit'];
     });
 
@@ -211,33 +197,12 @@ export class HomeScreen extends Component<Props, State> {
     })
   }
 
-  _daysLeft = (newPerson: Person): number => {
-    const daysSinceLastCall = moment(newPerson.lastCall).diff(moment(), 'days');
-    const frequencyNum = this._frequencyConverter(newPerson.frequency);
-    const daysRemaining = frequencyNum - daysSinceLastCall;
-    return daysRemaining;
-  }
-
-  _frequencyConverter = (personFrequency: frequency): number => {
-    if (personFrequency === frequency.twice_A_Week) {
-      return 7/2;
-    } else if (personFrequency === frequency.once_A_Week) {
-      return 7;
-    } else if (personFrequency === frequency.once_Every_Two_Weeks) {
-      return 14;
-    } else if (personFrequency === frequency.once_Every_Three_Weeks) {
-      return 21;
-    } else {
-      return 28;
-    }
-  }
-
   _confirm = (): void => {
     const newPerson = {
       name: this.state.text[0], 
       phoneNumber: this.state.text[1],
       lastCall: new Date(this.state.text[2]),
-      frequency: frequency.once_A_Week,
+      frequency: Frequency.once_A_Week,
     }
 
     let newPTD = this.state.personTableData;
