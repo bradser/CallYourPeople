@@ -5,7 +5,7 @@ import { Table, Row, Rows, Cell, TableWrapper } from 'react-native-table-compone
 import moment from 'moment';
 import BackgroundTask from 'react-native-background-task';
 import { Frequency, Person } from '../Types';
-import { frequencyConverter, daysLeft } from '../AppLogic';
+import { frequencyConverter, daysLeft, checkPeople } from '../AppLogic';
 
 BackgroundTask.define(() => {
   alert('Hello from a background task')
@@ -69,6 +69,8 @@ export class HomeScreen extends Component<Props, State> {
 
   componentDidMount() {
     BackgroundTask.schedule()
+    
+    checkPeople(defaultData);
   }
   
   constructor(props: Props) {
