@@ -91,7 +91,8 @@ export class HomeScreen extends Component<Props, State> {
 
     const picker = () => (
       
-      <Picker
+      <Picker 
+        selectedValue={this.state.text[this.state.index]}
         onValueChange={(itemValue, itemIndex) => this.setState(prevState => {
         prevState.text[prevState.index] = itemValue;
         return prevState;
