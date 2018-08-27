@@ -5,7 +5,14 @@ import { Table, Row, Rows, Cell, TableWrapper } from 'react-native-table-compone
 import moment from 'moment';
 import BackgroundTask from 'react-native-background-task';
 import { Frequency, Person } from '../Types';
-import { frequencyConverter, daysLeft, checkPeople } from '../AppLogic';
+import { frequencyConverter, daysLeft, checkPeople, checkCallLog } from '../AppLogic';
+import CallLogs from 'react-native-call-log';
+
+
+
+
+
+ 
 
 BackgroundTask.define(() => {
   alert('Hello from a background task')
@@ -31,11 +38,11 @@ let people: Person[] = [];
 let addPersonHeader = ['Add Person'];
 
 let defaultData: Person[] = [
-  { name: "Fake Name 1", phoneNumber: "Fake Number",
-  lastCall: moment('2013-02-11 12:00'), frequency: Frequency.twice_A_Week, shouldAlert: true},
+  { name: "Fake Name 1", phoneNumber: "1234567899",
+  lastCall: moment('2013-01-15'), frequency: Frequency.twice_A_Week, shouldAlert: true},
 
-  { name: "Fake Name 2", phoneNumber: "Fake Number",
-  lastCall: moment('2013-02-08'), frequency: Frequency.twice_A_Week, shouldAlert: true },
+  { name: "Fake Name 2", phoneNumber: "1234567899",
+  lastCall: moment('2013-02-08'), frequency: Frequency.once_A_Week, shouldAlert: true },
 
   { name: "Fake Name 3", phoneNumber: "Fake Number",
   lastCall: moment('2013-01-01'), frequency: Frequency.once_Every_Two_Weeks, shouldAlert: true },
@@ -50,6 +57,16 @@ let defaultData: Person[] = [
   lastCall: moment('1998-11-24'), frequency: Frequency.once_Every_Two_Weeks, shouldAlert: true },
 ];
 let defaultText = ['Tap Here', 'Tap Here', Frequency.once_A_Week];
+
+const fakeCallLog = [
+  {
+    phoneNumber: '1234567899',
+    callType: 'OUTGOING',
+    callDate: 'TimeStamp',
+    callDuration: '120',
+    callDayTime: '2013-01-15',
+  }
+]
 
 
 interface Props {
@@ -70,7 +87,8 @@ export class HomeScreen extends Component<Props, State> {
   componentDidMount() {
     BackgroundTask.schedule()
     
-    checkPeople(defaultData);
+    //checkPeople(defaultData);
+    checkCallLog(defaultData,fakeCallLog);
   }
   
   constructor(props: Props) {
@@ -165,8 +183,13 @@ export class HomeScreen extends Component<Props, State> {
 
 
     let displayPersonTableData = state.personTableData.map(person => {
-      const daysRemaining = daysLeft(person);
-      return [person.name, daysRemaining, person.frequency, 'Edit'];
+      for (let i = 0; i < fakeCallLog.length; i++) {
+        if (fakeCallLog[i].phoneNumber === person.phoneNumber) {
+          const x = fakeCallLog[i].callDayTime;
+          const daysRemaining = daysLeft(person, x)
+          return [person.name, daysRemaining, person.frequency, 'Edit'];
+        }
+      }
     });
 
     // console.log(JSON.stringify(displayPersonTableData));
@@ -192,6 +215,8 @@ export class HomeScreen extends Component<Props, State> {
       </ScrollView>  
     );
   }
+
+  
 
   _alertIndex = (index: number): void => {
     Alert.alert(`This is col ${index + 1}`);

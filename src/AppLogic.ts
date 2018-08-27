@@ -1,12 +1,41 @@
 import { Frequency, Person } from './Types';
 import moment from 'moment';
 import { HomeScreen } from './screens/HomeScreen';
+import CallLogs from 'react-native-call-log';
+
+// look at one person and then compare it to the call log phone numbers
+// if it matches then look at whether an alert to call needs to be called
+
 
 const now = moment('2013-02-15'); // temporary for testing
 
-const check = (person: Person): boolean => {
-  const daysLeftToCall = daysLeft(person);
+const checkDate = (person: Person, callDate): boolean => {
+  const daysLeftToCall = daysLeft(person, callDate);
   return daysLeftToCall <= 0;
+}
+
+const checkNumber = (person: Person, call): string => {
+  if (person.phoneNumber === call.phoneNumber) {
+    return call.phoneNumber;
+  } 
+}
+
+ export const checkCallLog = (people: Person[], callLog) => {
+  const sendAlertToPeople = people.map(person => {
+    const findCaller = callLog.map(call => {
+      if (person.phoneNumber === call.phoneNumber) {
+        return call.callDayTime;
+      }
+    });
+    const callDate = findCaller.slice(-1);
+    const alertCheck = checkDate(person, callDate);
+    if (alertCheck) {
+      alert('Call ' + person.name);
+    }
+    return alertCheck
+  }); 
+  
+  return sendAlertToPeople;
 }
 
 export const checkPeople = (people: Person[]): boolean[] => {
@@ -36,8 +65,8 @@ export const frequencyConverter = (personFrequency: Frequency): number => {
     }
   }
 
-export const daysLeft = (newPerson: Person): number => {
-    const daysSinceLastCall = Math.abs(moment(newPerson.lastCall).diff(now, 'minutes')) / (60*24);
+export const daysLeft = (newPerson: Person, lastTimeCalled): number => {
+    const daysSinceLastCall = Math.abs(moment(lastTimeCalled).diff(now, 'minutes')) / (60*24);
     const frequencyNum = frequencyConverter(newPerson.frequency);
     const daysRemaining = frequencyNum - daysSinceLastCall;
     return daysRemaining;
