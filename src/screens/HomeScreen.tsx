@@ -52,21 +52,21 @@ let addPersonHeader = ["Add Person"];
 let defaultData: Person[] = [
   {
     name: "Fake Name 1",
-    phoneNumber: "1234567899",
-    lastCall: moment("2013-01-15"),
-    frequency: Frequency.twice_A_Week,
+    phoneNumber: "2063999572",
+    lastCall: moment("2018-08-19"),
+    frequency: Frequency.once_A_Week, 
     shouldAlert: true
   },
 
   {
     name: "Fake Name 2",
-    phoneNumber: "1234567899",
-    lastCall: moment("2013-02-08"),
+    phoneNumber: "2066843000",
+    lastCall: moment("2018-08-19"),
     frequency: Frequency.once_A_Week,
     shouldAlert: true
   },
 
-  {
+  /*{
     name: "Fake Name 3",
     phoneNumber: "Fake Number",
     lastCall: moment("2013-01-01"),
@@ -96,7 +96,7 @@ let defaultData: Person[] = [
     lastCall: moment("1998-11-24"),
     frequency: Frequency.once_Every_Two_Weeks,
     shouldAlert: true
-  }
+  }*/
 ];
 let defaultText = ["Tap Here", "Tap Here", Frequency.once_A_Week];
 
@@ -1021,7 +1021,7 @@ export class HomeScreen extends Component<Props, State> {
           const x = fakeCallLog[i].callDayTime;
           const daysRemaining = daysLeft(person, x);
           return [person.name, daysRemaining, person.frequency, "Edit"];
-        }
+        } 
       }
     });
 

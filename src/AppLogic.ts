@@ -22,13 +22,14 @@ const checkNumber = (person: Person, call): string => {
 
  export const checkCallLog = (people: Person[], callLog) => {
   const sendAlertToPeople = people.map(person => {
-    const findCaller = callLog.map(call => {
-      if (person.phoneNumber === call.phoneNumber) {
+    const callerFound = callLog.find(call => {
+      if (call.phoneNumber === person.phoneNumber) {
         return call.callDayTime;
+      } else {
+        return false;
       }
     });
-    const callDate = findCaller.slice(-1);
-    const alertCheck = checkDate(person, callDate);
+    const alertCheck = checkDate(person, callerFound.callDayTime);
     if (alertCheck) {
       alert('Call ' + person.name);
     }
@@ -66,7 +67,7 @@ export const frequencyConverter = (personFrequency: Frequency): number => {
   }
 
 export const daysLeft = (newPerson: Person, lastTimeCalled): number => {
-    const daysSinceLastCall = Math.abs(moment(lastTimeCalled).diff(now, 'minutes')) / (60*24);
+    const daysSinceLastCall = Math.abs(moment(lastTimeCalled).diff(newPerson.lastCall, 'minutes')) / (60*24);
     const frequencyNum = frequencyConverter(newPerson.frequency);
     const daysRemaining = frequencyNum - daysSinceLastCall;
     return daysRemaining;
