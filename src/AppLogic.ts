@@ -20,7 +20,7 @@ const checkNumber = (person: Person, call): string => {
   } 
 }
 
-export const checkCallLog = (people: Person[], callLog) => {
+ export const checkCallLog = (people: Person[], callLog) => {
   const sendAlertToPeople = people.map(person => {
     const callerFound = callLog.find(call => {
       if (call.phoneNumber === person.phoneNumber) {
@@ -33,7 +33,7 @@ export const checkCallLog = (people: Person[], callLog) => {
     if (alertCheck) {
       alert('Call ' + person.name);
     }
-    return alertCheck;
+    return alertCheck
   }); 
   
   return sendAlertToPeople;

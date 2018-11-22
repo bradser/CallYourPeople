@@ -897,15 +897,10 @@ export class HomeScreen extends Component<Props, State> {
   componentDidMount() {
     BackgroundTask.schedule();
 
-    AsyncStorage.getItem("data").then((data) => {
-      const jsonData = data ? JSON.parse(data) : defaultData;
-
-      this.setState({ personTableData: jsonData });
-
-      return getLog().then(callLog => {
-          checkCallLog(jsonData, fakeCallLog)
-        });
-    });
+    getLog()
+      .then(callLog => {
+        checkCallLog(defaultData, fakeCallLog)
+      });
 
     //checkPeople(defaultData);
   }
@@ -914,7 +909,7 @@ export class HomeScreen extends Component<Props, State> {
     super(props);
 
     this.state = {
-      personTableData: [],
+      personTableData: defaultData,
       addPerson: false,
       deletePerson: false,
       userInput: false,
@@ -1020,16 +1015,14 @@ export class HomeScreen extends Component<Props, State> {
       );
     }
 
-    let displayPersonTableData = this.state.personTableData.map(person => {
+    let displayPersonTableData = state.personTableData.map(person => {
       for (let i = 0; i < fakeCallLog.length; i++) {
         if (fakeCallLog[i].phoneNumber === person.phoneNumber) {
-          const cdt = fakeCallLog[i].callDayTime;
-          const daysRemaining = daysLeft(person, cdt);
-          return this._getDisplayPersonTableRow(person, daysRemaining);
-        }
+          const x = fakeCallLog[i].callDayTime;
+          const daysRemaining = daysLeft(person, x);
+          return [person.name, daysRemaining, person.frequency, "Edit"];
+        } 
       }
-
-      return this._getDisplayPersonTableRow(person, 0);
     });
 
     // console.log(JSON.stringify(displayPersonTableData));
@@ -1058,10 +1051,6 @@ export class HomeScreen extends Component<Props, State> {
     );
   }
 
-  _getDisplayPersonTableRow = (person, daysRemaining) => {
-    return [person.name, daysRemaining, person.frequency, "Edit"];
-  }
-
   _alertIndex = (index: number): void => {
     Alert.alert(`This is col ${index + 1}`);
   };
@@ -1082,8 +1071,6 @@ export class HomeScreen extends Component<Props, State> {
       userInput: false,
       addPerson: false
     });
-
-    AsyncStorage.setItem("data", JSON.stringify(this.state.personTableData));
   };
 
   _confirm = (): void => {
