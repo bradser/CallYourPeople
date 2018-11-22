@@ -44,7 +44,7 @@ const editButton = () => (
     </View>
   </TouchableOpacity>
 );
-let personListHeader = ["Name", "Days Remaining", "Frequency", "Delete"];
+let personListHeader = ["Name", "Days Remaining", "Frequency", "Edit"];
 
 let people: Person[] = [];
 let addPersonHeader = ["Add Person"];
@@ -887,6 +887,7 @@ interface Props {}
 interface State {
   personTableData: Person[];
   addPerson: boolean;
+  deletePerson: boolean;
   userInput: boolean;
   text: Object[];
   index: number;
@@ -915,6 +916,7 @@ export class HomeScreen extends Component<Props, State> {
     this.state = {
       personTableData: [],
       addPerson: false,
+      deletePerson: false,
       userInput: false,
       text: defaultText,
       index: 0
@@ -1044,6 +1046,7 @@ export class HomeScreen extends Component<Props, State> {
         </Table>
 
         <Button title="Add" onPress={this._addPersonCheck} />
+        <Button title="Delete" onPress={this._deletePersonCheck} />
         <Button title="Show me more of the app" onPress={this._showMoreApp} />
         <Button title="Actually, sign me out :)" onPress={this._signOutAsync} />
 
@@ -1056,7 +1059,7 @@ export class HomeScreen extends Component<Props, State> {
   }
 
   _getDisplayPersonTableRow = (person, daysRemaining) => {
-    return [person.name, daysRemaining, person.frequency, <Button title="Delete" onPress={ () => this._deletePersonCheck(person) } />];
+    return [person.name, daysRemaining, person.frequency, "Edit"];
   }
 
   _alertIndex = (index: number): void => {
@@ -1113,10 +1116,16 @@ export class HomeScreen extends Component<Props, State> {
     }
   };
 
-  _deletePersonCheck = (person) => {
-    this.setState(prevState => ({
-      personTableData: this.state.personTableData.filter(p => p.name != person.name),
-    }), () => this._done());
+  _deletePersonCheck = () => {
+    if (!this.state.deletePerson) {
+      this.setState({
+        deletePerson: true
+      });
+    } else {
+      this.setState({
+        deletePerson: false
+      });
+    }
   };
 
   _showMoreApp = () => {
