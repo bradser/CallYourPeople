@@ -2,6 +2,7 @@ import { Frequency, Person } from './Types';
 import moment from 'moment';
 import { HomeScreen } from './screens/HomeScreen';
 import CallLogs from 'react-native-call-log';
+import { NotificationsAndroid } from 'react-native-notifications';
 
 // look at one person and then compare it to the call log phone numbers
 // if it matches then look at whether an alert to call needs to be called
@@ -31,7 +32,12 @@ const checkNumber = (person: Person, call): string => {
     });
     const alertCheck = checkDate(person, callerFound.callDayTime);
     if (alertCheck) {
-      alert('Call ' + person.name);
+      //alert('Call ' + person.name);
+      NotificationsAndroid.localNotification({
+        title: `Call ${person.name} now!`,
+        body: "They want to hear from you!",
+        extra: person.phoneNumber
+      });
     }
     return alertCheck
   }); 
