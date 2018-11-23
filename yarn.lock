@@ -4542,7 +4542,7 @@ react-native-easy-grid@^0.1.17:
   dependencies:
     lodash "^4.11.1"
 
-react-native-fbsdk@0.8.0:
+react-native-fbsdk@^0.8.0:
   version "0.8.0"
   resolved "https://registry.yarnpkg.com/react-native-fbsdk/-/react-native-fbsdk-0.8.0.tgz#4ee95ebb7be4b00fa9f871ca594f068c9782c7de"
   integrity sha512-odqSTgvXtw9f84iU0THTjK+Z9Lvy14aP5Yd0fdfHCXFpb/Q0WrpwsSyjPFXG1AsWIe+FtpzzgJsjOu6E2xqgMQ==
@@ -4554,6 +4554,14 @@ react-native-fbsdk@0.8.0:
     progress "^2.0.0"
     pump "^1.0.2"
     xcode "^0.9.3"
+
+react-native-notifications@^1.1.20:
+  version "1.1.21"
+  resolved "https://registry.yarnpkg.com/react-native-notifications/-/react-native-notifications-1.1.21.tgz#72ee591d55f47a193e57abfdbcf7cd3deb53d423"
+  integrity sha512-zM9pqTWM3C7qmQOxtjU49kZKnj2faeTnS5gTtLAPlTLi+j+L+nnJMpgldmQbDV1AJZkk+O2Qz6P3rM5HRcm64w==
+  dependencies:
+    core-js "^1.0.0"
+    uuid "^2.0.3"
 
 react-native-safe-area-view@0.11.0:
   version "0.11.0"
@@ -5730,6 +5738,11 @@ utils-merge@1.0.1:
 uuid@3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.0.1.tgz#6544bba2dfda8c1cf17e629a3a305e2bb1fee6c1"
+
+uuid@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-2.0.3.tgz#67e2e863797215530dff318e5bf9dcebfd47b21a"
+  integrity sha1-Z+LoY3lyFVMN/zGOW/nc6/1Hsho=
 
 uuid@^3.1.0:
   version "3.2.1"

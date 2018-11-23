@@ -14,6 +14,7 @@ import com.facebook.FacebookSdk;
 import com.facebook.CallbackManager;
 import com.facebook.appevents.AppEventsLogger;
 import com.rhaker.reactnativesmsandroid.RNSmsAndroidPackage;
+import com.wix.reactnativenotifications.RNNotificationsPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -36,10 +37,11 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new BackgroundTaskPackage(),
-            new CallLogPackage(),
+          new BackgroundTaskPackage(),
+          new CallLogPackage(),
           new FBSDKPackage(mCallbackManager),
-              new RNSmsAndroidPackage()
+          new RNSmsAndroidPackage(),
+          new RNNotificationsPackage(MainApplication.this)
       );
     }
 

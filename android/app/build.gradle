@@ -145,6 +145,7 @@ dependencies {
     implementation "com.facebook.android:facebook-android-sdk:[4,5)"
     compile project(':react-native-sms-android')
     compile project(':react-native-background-task')
+    compile project(':reactnativenotifications')
 }
 
 // Run this once to be able to run the application with BUCK

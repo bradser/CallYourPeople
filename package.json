@@ -15,7 +15,8 @@
     "react-native-background-task": "^0.2.1",
     "react-native-call-log": "git+https://github.com/wscodelabs/react-native-call-log.git",
     "react-native-easy-grid": "^0.1.17",
-    "react-native-fbsdk": "0.8.0",
+    "react-native-fbsdk": "^0.8.0",
+    "react-native-notifications": "^1.1.20",
     "react-native-sms-android": "^0.4.1",
     "react-native-table-component": "^1.1.8",
     "react-navigation": "^2.3.1"
