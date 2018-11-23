@@ -22,8 +22,14 @@ const checkNumber = (person: Person, call): string => {
 
  export const checkCallLog = (people: Person[], callLog) => {
   const sendAlertToPeople = people.map(person => {
-    const callerFound = callLog.find(call => call.phoneNumber === person.phoneNumber);
-    const alertCheck = callerFound ? checkDate(person, callerFound.callDayTime) : false;
+    const callerFound = callLog.find(call => {
+      if (call.phoneNumber === person.phoneNumber) {
+        return call.callDayTime;
+      } else {
+        return false;
+      }
+    });
+    const alertCheck = checkDate(person, callerFound.callDayTime);
     if (alertCheck) {
       alert('Call ' + person.name);
     }
