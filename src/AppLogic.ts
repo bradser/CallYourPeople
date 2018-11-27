@@ -67,7 +67,7 @@ export const frequencyConverter = (personFrequency: Frequency): number => {
   }
 
 export const daysLeft = (newPerson: Person, lastTimeCalled): number => {
-    const daysSinceLastCall = Math.abs(moment(lastTimeCalled).diff(newPerson.lastCall, 'minutes')) / (60*24);
+    const daysSinceLastCall = Math.abs(moment(new Date(lastTimeCalled)).diff(newPerson.lastCall, 'minutes')) / (60*24);
     const frequencyNum = frequencyConverter(newPerson.frequency);
     const daysRemaining = frequencyNum - daysSinceLastCall;
     return daysRemaining;
