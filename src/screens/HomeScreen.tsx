@@ -1,5 +1,5 @@
-import React from 'react'
-import { Component } from 'react';
+import React from "react";
+import { Component } from "react";
 import {
   AsyncStorage,
   Button,
@@ -20,20 +20,9 @@ import {
   TableWrapper
 } from "react-native-table-component";
 import moment from "moment";
-import BackgroundTask from "react-native-background-task";
 import { Frequency, Person } from "../Types";
-import {
-  frequencyConverter,
-  daysLeft,
-  checkPeople,
-  checkCallLog
-} from "../AppLogic";
-import { default as getLog } from "./../CallLog";
-
-BackgroundTask.define(() => {
-  alert("Hello from a background task");
-  BackgroundTask.finish();
-});
+import { check, daysLeft } from "../AppLogic";
+import BackgroundTask from "react-native-background-task";
 
 const FBSDK = require("react-native-fbsdk");
 const { LoginManager } = FBSDK;
@@ -55,7 +44,7 @@ let defaultData: Person[] = [
     name: "Fake Name 1",
     phoneNumber: "2063999572",
     lastCall: moment("2018-08-19"),
-    frequency: Frequency.once_A_Week, 
+    frequency: Frequency.once_A_Week,
     shouldAlert: true
   },
 
@@ -65,7 +54,7 @@ let defaultData: Person[] = [
     lastCall: moment("2018-08-19"),
     frequency: Frequency.once_A_Week,
     shouldAlert: true
-  },
+  }
 
   /*{
     name: "Fake Name 3",
@@ -896,21 +885,16 @@ interface State {
 
 export class HomeScreen extends Component<Props, State> {
   componentDidMount() {
-    BackgroundTask.schedule();
-
-    getLog()
-      .then(callLog => {
-        checkCallLog(defaultData, fakeCallLog)
-      });
-
-    //checkPeople(defaultData);
+    check().then(jsonData => {
+      this.setState({ personTableData: jsonData });
+    });
   }
 
   constructor(props: Props) {
     super(props);
 
     this.state = {
-      personTableData: defaultData,
+      personTableData: [],
       addPerson: false,
       deletePerson: false,
       userInput: false,
@@ -1021,8 +1005,10 @@ export class HomeScreen extends Component<Props, State> {
         if (fakeCallLog[i].phoneNumber === person.phoneNumber) {
           const x = fakeCallLog[i].callDayTime;
           const daysRemaining = daysLeft(person, x);
-          return [person.name, daysRemaining, person.frequency, "Edit"];
-        } 
+          return this._getDisplayPersonTableRow(person, daysRemaining);
+        } else {
+          return this._getDisplayPersonTableRow(person, 0);
+        }
       }
     });
 
@@ -1052,6 +1038,10 @@ export class HomeScreen extends Component<Props, State> {
     );
   }
 
+  _getDisplayPersonTableRow = (person, daysRemaining) => {
+    return [person.name, daysRemaining, person.frequency, "Edit"];
+  };
+
   _alertIndex = (index: number): void => {
     Alert.alert(`This is col ${index + 1}`);
   };
@@ -1072,6 +1062,8 @@ export class HomeScreen extends Component<Props, State> {
       userInput: false,
       addPerson: false
     });
+
+    AsyncStorage.setItem("data", JSON.stringify(this.state.personTableData));
   };
 
   _confirm = (): void => {
