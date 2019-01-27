@@ -5,9 +5,9 @@ export default (): Promise<any> => {
   return PermissionsAndroid.request(
     PermissionsAndroid.PERMISSIONS.READ_CALL_LOG,
     {
-      title: "Call Your Mom Call Log Permission",
+      title: "Call Your People Call Log Permission",
       message:
-        "Call Your Mom needs access to your call log " +
+        "Call Your People needs access to your call log " +
         "so it can tell you when to call."
     }
   ).then(

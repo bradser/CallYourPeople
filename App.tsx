@@ -4,7 +4,7 @@ import { HomeScreen } from "./src/screens/HomeScreen";
 import { DetailsScreen } from "./src/screens/DetailsScreen";
 import { AuthLoadingScreen } from "./src/screens/AuthLoadingScreen";
 import { SignInScreen } from "./src/screens/SignInScreen";
-import { check } from './src/AppLogic';
+import AppLogic from './src/AppLogic';
 import { Linking } from 'react-native';
 import { NotificationsAndroid } from 'react-native-notifications';
 import BackgroundTask from 'react-native-background-task';
@@ -51,5 +51,7 @@ NotificationsAndroid.setNotificationOpenedListener((notification) => {
 
 
 BackgroundTask.define(() => {
-  check().then(() =>  BackgroundTask.finish());
+  new AppLogic(NotificationsAndroid.localNotification)
+    .check()
+    .then(() =>  BackgroundTask.finish());
 });

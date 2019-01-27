@@ -3,6 +3,8 @@ package com.caseycooper.callyourmom;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.streem.selectcontact.SelectContactPackage;
+import com.wix.reactnativenotifications.RNNotificationsPackage;
 import com.jamesisaac.rnbackgroundtask.BackgroundTaskPackage;
 import com.wscodelabs.callLogs.CallLogPackage;
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
@@ -37,6 +39,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new SelectContactPackage(),
           new BackgroundTaskPackage(),
           new CallLogPackage(),
           new FBSDKPackage(mCallbackManager),

@@ -137,6 +137,8 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-select-contact')
+    compile project(':react-native-notifications')
     compile project(':react-native-call-log')
     compile project(':react-native-fbsdk')
     implementation fileTree(dir: "libs", include: ["*.jar"])
