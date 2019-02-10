@@ -5,16 +5,18 @@ import {
   Button,
   StyleSheet,
   ScrollView,
-  Picker
+  Picker,
+  TouchableOpacity
 } from "react-native";
 import { Table, Row, Rows } from "react-native-table-component";
 import { NotificationsAndroid } from "react-native-notifications";
+import Icon from "react-native-vector-icons/MaterialIcons";
 
 import { Frequency, FrequencyText, Person } from "../Types";
 import AppLogic from "../AppLogic";
 import Contacts from "../Contacts";
 
-let personListHeader = ["Name", "Days Remaining", "Frequency", "Delete"];
+let personListHeader = ["Name", "Days\nLeft", "Frequency", ""];
 
 interface Props {}
 
@@ -38,29 +40,44 @@ export class HomeScreen extends Component<Props, State> {
   }
 
   componentDidMount() {
+    this.check();
+  }
+
+  check = () =>
     new AppLogic(NotificationsAndroid.localNotification)
       .check()
       .then(results => {
         this.setState({ ...results });
       });
-  }
 
-  picker = index => (
+  picker = (person: Person) => (
     <Picker
-      selectedValue={index}
-      onValueChange={(itemValue, itemIndex) =>
-        /*this.setState(prevState => {
-          prevState.text[prevState.index] = itemValue;
-          return prevState;
-        })*/
-        {}
+      style={{ backgroundColor: "white" }}
+      selectedValue={
+        this.state.people.find(p => p.contact.name === person.contact.name)!!
+          .frequency
       }
+      onValueChange={(itemValue, itemIndex) => {
+        this.setState(
+          prevState => {
+            const personIndex = prevState.people.findIndex(
+              p => p.contact.name === person.contact.name
+            );
+            prevState.people[personIndex].frequency = itemIndex ;
+
+            return prevState;
+          },
+          () => this._done()
+        );
+      }}
     >
       {FrequencyText.map((frequencyText, index) => (
         <Picker.Item key={index} label={frequencyText} value={index} />
       ))}
     </Picker>
   );
+
+  readonly columnWidths = [122, 55, 86, 23];
 
   render() {
     return (
@@ -70,8 +87,13 @@ export class HomeScreen extends Component<Props, State> {
             data={personListHeader}
             style={styles.head}
             textStyle={styles.text}
+            widthArr={this.columnWidths}
           />
-          <Rows data={this._getDisplayPeople()} textStyle={styles.text} />
+          <Rows
+            data={this._getRow()}
+            textStyle={styles.text}
+            widthArr={this.columnWidths}
+          />
         </Table>
 
         <Button title="Add" onPress={this._addPerson} />
@@ -79,13 +101,14 @@ export class HomeScreen extends Component<Props, State> {
     );
   }
 
-  _getDisplayPeople = () =>
-     this.state.people.map(person => 
-      [
+  _getRow = () =>
+    this.state.people.map(person => [
       person.contact.name,
       person.daysLeftTillCallNeeded,
-      this.picker(person.frequency),
-      <Button title="Delete" onPress={() => this._deletePerson(person)} />
+      this.picker(person),
+      <TouchableOpacity onPress={() => this._deletePerson(person)}>
+        <Icon size={20} name="delete" />
+      </TouchableOpacity>
     ]);
 
   _addPerson = (): void => {
@@ -100,12 +123,9 @@ export class HomeScreen extends Component<Props, State> {
         daysLeftTillCallNeeded: 0
       };
 
-      const newPeople = this.state.people;
-      newPeople.push(newPerson);
-
       this.setState(
-        () => ({
-          people: newPeople
+        prevState => ({
+          people: [...prevState.people, newPerson]
         }),
         () => this._done()
       );
@@ -114,12 +134,16 @@ export class HomeScreen extends Component<Props, State> {
 
   _done = (): void => {
     AsyncStorage.setItem("data", JSON.stringify(this.state.people));
+
+    this.check();
   };
 
   _deletePerson = (person: Person): void => {
     this.setState(
-      () => ({
-        people: this.state.people.filter(p => p.contact.name != person.contact.name)
+      prevState => ({
+        people: prevState.people.filter(
+          p => p.contact.name != person.contact.name
+        )
       }),
       () => this._done()
     );
@@ -129,16 +153,5 @@ export class HomeScreen extends Component<Props, State> {
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: "#fff" },
   head: { height: 40, backgroundColor: "#f1f8ff" },
-  text: { margin: 6, textAlign: "center" },
-  btn: { width: 58, height: 18, backgroundColor: "#78B7BB", borderRadius: 2 },
-  btnText: { textAlign: "center", color: "#fff" }
-});
-
-const addPersonStyles = StyleSheet.create({
-  container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: "#fff" },
-  head: { height: 40, backgroundColor: "orange" },
-  text: { margin: 6, textAlign: "center", color: "black" },
-  row: { flexDirection: "row", backgroundColor: "#FFF1C1" },
-  btn: { width: 58, height: 40, backgroundColor: "#78B7BB", borderRadius: 2 },
-  btnText: { textAlign: "center", color: "#fff" }
+  text: { margin: 3, textAlign: "center" }
 });

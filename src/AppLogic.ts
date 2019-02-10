@@ -27,7 +27,6 @@ export default class AppLogic {
       });
 
   public checkCallLog = (people: Person[], callLog: Call[]): Person[] => {
-    debugger;
     return people.map(person => {
       const found = this.findPhoneAndCall(person, callLog);
 
@@ -127,18 +126,21 @@ export default class AppLogic {
   };
 
   private frequencyToDays = ({ frequency }): number => {
-    if (frequency === Frequency.twice_A_Week) {
-      return 7 / 2;
-    } else if (frequency === Frequency.once_A_Week) {
-      return 7;
-    } else if (frequency === Frequency.once_Every_Two_Weeks) {
-      return 14;
-    } else if (frequency === Frequency.once_Every_Three_Weeks) {
-      return 21;
-    } else if (frequency === Frequency.once_Every_Month) {
-      return 28;
-    } else if (frequency === Frequency.once_Every_Quarter_Year) {
-      return (365 / 12) * 3;
+    switch (frequency) {
+      case Frequency.twice_A_Week:
+        return 7 / 2;
+      case Frequency.once_A_Week:
+        return 7;
+      case Frequency.once_Every_Two_Weeks:
+        return 14;
+      case Frequency.once_Every_Three_Weeks:
+        return 21;
+      case Frequency.once_Every_Month:
+        return 28;
+      case Frequency.once_Every_Two_Months:
+        return 60;
+      case Frequency.once_Every_Quarter_Year:
+        return (365 / 12) * 3;
     }
 
     throw Error(`unhandled Frequency ${frequency} in frequencyToDays`);

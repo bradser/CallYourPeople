@@ -3,9 +3,10 @@ package com.caseycooper.callyourmom;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.oblador.vectoricons.VectorIconsPackage;
+import com.transistorsoft.rnbackgroundfetch.RNBackgroundFetchPackage;
 import com.streem.selectcontact.SelectContactPackage;
 import com.wix.reactnativenotifications.RNNotificationsPackage;
-import com.jamesisaac.rnbackgroundtask.BackgroundTaskPackage;
 import com.wscodelabs.callLogs.CallLogPackage;
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.facebook.react.ReactNativeHost;
@@ -15,8 +16,6 @@ import com.facebook.soloader.SoLoader;
 import com.facebook.FacebookSdk;
 import com.facebook.CallbackManager;
 import com.facebook.appevents.AppEventsLogger;
-import com.rhaker.reactnativesmsandroid.RNSmsAndroidPackage;
-import com.wix.reactnativenotifications.RNNotificationsPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -39,11 +38,11 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new VectorIconsPackage(),
+            new RNBackgroundFetchPackage(),
             new SelectContactPackage(),
-          new BackgroundTaskPackage(),
           new CallLogPackage(),
           new FBSDKPackage(mCallbackManager),
-          new RNSmsAndroidPackage(),
           new RNNotificationsPackage(MainApplication.this)
       );
     }
@@ -67,7 +66,5 @@ public class MainApplication extends Application implements ReactApplication {
     FacebookSdk.sdkInitialize(getApplicationContext());
 
     AppEventsLogger.activateApp(this);
-
-    BackgroundTaskPackage.useContext(this);
   }
 }

@@ -17,13 +17,13 @@ export enum Frequency {
 }
 
 export const FrequencyText = [
-  "Twice a week",
-  "Once a week",
-  "Every 2 weeks",
-  "Every 3 weeks",
-  "Every Month",
-  "Every Two Months",
-  "Every Season"
+  "2/week",
+  "1 week",
+  "2 weeks",
+  "3 weeks",
+  "1 month",
+  "2 months",
+  "1/4 year"
 ];
 
 export interface Call {
