@@ -1,8 +1,8 @@
 import moment from "moment";
-import { AsyncStorage, Alert } from "react-native";
-import { PhoneNumberUtil, PhoneNumberFormat } from "google-libphonenumber";
+import AsyncStorage from '@react-native-community/async-storage';
+import { PhoneNumberUtil } from "google-libphonenumber";
 import { Call, Found, Frequency, Person, CallType } from "./Types";
-import { default as getLog } from "./CallLog";
+
 import { PhoneEntry } from "react-native-select-contact";
 const phoneNumberUtil = PhoneNumberUtil.getInstance();
 
@@ -13,9 +13,10 @@ export default class AppLogic {
     this.notfy = notfy;
   }
 
-  public check = () =>
+  public check = (getLog) => 
     Promise.all([AsyncStorage.getItem("data"), getLog()])
       .then(results => {
+        console.log('BackgroundFetch: check post get data');
         const storagePeople = results[0] ? JSON.parse(results[0]) : [];
 
         const checkedPeople = this.checkCallLog(storagePeople, results[1]);
@@ -23,7 +24,7 @@ export default class AppLogic {
         return { people: checkedPeople, log: results[1] };
       })
       .catch(e => {
-        Alert.alert(`Error: ${e.message}`);
+        console.log(`BackgroundFetch: AppLogic Error: ${e.message}`);
       });
 
   public checkCallLog = (people: Person[], callLog: Call[]): Person[] => {
@@ -79,8 +80,9 @@ export default class AppLogic {
   ): void => {
     this.notfy({
       title: `Call ${person.contact.name} now!`,
-      body: "They want to hear from you!",
-      extra: foundPhone && foundPhone.number
+      message: "They want to hear from you!",
+      tag: foundPhone && foundPhone.number,
+      actions: '["Call"]'
     });
   };
 

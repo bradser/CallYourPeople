@@ -1,19 +1,20 @@
 import React from "react";
 import { Component } from "react";
 import {
-  AsyncStorage,
   Button,
   StyleSheet,
   ScrollView,
   Picker,
   TouchableOpacity
 } from "react-native";
+import AsyncStorage from '@react-native-community/async-storage';
 import { Table, Row, Rows } from "react-native-table-component";
-import { NotificationsAndroid } from "react-native-notifications";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import PushNotification from 'react-native-push-notification';
 
 import { Frequency, FrequencyText, Person } from "../Types";
 import AppLogic from "../AppLogic";
+import { getLogWithPermissions } from "../CallLog";
 import Contacts from "../Contacts";
 
 let personListHeader = ["Name", "Days\nLeft", "Frequency", ""];
@@ -44,8 +45,8 @@ export class HomeScreen extends Component<Props, State> {
   }
 
   check = () =>
-    new AppLogic(NotificationsAndroid.localNotification)
-      .check()
+    new AppLogic((details) => PushNotification.localNotification(details))
+      .check(getLogWithPermissions)
       .then(results => {
         this.setState({ ...results });
       });
@@ -63,7 +64,8 @@ export class HomeScreen extends Component<Props, State> {
             const personIndex = prevState.people.findIndex(
               p => p.contact.name === person.contact.name
             );
-            prevState.people[personIndex].frequency = itemIndex ;
+            
+            prevState.people[personIndex].frequency = itemIndex;
 
             return prevState;
           },

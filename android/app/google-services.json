@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "330945320944",
+    "firebase_url": "https://callyourpeople-9ff71.firebaseio.com",
+    "project_id": "callyourpeople-9ff71",
+    "storage_bucket": "callyourpeople-9ff71.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:330945320944:android:d3271faca8430a8a",
+        "android_client_info": {
+          "package_name": "com.caseycooper.callyourmom"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "330945320944-rr79g772il3hd0t6rbrkbhng6hppus1b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2w8ArLHzKEoUACfZIwqJEglJjbSLbqlc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

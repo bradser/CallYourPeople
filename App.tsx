@@ -1,51 +1,25 @@
 import React from "react";
-import { createSwitchNavigator, createStackNavigator } from "react-navigation";
-import { HomeScreen } from "./src/screens/HomeScreen";
-import { AuthLoadingScreen } from "./src/screens/AuthLoadingScreen";
-import { SignInScreen } from "./src/screens/SignInScreen";
-import AppLogic from './src/AppLogic';
-import { Linking } from 'react-native';
-import { NotificationsAndroid } from 'react-native-notifications';
 import BackgroundFetch from "react-native-background-fetch";
-
-const AppStack = createStackNavigator({
-  Home: HomeScreen,
-});
-
-const AuthStack = createStackNavigator({ SignIn: SignInScreen });
-
-const RootStack = createSwitchNavigator(
-  {
-    AuthLoading: AuthLoadingScreen,
-    App: AppStack,
-    Auth: AuthStack
-  },
-  {
-    initialRouteName: "AuthLoading",
-    headerStyle: {
-      backgroundColor: "#f4511e"
-    },
-    headerTintColor: "#fff",
-    headerTitleStyle: {
-      fontWeight: "bold"
-    }
-  }
-);
-
+import PushNotification from 'react-native-push-notification';
+import SendIntentAndroid from 'react-native-send-intent';
+import { getLog } from "./src/CallLog";
+import { HomeScreen } from "./src/screens/HomeScreen";
+import AppLogic from './src/AppLogic';
 
 export default class App extends React.Component {
   componentDidMount() {
+    SendIntentAndroid.requestIgnoreBatteryOptimizations();
+    SendIntentAndroid.showIgnoreBatteryOptimizationsSettings();
+
     BackgroundFetch.configure({
-      minimumFetchInterval: 15,
+      minimumFetchInterval: 15,//6 * 60,
       stopOnTerminate: false,
       startOnBoot: true,
       enableHeadless: true
-    }, () => {
-      console.log("[js] Received background-fetch event");
-      // Required: Signal completion of your task to native code
-      // If you fail to do this, the OS can terminate your app
-      // or assign battery-blame for consuming too much background-time
-      BackgroundFetch.finish(BackgroundFetch.FETCH_RESULT_NEW_DATA);
+    }, async () => {
+      await new AppLogic((details) => PushNotification.localNotification(details)).check(getLog);
+
+      BackgroundFetch.finish(BackgroundFetch.FETCH_RESULT_NO_DATA);
     }, (error) => {
       console.log("[js] RNBackgroundFetch failed to start");
     });
@@ -67,20 +41,6 @@ export default class App extends React.Component {
   }
 
   render() {
-    return <RootStack />;
+    return <HomeScreen />;
   }
 }
-
-NotificationsAndroid.setNotificationOpenedListener((notification) => {
-  if (notification.data.extra) {
-    Linking.openURL('tel://' + notification.data.extra);
-  }
-});
-
-BackgroundFetch.registerHeadlessTask(async () => {
-  NotificationsAndroid.localNotification({ "title": "Test", "body": new Date().toString() });
-
-  //await new AppLogic(NotificationsAndroid.localNotification).check();
-
-  BackgroundFetch.finish();
-})

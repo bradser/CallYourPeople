@@ -38,7 +38,6 @@
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
 		7B1089407D6A439E8A9BCBD3 /* libRCTFBSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD5F32CC9E5049DAAED0E32E /* libRCTFBSDK.a */; };
-		FE281D7D803942088CE10825 /* libRNNotifications.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F8CB71DB6CB4C508F4C272A /* libRNNotifications.a */; };
 		13D03847D25E494690DE5ACD /* libRCTSelectContact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C53979CFDFAD4A86BB94007C /* libRCTSelectContact.a */; };
 		FB9C4D81C92944A7BAB3B59C /* libRNBackgroundFetch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 35C10D1C8FE94A09BF96EF3B /* libRNBackgroundFetch.a */; };
 		9C6F3F49D2B447C19A361E8D /* TSBackgroundFetch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AB5AF397904431B9A8687C9 /* TSBackgroundFetch.framework */; };
@@ -60,6 +59,7 @@
 		E09A66D087264B4BB9C66109 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2FF6E78232FD4AA5896DE72D /* Octicons.ttf */; };
 		0953E28C26C446FEAAB49CFA /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 327EF6798A104DB884EE259E /* SimpleLineIcons.ttf */; };
 		18A2560FDC1B4D679B50ACC0 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D189E0F6E0CB4F4BAA428A67 /* Zocial.ttf */; };
+		8AA856FBBC9E4B149D3B8276 /* libRNCAsyncStorage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7274B57F054C418C9EC24A82 /* libRNCAsyncStorage.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -367,8 +367,6 @@
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
 		6E8EAF87925A4572AC2E034D /* RCTFBSDK.xcodeproj */ = {isa = PBXFileReference; name = "RCTFBSDK.xcodeproj"; path = "../node_modules/react-native-fbsdk/ios/RCTFBSDK.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		AD5F32CC9E5049DAAED0E32E /* libRCTFBSDK.a */ = {isa = PBXFileReference; name = "libRCTFBSDK.a"; path = "libRCTFBSDK.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
-		C1A9EB33E4324E7DBB37BF7B /* RNNotifications.xcodeproj */ = {isa = PBXFileReference; name = "RNNotifications.xcodeproj"; path = "../node_modules/react-native-notifications/RNNotifications/RNNotifications.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
-		6F8CB71DB6CB4C508F4C272A /* libRNNotifications.a */ = {isa = PBXFileReference; name = "libRNNotifications.a"; path = "libRNNotifications.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		78B2D98949064D9C88BE7DB1 /* SelectContact.xcodeproj */ = {isa = PBXFileReference; name = "SelectContact.xcodeproj"; path = "../node_modules/react-native-select-contact/ios/SelectContact.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		C53979CFDFAD4A86BB94007C /* libRCTSelectContact.a */ = {isa = PBXFileReference; name = "libRCTSelectContact.a"; path = "libRCTSelectContact.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		A70D52FAB41A41D59E3700D7 /* RNBackgroundFetch.xcodeproj */ = {isa = PBXFileReference; name = "RNBackgroundFetch.xcodeproj"; path = "../node_modules/react-native-background-fetch/ios/RNBackgroundFetch.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
@@ -393,6 +391,8 @@
 		2FF6E78232FD4AA5896DE72D /* Octicons.ttf */ = {isa = PBXFileReference; name = "Octicons.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		327EF6798A104DB884EE259E /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; name = "SimpleLineIcons.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		D189E0F6E0CB4F4BAA428A67 /* Zocial.ttf */ = {isa = PBXFileReference; name = "Zocial.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		416F94057B3F45C5AC1AF30A /* RNCAsyncStorage.xcodeproj */ = {isa = PBXFileReference; name = "RNCAsyncStorage.xcodeproj"; path = "../node_modules/@react-native-community/async-storage/ios/RNCAsyncStorage.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		7274B57F054C418C9EC24A82 /* libRNCAsyncStorage.a */ = {isa = PBXFileReference; name = "libRNCAsyncStorage.a"; path = "libRNCAsyncStorage.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -421,11 +421,11 @@
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
 				7B1089407D6A439E8A9BCBD3 /* libRCTFBSDK.a in Frameworks */,
-				FE281D7D803942088CE10825 /* libRNNotifications.a in Frameworks */,
 				13D03847D25E494690DE5ACD /* libRCTSelectContact.a in Frameworks */,
 				FB9C4D81C92944A7BAB3B59C /* libRNBackgroundFetch.a in Frameworks */,
 				9C6F3F49D2B447C19A361E8D /* TSBackgroundFetch.framework in Frameworks */,
 				16D769F92C3E423D9A453C45 /* libRNVectorIcons.a in Frameworks */,
+				8AA856FBBC9E4B149D3B8276 /* libRNCAsyncStorage.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -616,10 +616,10 @@
 				00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */,
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
 				6E8EAF87925A4572AC2E034D /* RCTFBSDK.xcodeproj */,
-				C1A9EB33E4324E7DBB37BF7B /* RNNotifications.xcodeproj */,
 				78B2D98949064D9C88BE7DB1 /* SelectContact.xcodeproj */,
 				A70D52FAB41A41D59E3700D7 /* RNBackgroundFetch.xcodeproj */,
 				4C5C999DE81648AEAE6846C4 /* RNVectorIcons.xcodeproj */,
+				416F94057B3F45C5AC1AF30A /* RNCAsyncStorage.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1294,18 +1294,14 @@
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CallYourMom.app/CallYourMom";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
-					"$(SRCROOT)/../node_modules/react-native-notifications/RNNotifications",
 					"$(SRCROOT)/../node_modules/react-native-select-contact/ios/RCTSelectContact",
 					"$(SRCROOT)/../node_modules/react-native-background-fetch/ios/RNBackgroundFetch/**",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
+					"$(SRCROOT)/../node_modules/@react-native-community/async-storage/ios",
 				);
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/../node_modules/react-native-background-fetch/ios/**",
@@ -1330,18 +1326,14 @@
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CallYourMom.app/CallYourMom";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
-					"$(SRCROOT)/../node_modules/react-native-notifications/RNNotifications",
 					"$(SRCROOT)/../node_modules/react-native-select-contact/ios/RCTSelectContact",
 					"$(SRCROOT)/../node_modules/react-native-background-fetch/ios/RNBackgroundFetch/**",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
+					"$(SRCROOT)/../node_modules/@react-native-community/async-storage/ios",
 				);
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/../node_modules/react-native-background-fetch/ios/**",
@@ -1368,10 +1360,10 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
-					"$(SRCROOT)/../node_modules/react-native-notifications/RNNotifications",
 					"$(SRCROOT)/../node_modules/react-native-select-contact/ios/RCTSelectContact",
 					"$(SRCROOT)/../node_modules/react-native-background-fetch/ios/RNBackgroundFetch/**",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
+					"$(SRCROOT)/../node_modules/@react-native-community/async-storage/ios",
 				);
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/../node_modules/react-native-background-fetch/ios/**",
@@ -1397,10 +1389,10 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
-					"$(SRCROOT)/../node_modules/react-native-notifications/RNNotifications",
 					"$(SRCROOT)/../node_modules/react-native-select-contact/ios/RCTSelectContact",
 					"$(SRCROOT)/../node_modules/react-native-background-fetch/ios/RNBackgroundFetch/**",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
+					"$(SRCROOT)/../node_modules/@react-native-community/async-storage/ios",
 				);
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/../node_modules/react-native-background-fetch/ios/**",
@@ -1433,18 +1425,14 @@
 				TVOS_DEPLOYMENT_TARGET = 9.2;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
-					"$(SRCROOT)/../node_modules/react-native-notifications/RNNotifications",
 					"$(SRCROOT)/../node_modules/react-native-select-contact/ios/RCTSelectContact",
 					"$(SRCROOT)/../node_modules/react-native-background-fetch/ios/RNBackgroundFetch/**",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
+					"$(SRCROOT)/../node_modules/@react-native-community/async-storage/ios",
 				);
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/../node_modules/react-native-background-fetch/ios/**",
@@ -1477,18 +1465,14 @@
 				TVOS_DEPLOYMENT_TARGET = 9.2;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
-					"$(SRCROOT)/../node_modules/react-native-notifications/RNNotifications",
 					"$(SRCROOT)/../node_modules/react-native-select-contact/ios/RCTSelectContact",
 					"$(SRCROOT)/../node_modules/react-native-background-fetch/ios/RNBackgroundFetch/**",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
+					"$(SRCROOT)/../node_modules/@react-native-community/async-storage/ios",
 				);
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/../node_modules/react-native-background-fetch/ios/**",
@@ -1520,18 +1504,14 @@
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
-					"$(SRCROOT)/../node_modules/react-native-notifications/RNNotifications",
 					"$(SRCROOT)/../node_modules/react-native-select-contact/ios/RCTSelectContact",
 					"$(SRCROOT)/../node_modules/react-native-background-fetch/ios/RNBackgroundFetch/**",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
+					"$(SRCROOT)/../node_modules/@react-native-community/async-storage/ios",
 				);
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/../node_modules/react-native-background-fetch/ios/**",
@@ -1563,18 +1543,14 @@
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
-					"$(SRCROOT)/../node_modules/react-native-notifications/RNNotifications",
 					"$(SRCROOT)/../node_modules/react-native-select-contact/ios/RCTSelectContact",
 					"$(SRCROOT)/../node_modules/react-native-background-fetch/ios/RNBackgroundFetch/**",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
+					"$(SRCROOT)/../node_modules/@react-native-community/async-storage/ios",
 				);
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/../node_modules/react-native-background-fetch/ios/**",
