@@ -84,7 +84,7 @@ export class HomeScreen extends Component<Props, State> {
   render() {
     return (
       <ScrollView style={styles.container}>
-        <Table borderStyle={{ borderWidth: 2, borderColor: "#c8e1ff" }}>
+        <Table borderStyle={{ borderWidth: 2, borderColor: "#c8e1ff" }} style={styles.table}>
           <Row
             data={personListHeader}
             style={styles.head}
@@ -98,7 +98,7 @@ export class HomeScreen extends Component<Props, State> {
           />
         </Table>
 
-        <Button title="Add" onPress={this._addPerson} />
+        <Button title="Add Contact" onPress={this._addPerson} />
       </ScrollView>
     );
   }
@@ -155,5 +155,6 @@ export class HomeScreen extends Component<Props, State> {
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: "#fff" },
   head: { height: 40, backgroundColor: "#f1f8ff" },
-  text: { margin: 3, textAlign: "center" }
+  text: { margin: 3, textAlign: "center" },
+  table: { marginBottom: 5 }
 });

@@ -1,10 +1,12 @@
 import moment from "moment";
-import AsyncStorage from '@react-native-community/async-storage';
 import { PhoneNumberUtil } from "google-libphonenumber";
+import { PhoneEntry } from "react-native-select-contact";
+import AsyncStorage from '@react-native-community/async-storage';
+
 import { Call, Found, Frequency, Person, CallType } from "./Types";
 
-import { PhoneEntry } from "react-native-select-contact";
 const phoneNumberUtil = PhoneNumberUtil.getInstance();
+
 
 export default class AppLogic {
   private notfy: any;

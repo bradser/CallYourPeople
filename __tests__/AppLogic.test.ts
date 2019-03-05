@@ -127,7 +127,7 @@ const duplicateTestCases = [
   [
     new DuplicateTestCase(
       "Joe Serbus",
-      "3136385505",
+      "+3136385505",
       Frequency.once_Every_Two_Weeks,
       CallType.OUTGOING,
       5,
@@ -137,7 +137,7 @@ const duplicateTestCases = [
     ),
     new DuplicateTestCase(
       "Gayle Serbus",
-      "3136385505",
+      "+3136385505",
       Frequency.once_Every_Two_Weeks,
       CallType.OUTGOING,
       5,
@@ -149,7 +149,7 @@ const duplicateTestCases = [
   [
     new DuplicateTestCase(
       "Joe Serbus",
-      "3136385505",
+      "+3136385505",
       Frequency.once_Every_Two_Weeks,
       CallType.OUTGOING,
       5,
@@ -159,7 +159,7 @@ const duplicateTestCases = [
     ),
     new DuplicateTestCase(
       "Gayle Serbus",
-      "3136385505",
+      "+3136385505",
       Frequency.once_Every_Two_Weeks,
       CallType.OUTGOING,
       5,
@@ -179,7 +179,7 @@ duplicateTestCases.forEach((testCase, index) => {
 
     const testLog = [
       getCall(
-        "3136385505",
+        "+3136385505",
         testCase[0].callType,
         testCase[0].daysDelta,
         testCase[0].callDuration

@@ -8,17 +8,18 @@ export const getLogWithPermissions = (): Promise<object> => {
       title: "Call Your People Call Log Permission",
       message:
         "Call Your People needs access to your call log " +
-        "so it can tell you when to call."
+        "so it can tell you when to call.",
+      buttonPositive: "Ok"
     }
   ).then(getLog);
 };
 
 export const getLog = (): Promise<object> => {
   return new Promise(resolve =>
-        CallLogs.show((logs: string) => {
-          const parsedLogs = JSON.parse(logs);
+    CallLogs.show((logs: string) => {
+      const parsedLogs = JSON.parse(logs);
 
-          resolve(parsedLogs);
-        })
-      );
+      resolve(parsedLogs);
+    })
+  );
 };

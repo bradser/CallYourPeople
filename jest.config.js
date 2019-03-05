@@ -12,6 +12,9 @@ module.exports = {
       babelConfig: true,
     }
   },
+  transformIgnorePatterns: [
+    "!<rootDir>/node_modules"
+  ],
   // This is the only part which you can keep
   // from the above linked tutorial's config:
   cacheDirectory: '.jest/cache',

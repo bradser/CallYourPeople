@@ -2,14 +2,13 @@ import React from "react";
 import BackgroundFetch from "react-native-background-fetch";
 import PushNotification from 'react-native-push-notification';
 import SendIntentAndroid from 'react-native-send-intent';
-import { getLog } from "./src/CallLog";
-import { HomeScreen } from "./src/screens/HomeScreen";
-import AppLogic from './src/AppLogic';
+import { getLog } from "./CallLog";
+import { HomeScreen } from "./screens/HomeScreen";
+import AppLogic from './AppLogic';
 
 export default class App extends React.Component {
   componentDidMount() {
     SendIntentAndroid.requestIgnoreBatteryOptimizations();
-    SendIntentAndroid.showIgnoreBatteryOptimizationsSettings();
 
     BackgroundFetch.configure({
       minimumFetchInterval: 15,//6 * 60,
