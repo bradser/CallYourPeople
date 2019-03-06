@@ -6,7 +6,8 @@
     "start": "react-native start",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
-    "test": "jest"
+    "test": "jest",
+    "prettier": "prettier --single-quote --write '**/*.{ts,tsx,.js}'"
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.1.0",

@@ -1,12 +1,11 @@
-import moment from "moment";
-import { PhoneNumberUtil } from "google-libphonenumber";
-import { PhoneEntry } from "react-native-select-contact";
+import moment from 'moment';
+import { PhoneNumberUtil } from 'google-libphonenumber';
+import { PhoneEntry } from 'react-native-select-contact';
 import AsyncStorage from '@react-native-community/async-storage';
 
-import { Call, Found, Frequency, Person, CallType } from "./Types";
+import { Call, Found, Frequency, Person, CallType } from './Types';
 
 const phoneNumberUtil = PhoneNumberUtil.getInstance();
-
 
 export default class AppLogic {
   private notfy: any;
@@ -15,8 +14,8 @@ export default class AppLogic {
     this.notfy = notfy;
   }
 
-  public check = (getLog) => 
-    Promise.all([AsyncStorage.getItem("data"), getLog()])
+  public check = getLog =>
+    Promise.all([AsyncStorage.getItem('data'), getLog()])
       .then(results => {
         console.log('BackgroundFetch: check post get data');
         const storagePeople = results[0] ? JSON.parse(results[0]) : [];
@@ -50,7 +49,7 @@ export default class AppLogic {
     const call = callLog.find(call => {
       phone = person.contact.phones.find(phone => {
         try {
-          const parsedPhone = phoneNumberUtil.parse(phone.number, "US");
+          const parsedPhone = phoneNumberUtil.parse(phone.number, 'US');
 
           return (
             call.phoneNumber === phoneNumberUtil.format(parsedPhone, PNFE164)
@@ -82,9 +81,8 @@ export default class AppLogic {
   ): void => {
     this.notfy({
       title: `Call ${person.contact.name} now!`,
-      message: "They want to hear from you!",
+      message: 'They want to hear from you!',
       tag: foundPhone && foundPhone.number,
-      actions: '["Call"]'
     });
   };
 
@@ -113,7 +111,7 @@ export default class AppLogic {
   private isVoicemail = (call: Call): boolean => call.callDuration <= 2;
 
   private callDateToDaysSinceLastCall = (callDate: string): number =>
-    Math.abs(moment().diff(new Date(parseInt(callDate)), "minutes")) /
+    Math.abs(moment().diff(new Date(parseInt(callDate)), 'minutes')) /
     (60 * 24);
 
   public daysLeftTillCallNeeded = (

@@ -1,6 +1,6 @@
-import moment from "moment";
-import AppLogic from "../src/AppLogic";
-import { Call, CallType, Person, Frequency } from "../src/Types";
+import moment from 'moment';
+import AppLogic from '../src/AppLogic';
+import { Call, CallType, Person, Frequency } from '../src/Types';
 
 class TestCase {
   constructor(
@@ -35,7 +35,7 @@ const getPerson = (
     phones: [
       {
         number,
-        type: "mobile"
+        type: 'mobile'
       }
     ],
     emails: [],
@@ -57,11 +57,11 @@ const getCall = (
   callType,
   callDate: now
     .clone()
-    .subtract(daysDelta, "days")
+    .subtract(daysDelta, 'days')
     .valueOf()
     .toString(),
   callDuration,
-  callDayTime: ""
+  callDayTime: ''
 });
 
 const testCases = [
@@ -102,12 +102,12 @@ const testCases = [
 testCases.forEach((testCase, index) => {
   it(`case #${index}`, () => {
     const testPeople = [
-      getPerson("Shelley McIntyre", "+12062954055", testCase[0].frequency)
+      getPerson('Shelley McIntyre', '+12062954055', testCase[0].frequency)
     ];
 
     const testLog = [
       getCall(
-        "+12062954055",
+        '+12062954055',
         testCase[0].callType,
         testCase[0].daysDelta,
         testCase[0].callDuration
@@ -126,8 +126,8 @@ testCases.forEach((testCase, index) => {
 const duplicateTestCases = [
   [
     new DuplicateTestCase(
-      "Joe Serbus",
-      "+3136385505",
+      'Joe Serbus',
+      '+3136385505',
       Frequency.once_Every_Two_Weeks,
       CallType.OUTGOING,
       5,
@@ -136,8 +136,8 @@ const duplicateTestCases = [
       7
     ),
     new DuplicateTestCase(
-      "Gayle Serbus",
-      "+3136385505",
+      'Gayle Serbus',
+      '+3136385505',
       Frequency.once_Every_Two_Weeks,
       CallType.OUTGOING,
       5,
@@ -148,8 +148,8 @@ const duplicateTestCases = [
   ],
   [
     new DuplicateTestCase(
-      "Joe Serbus",
-      "+3136385505",
+      'Joe Serbus',
+      '+3136385505',
       Frequency.once_Every_Two_Weeks,
       CallType.OUTGOING,
       5,
@@ -158,8 +158,8 @@ const duplicateTestCases = [
       -7
     ),
     new DuplicateTestCase(
-      "Gayle Serbus",
-      "+3136385505",
+      'Gayle Serbus',
+      '+3136385505',
       Frequency.once_Every_Two_Weeks,
       CallType.OUTGOING,
       5,
@@ -179,7 +179,7 @@ duplicateTestCases.forEach((testCase, index) => {
 
     const testLog = [
       getCall(
-        "+3136385505",
+        '+3136385505',
         testCase[0].callType,
         testCase[0].daysDelta,
         testCase[0].callDuration

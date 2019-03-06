@@ -1,23 +1,23 @@
-import React from "react";
-import { Component } from "react";
+import React from 'react';
+import { Component } from 'react';
 import {
   Button,
   StyleSheet,
   ScrollView,
   Picker,
   TouchableOpacity
-} from "react-native";
+} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import { Table, Row, Rows } from "react-native-table-component";
-import Icon from "react-native-vector-icons/MaterialIcons";
+import { Table, Row, Rows } from 'react-native-table-component';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import PushNotification from 'react-native-push-notification';
 
-import { Frequency, FrequencyText, Person } from "../Types";
-import AppLogic from "../AppLogic";
-import { getLogWithPermissions } from "../CallLog";
-import Contacts from "../Contacts";
+import { Frequency, FrequencyText, Person } from '../Types';
+import AppLogic from '../AppLogic';
+import { getLogWithPermissions } from '../CallLog';
+import Contacts from '../Contacts';
 
-let personListHeader = ["Name", "Days\nLeft", "Frequency", ""];
+let personListHeader = ['Name', 'Days\nLeft', 'Frequency', ''];
 
 interface Props {}
 
@@ -28,7 +28,7 @@ interface State {
 
 export class HomeScreen extends Component<Props, State> {
   static navigationOptions = {
-    title: "Call Your People!"
+    title: 'Call Your People!'
   };
 
   constructor(props: Props) {
@@ -45,7 +45,7 @@ export class HomeScreen extends Component<Props, State> {
   }
 
   check = () =>
-    new AppLogic((details) => PushNotification.localNotification(details))
+    new AppLogic(details => PushNotification.localNotification(details))
       .check(getLogWithPermissions)
       .then(results => {
         this.setState({ ...results });
@@ -53,7 +53,7 @@ export class HomeScreen extends Component<Props, State> {
 
   picker = (person: Person) => (
     <Picker
-      style={{ backgroundColor: "white" }}
+      style={{ backgroundColor: 'white' }}
       selectedValue={
         this.state.people.find(p => p.contact.name === person.contact.name)!!
           .frequency
@@ -64,7 +64,7 @@ export class HomeScreen extends Component<Props, State> {
             const personIndex = prevState.people.findIndex(
               p => p.contact.name === person.contact.name
             );
-            
+
             prevState.people[personIndex].frequency = itemIndex;
 
             return prevState;
@@ -84,7 +84,10 @@ export class HomeScreen extends Component<Props, State> {
   render() {
     return (
       <ScrollView style={styles.container}>
-        <Table borderStyle={{ borderWidth: 2, borderColor: "#c8e1ff" }} style={styles.table}>
+        <Table
+          borderStyle={{ borderWidth: 2, borderColor: '#c8e1ff' }}
+          style={styles.table}
+        >
           <Row
             data={personListHeader}
             style={styles.head}
@@ -135,7 +138,7 @@ export class HomeScreen extends Component<Props, State> {
   };
 
   _done = (): void => {
-    AsyncStorage.setItem("data", JSON.stringify(this.state.people));
+    AsyncStorage.setItem('data', JSON.stringify(this.state.people));
 
     this.check();
   };
@@ -153,8 +156,8 @@ export class HomeScreen extends Component<Props, State> {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: "#fff" },
-  head: { height: 40, backgroundColor: "#f1f8ff" },
-  text: { margin: 3, textAlign: "center" },
+  container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff' },
+  head: { height: 40, backgroundColor: '#f1f8ff' },
+  text: { margin: 3, textAlign: 'center' },
   table: { marginBottom: 5 }
 });

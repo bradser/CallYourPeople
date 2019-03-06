@@ -1,4 +1,4 @@
-import { Contact, PhoneEntry } from "react-native-select-contact";
+import { Contact, PhoneEntry } from 'react-native-select-contact';
 
 export interface Person {
   contact: Contact;
@@ -17,13 +17,13 @@ export enum Frequency {
 }
 
 export const FrequencyText = [
-  "2/week",
-  "1 week",
-  "2 weeks",
-  "3 weeks",
-  "1 month",
-  "2 months",
-  "1/4 year"
+  '2/week',
+  '1 week',
+  '2 weeks',
+  '3 weeks',
+  '1 month',
+  '2 months',
+  '1/4 year'
 ];
 
 export interface Call {
@@ -35,9 +35,9 @@ export interface Call {
 }
 
 export enum CallType {
-  INCOMING = "INCOMING",
-  OUTGOING = "OUTGOING",
-  MISSED = "MISSED"
+  INCOMING = 'INCOMING',
+  OUTGOING = 'OUTGOING',
+  MISSED = 'MISSED'
 }
 
 export interface Found {
