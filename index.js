@@ -14,7 +14,7 @@ const MyHeadlessTask = async () => {
 
 BackgroundFetch.registerHeadlessTask(MyHeadlessTask);
 
-AppRegistry.registerComponent("CallYourMom", () => App);
+AppRegistry.registerComponent("CallYourPeople", () => App);
 
 PushNotification.configure({
   onNotification: (notification) => {

@@ -1,4 +1,4 @@
-package com.caseycooper.callyourmom;
+package com.caseycooper.callyourpeople;
 
 import android.app.Application;
 

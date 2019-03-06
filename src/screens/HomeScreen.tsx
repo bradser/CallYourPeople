@@ -101,7 +101,9 @@ export class HomeScreen extends Component<Props, State> {
           />
         </Table>
 
-        <Button title="Add Contact" onPress={this._addPerson} />
+        <Icon.Button name="person-add" onPress={this._addPerson} style={styles.addButton}>
+          Add Person
+        </Icon.Button>
       </ScrollView>
     );
   }
@@ -159,5 +161,6 @@ const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff' },
   head: { height: 40, backgroundColor: '#f1f8ff' },
   text: { margin: 3, textAlign: 'center' },
-  table: { marginBottom: 5 }
+  table: { marginBottom: 5 },
+  addButton: { alignSelf: 'center' }
 });
