@@ -25,7 +25,7 @@ export default class App extends React.Component {
         BackgroundFetch.finish(BackgroundFetch.FETCH_RESULT_NO_DATA);
       },
       error => {
-        console.log('[js] RNBackgroundFetch failed to start');
+        console.log('[js] RNBackgroundFetch failed to start ' + error);
       }
     );
 
