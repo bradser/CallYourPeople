@@ -29,21 +29,22 @@ const getPerson = (
   name: string,
   number: string,
   frequency: Frequency
-): Person => ({
-  contact: {
-    name,
-    phones: [
-      {
-        number,
-        type: 'mobile'
-      }
-    ],
-    emails: [],
-    postalAddresses: []
-  },
-  frequency,
-  daysLeftTillCallNeeded: 0
-});
+): Person =>
+  new Person(
+    {
+      name,
+      phones: [
+        {
+          number,
+          type: 'mobile'
+        }
+      ],
+      emails: [],
+      postalAddresses: []
+    },
+    frequency,
+    0
+  );
 
 const now = moment();
 
@@ -52,17 +53,18 @@ const getCall = (
   callType: CallType,
   daysDelta: number,
   callDuration: number
-): Call => ({
-  phoneNumber,
-  callType,
-  callDate: now
-    .clone()
-    .subtract(daysDelta, 'days')
-    .valueOf()
-    .toString(),
-  callDuration,
-  callDayTime: ''
-});
+): Call =>
+  new Call(
+    phoneNumber,
+    callType,
+    now
+      .clone()
+      .subtract(daysDelta, 'days')
+      .valueOf()
+      .toString(),
+    callDuration,
+    ''
+  );
 
 const testCases = [
   // normal
@@ -116,7 +118,7 @@ testCases.forEach((testCase, index) => {
 
     const notify = jest.fn();
 
-    new AppLogic(notify).checkCallLog(testPeople, testLog);
+    new AppLogic(notify, now.clone()).checkCallLog(testPeople, testLog);
 
     expect(notify).toHaveBeenCalledTimes(testCase[0].notifyCount);
   });
@@ -188,7 +190,7 @@ duplicateTestCases.forEach((testCase, index) => {
 
     const notify = jest.fn();
 
-    const checkedPeople = new AppLogic(notify).checkCallLog(
+    const checkedPeople = new AppLogic(notify, now.clone()).checkCallLog(
       testPeople,
       testLog
     );

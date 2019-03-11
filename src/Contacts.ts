@@ -6,5 +6,6 @@ export default () =>
     title: 'Call Your People Contacts Permission',
     message:
       'Call Your People needs access to your contacts ' +
-      "so you can select who's phone numbers to track."
+      "so you can select who's phone numbers to track.",
+    buttonPositive: 'Ok'
   }).then(() => selectContactPhone());

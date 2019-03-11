@@ -17,6 +17,7 @@
     "react-native": "0.57.5",
     "react-native-background-fetch": "2.5.1",
     "react-native-call-log": "https://github.com/wscodelabs/react-native-call-log#0a31eb7ca98f3a049a20e4851adeb7c7aa92c1ca",
+    "react-native-popup-menu": "^0.15.4",
     "react-native-push-notification": "^3.1.2",
     "react-native-select-contact": "^1.1.1",
     "react-native-send-intent": "https://github.com/bradser/react-native-send-intent",

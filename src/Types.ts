@@ -1,9 +1,11 @@
 import { Contact, PhoneEntry } from 'react-native-select-contact';
 
-export interface Person {
-  contact: Contact;
-  frequency: Frequency;
-  daysLeftTillCallNeeded: number;
+export class Person {
+  constructor(
+    public contact: Contact,
+    public frequency: Frequency,
+    public daysLeftTillCallNeeded: number
+  ) {}
 }
 
 export enum Frequency {
@@ -26,12 +28,14 @@ export const FrequencyText = [
   '1/4 year'
 ];
 
-export interface Call {
-  phoneNumber: string;
-  callType: CallType;
-  callDate: string;
-  callDuration: number;
-  callDayTime: string;
+export class Call {
+  constructor(
+    public phoneNumber: string,
+    public callType: CallType,
+    public callDate: string,
+    public callDuration: number,
+    public callDayTime: string
+  ) {}
 }
 
 export enum CallType {
@@ -40,7 +44,9 @@ export enum CallType {
   MISSED = 'MISSED'
 }
 
-export interface Found {
-  phone: PhoneEntry | undefined;
-  call: Call | undefined;
+export class Found {
+  constructor(
+    public phone: PhoneEntry | undefined,
+    public call: Call | undefined
+  ) {}
 }

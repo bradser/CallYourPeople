@@ -1,22 +1,22 @@
 import React from 'react';
-import { Component } from 'react';
+import { PureComponent } from 'react';
 import {
-  StyleSheet,
+  Linking,
   ScrollView,
-  Picker,
+  StyleSheet,
+  Text,
   TouchableOpacity
 } from 'react-native';
+import moment from 'moment';
 import AsyncStorage from '@react-native-community/async-storage';
-import { Table, Row, Rows } from 'react-native-table-component';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import { Cell, Row, Table, TableWrapper } from 'react-native-table-component';
+import * as MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import PushNotification from 'react-native-push-notification';
-
-import { Frequency, FrequencyText, Person } from '../Types';
+import { Frequency, Person } from '../Types';
 import AppLogic from '../AppLogic';
 import { getLogWithPermissions } from '../CallLog';
 import Contacts from '../Contacts';
-
-let personListHeader = ['Name', 'Days\nLeft', 'Frequency', ''];
+import FrequencyPicker from '../components/FrequencyPicker';
 
 interface Props {}
 
@@ -25,7 +25,7 @@ interface State {
   log: Object;
 }
 
-export class HomeScreen extends Component<Props, State> {
+export class HomeScreen extends PureComponent<Props, State> {
   static navigationOptions = {
     title: 'Call Your People!'
   };
@@ -43,42 +43,8 @@ export class HomeScreen extends Component<Props, State> {
     this.check();
   }
 
-  check = () =>
-    new AppLogic(details => PushNotification.localNotification(details))
-      .check(getLogWithPermissions)
-      .then(results => {
-        this.setState({ ...results });
-      });
-
-  picker = (person: Person) => (
-    <Picker
-      style={{ backgroundColor: 'white' }}
-      selectedValue={
-        this.state.people.find(p => p.contact.name === person.contact.name)!!
-          .frequency
-      }
-      onValueChange={(itemValue, itemIndex) => {
-        this.setState(
-          prevState => {
-            const personIndex = prevState.people.findIndex(
-              p => p.contact.name === person.contact.name
-            );
-
-            prevState.people[personIndex].frequency = itemIndex;
-
-            return prevState;
-          },
-          () => this._done()
-        );
-      }}
-    >
-      {FrequencyText.map((frequencyText, index) => (
-        <Picker.Item key={index} label={frequencyText} value={index} />
-      ))}
-    </Picker>
-  );
-
-  readonly columnWidths = [122, 55, 86, 23];
+  readonly columnFlexes = [1, 0.3, 0.55, 0.14];
+  readonly personListHeader = ['Name', 'Days\nLeft', 'Frequency', ''];
 
   render() {
     return (
@@ -88,70 +54,144 @@ export class HomeScreen extends Component<Props, State> {
           style={styles.table}
         >
           <Row
-            data={personListHeader}
+            data={this.personListHeader}
             style={styles.head}
-            textStyle={styles.text}
-            widthArr={this.columnWidths}
+            textStyle={styles.cell}
+            flexArr={this.columnFlexes}
           />
-          <Rows
-            data={this._getRow()}
-            textStyle={styles.text}
-            widthArr={this.columnWidths}
-          />
+          {this.getRows()}
         </Table>
-
-        <Icon.Button name="person-add" onPress={this._addPerson} style={styles.addButton}>
+        <MaterialIcon.Button
+          name="person-add"
+          onPress={this.addPerson}
+          style={styles.addButton}
+        >
           Add Person
-        </Icon.Button>
+        </MaterialIcon.Button>
       </ScrollView>
     );
   }
 
-  _getRow = () =>
-    this.state.people.map(person => [
-      person.contact.name,
-      person.daysLeftTillCallNeeded,
-      this.picker(person),
-      <TouchableOpacity onPress={() => this._deletePerson(person)}>
-        <Icon size={20} name="delete" />
-      </TouchableOpacity>
-    ]);
+  check = () =>
+    new AppLogic(
+      details => PushNotification.localNotification(details),
+      moment()
+    )
+      .check(getLogWithPermissions)
+      .then(results => {
+        this.setState({ ...results });
+      });
 
-  _addPerson = (): void => {
+  getRows = () =>
+    this.state.people.map((person, personIndex) => {
+      const daysLeftBackgoundColor =
+        person.daysLeftTillCallNeeded <= 0
+          ? { backgroundColor: 'lawngreen' }
+          : {};
+
+      return (
+        <TableWrapper key={personIndex} style={{ flexDirection: 'row' }}>
+          <Cell
+            key={1}
+            data={this.callLauncher(person, person => person.contact.name)}
+            flex={this.columnFlexes[0]}
+          />
+          <Cell
+            key={2}
+            data={this.callLauncher(
+              person,
+              person => person.daysLeftTillCallNeeded
+            )}
+            flex={this.columnFlexes[1]}
+            style={daysLeftBackgoundColor}
+          />
+          <Cell
+            key={3}
+            data={
+              <FrequencyPicker
+                person={person}
+                onSelect={this.frequencyOnSelect}
+                styles={styles.cell}
+              />
+            }
+            flex={this.columnFlexes[2]}
+          />
+          <Cell
+            key={4}
+            data={this.deleteButton(person)}
+            flex={this.columnFlexes[3]}
+          />
+        </TableWrapper>
+      );
+    });
+
+  frequencyOnSelect = (person, index) => {
+    this.setState(
+      prevState => {
+        this.setFrequency(prevState.people, person, index);
+
+        return prevState;
+      },
+      () => this.saveAndRecheck()
+    );
+  };
+
+  setFrequency = (people, person, frequency): void => {
+    const personIndex = people.findIndex(
+      p => p.contact.name === person.contact.name
+    );
+
+    people[personIndex].frequency = frequency;
+  };
+
+  callLauncher = (person: Person, contentCallback) => (
+    <TouchableOpacity
+      onPress={() => Linking.openURL(`tel:${person.contact.phones[0].number}`)}
+    >
+      <Text style={styles.cell}>{contentCallback(person)}</Text>
+    </TouchableOpacity>
+  );
+
+  deleteButton = person => (
+    <TouchableOpacity
+      onPress={() => this.deletePerson(person)}
+      style={styles.cell}
+    >
+      <MaterialIcon.default size={20} name="delete" />
+    </TouchableOpacity>
+  );
+
+  addPerson = (): void => {
     Contacts().then(selection => {
       if (!selection) {
-        return null;
+        return;
       }
 
-      const newPerson = {
-        contact: selection.contact,
-        frequency: Frequency.once_A_Week,
-        daysLeftTillCallNeeded: 0
-      };
+      const newPerson = new Person(selection.contact, Frequency.once_A_Week, 0);
 
       this.setState(
         prevState => ({
           people: [...prevState.people, newPerson]
         }),
-        () => this._done()
+        () => this.saveAndRecheck()
       );
     });
   };
 
-  _done = (): void => {
+  saveAndRecheck = (): void => {
     AsyncStorage.setItem('data', JSON.stringify(this.state.people));
 
     this.check();
   };
 
-  _deletePerson = (person: Person): void => {
+  deletePerson = (person: Person): void => {
     this.setState(
       prevState => ({
         people: prevState.people.filter(
           p => p.contact.name != person.contact.name
         )
       }),
-      () => this._done()
+      () => this.saveAndRecheck()
     );
   };
 }
@@ -159,7 +199,7 @@ export class HomeScreen extends Component<Props, State> {
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff' },
   head: { height: 40, backgroundColor: '#f1f8ff' },
-  text: { margin: 3, textAlign: 'center' },
+  cell: { margin: 3, textAlign: 'center' },
   table: { marginBottom: 5 },
   addButton: { alignSelf: 'center' }
 });

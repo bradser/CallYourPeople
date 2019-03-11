@@ -8,11 +8,7 @@ import { Call, Found, Frequency, Person, CallType } from './Types';
 const phoneNumberUtil = PhoneNumberUtil.getInstance();
 
 export default class AppLogic {
-  private notfy: any;
-
-  constructor(notfy: Function) {
-    this.notfy = notfy;
-  }
+  constructor(private notifyCallback: Function, private rightNow: moment.Moment) {}
 
   public check = getLog =>
     Promise.all([AsyncStorage.getItem('data'), getLog()])
@@ -29,17 +25,18 @@ export default class AppLogic {
       });
 
   public checkCallLog = (people: Person[], callLog: Call[]): Person[] => {
-    return people.map(person => {
+    return people.map((person: Person) => {
       const found = this.findPhoneAndCall(person, callLog);
 
       if (!found.call || this.checkCall(person, found.call)) {
         this.notify(person, found.phone);
       }
 
-      return {
-        ...person,
-        daysLeftTillCallNeeded: this.getDays(person, found.call)
-      };
+      return new Person(
+        person.contact,
+        person.frequency,
+        this.getDays(person, found.call)
+      );
     });
   };
 
@@ -62,27 +59,25 @@ export default class AppLogic {
       return Boolean(phone);
     });
 
-    return {
-      phone: phone || (person.contact.phones && person.contact.phones[0]),
+    return new Found(
+      phone || (person.contact.phones && person.contact.phones[0]),
       call
-    };
+    );
   };
 
   private getDays = (person: Person, foundCall: Call | undefined): number =>
     Boolean(foundCall)
-      ? Math.round(
-          this.daysLeftTillCallNeeded(person, foundCall!!.callDate) * 10
-        ) / 10
+      ? this.daysLeftTillCallNeeded(person, foundCall!!.callDate)
       : 0;
 
   private notify = (
     person: Person,
     foundPhone: PhoneEntry | undefined
   ): void => {
-    this.notfy({
+    this.notifyCallback({
       title: `Call ${person.contact.name} now!`,
       message: 'They want to hear from you!',
-      tag: foundPhone && foundPhone.number,
+      tag: foundPhone && foundPhone.number
     });
   };
 
@@ -105,13 +100,15 @@ export default class AppLogic {
       );
     }
 
-    return this.daysLeftTillCallNeeded(person, call.callDate) <= 0;
+    const daysLeft = this.daysLeftTillCallNeeded(person, call.callDate);
+
+    return daysLeft <= 0;
   };
 
   private isVoicemail = (call: Call): boolean => call.callDuration <= 2;
 
   private callDateToDaysSinceLastCall = (callDate: string): number =>
-    Math.abs(moment().diff(new Date(parseInt(callDate)), 'minutes')) /
+    Math.abs(this.rightNow.diff(new Date(parseInt(callDate)), 'minutes')) /
     (60 * 24);
 
   public daysLeftTillCallNeeded = (
@@ -124,7 +121,7 @@ export default class AppLogic {
 
     const daysRemaining = frequencyDays - daysSinceLastCall;
 
-    return daysRemaining;
+    return Math.round(daysRemaining * 10) / 10;
   };
 
   private frequencyToDays = ({ frequency }): number => {

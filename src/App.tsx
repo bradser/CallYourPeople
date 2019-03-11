@@ -2,6 +2,8 @@ import React from 'react';
 import BackgroundFetch from 'react-native-background-fetch';
 import PushNotification from 'react-native-push-notification';
 import SendIntentAndroid from 'react-native-send-intent';
+import { MenuProvider } from 'react-native-popup-menu';
+import moment from 'moment';
 import { getLog } from './CallLog';
 import { HomeScreen } from './screens/HomeScreen';
 import AppLogic from './AppLogic';
@@ -19,7 +21,7 @@ export default class App extends React.Component {
       },
       async () => {
         await new AppLogic(details =>
-          PushNotification.localNotification(details)
+          PushNotification.localNotification(details), moment()
         ).check(getLog);
 
         BackgroundFetch.finish(BackgroundFetch.FETCH_RESULT_NO_DATA);
@@ -46,6 +48,10 @@ export default class App extends React.Component {
   }
 
   render() {
-    return <HomeScreen />;
+    return (
+      <MenuProvider>
+        <HomeScreen />
+      </MenuProvider>
+    );
   }
 }
