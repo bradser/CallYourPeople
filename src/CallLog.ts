@@ -1,8 +1,8 @@
 import { PermissionsAndroid } from 'react-native';
 import CallLogs from 'react-native-call-log';
 
-export const getLogWithPermissions = (): Promise<object> => {
-  return PermissionsAndroid.request(
+export const getLogWithPermissions = async (): Promise<object | []> => {
+  const granted = await PermissionsAndroid.request(
     PermissionsAndroid.PERMISSIONS.READ_CALL_LOG,
     {
       title: 'Call Your People Call Log Permission',
@@ -11,7 +11,9 @@ export const getLogWithPermissions = (): Promise<object> => {
         'so it can tell you when to call.',
       buttonPositive: 'Ok'
     }
-  ).then(getLog);
+  );
+
+  return granted === PermissionsAndroid.RESULTS.GRANTED ? getLog() : [];
 };
 
 export const getLog = (): Promise<object> => {

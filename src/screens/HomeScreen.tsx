@@ -1,5 +1,6 @@
-import React from 'react';
-import { PureComponent } from 'react';
+import AsyncStorage from '@react-native-community/async-storage';
+import moment from 'moment';
+import React, { PureComponent } from 'react';
 import {
   Linking,
   ScrollView,
@@ -7,22 +8,20 @@ import {
   Text,
   TouchableOpacity
 } from 'react-native';
-import moment from 'moment';
-import AsyncStorage from '@react-native-community/async-storage';
+import PushNotification from 'react-native-push-notification';
 import { Cell, Row, Table, TableWrapper } from 'react-native-table-component';
 import * as MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import PushNotification from 'react-native-push-notification';
-import { Frequency, Person } from '../Types';
 import AppLogic from '../AppLogic';
 import { getLogWithPermissions } from '../CallLog';
-import Contacts from '../Contacts';
 import FrequencyPicker from '../components/FrequencyPicker';
+import Contacts from '../Contacts';
+import { Frequency, Person } from '../Types';
 
 interface Props {}
 
 interface State {
   people: Person[];
-  log: Object;
+  log: any | undefined;
 }
 
 export class HomeScreen extends PureComponent<Props, State> {

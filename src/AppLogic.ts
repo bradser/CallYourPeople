@@ -1,33 +1,43 @@
-import moment from 'moment';
-import { PhoneNumberUtil } from 'google-libphonenumber';
-import { PhoneEntry } from 'react-native-select-contact';
 import AsyncStorage from '@react-native-community/async-storage';
-
-import { Call, Found, Frequency, Person, CallType } from './Types';
+import { PhoneNumberUtil } from 'google-libphonenumber';
+import moment from 'moment';
+import { PhoneEntry } from 'react-native-select-contact';
+import { Call, CallType, Found, Frequency, Person } from './Types';
 
 const phoneNumberUtil = PhoneNumberUtil.getInstance();
 
+export class CheckOutput {
+  constructor(public people: Person[], public log: any) {}
+}
+
 export default class AppLogic {
-  constructor(private notifyCallback: Function, private rightNow: moment.Moment) {}
+  constructor(
+    private notifyCallback: Function,
+    private rightNow: moment.Moment
+  ) {}
 
-  public check = getLog =>
-    Promise.all([AsyncStorage.getItem('data'), getLog()])
-      .then(results => {
-        console.log('BackgroundFetch: check post get data');
-        const storagePeople = results[0] ? JSON.parse(results[0]) : [];
+  public check = async (getLog: Function): Promise<CheckOutput> => {
+    let storageData = undefined;
+    let log = [];
 
-        const checkedPeople = this.checkCallLog(storagePeople, results[1]);
+    try {
+      const [storageData, log] = await Promise.all([AsyncStorage.getItem('data'), getLog()]);
+    } catch (error) {
+        // TODO: log to sentry
+    }
 
-        return { people: checkedPeople, log: results[1] };
-      })
-      .catch(e => {
-        console.log(`BackgroundFetch: AppLogic Error: ${e.message}`);
-      });
+    const storagePeople = storageData ? JSON.parse(storageData) : [];
 
-  public checkCallLog = (people: Person[], callLog: Call[]): Person[] => {
-    return people.map((person: Person) => {
+    const checkedPeople = this.checkCallLog(storagePeople, log);
+
+    return new CheckOutput(checkedPeople, log);
+  }
+
+  public checkCallLog = (people: Person[], callLog: Call[]): Person[] => (
+     people.map((person: Person) => {
       const found = this.findPhoneAndCall(person, callLog);
 
+      // If there was never a call to/from this person, notify immediately
       if (!found.call || this.checkCall(person, found.call)) {
         this.notify(person, found.phone);
       }
@@ -37,12 +47,13 @@ export default class AppLogic {
         person.frequency,
         this.getDays(person, found.call)
       );
-    });
-  };
+    })
+  );
 
   private findPhoneAndCall = (person: Person, callLog: Call[]): Found => {
     const PNFE164 = 0;
     let phone: PhoneEntry | undefined;
+
     const call = callLog.find(call => {
       phone = person.contact.phones.find(phone => {
         try {
@@ -59,6 +70,7 @@ export default class AppLogic {
       return Boolean(phone);
     });
 
+    // If there was never a call to this person, default to the first phone found
     return new Found(
       phone || (person.contact.phones && person.contact.phones[0]),
       call
@@ -95,6 +107,7 @@ export default class AppLogic {
         return this.callDateToDaysSinceLastCall(call.callDate) > 2;
       }
 
+      // TODO: log to sentry
       throw Error(
         `unexpected CallType ${call.callType} in checkCall's isVoicemail check`
       );
@@ -142,6 +155,7 @@ export default class AppLogic {
         return (365 / 12) * 3;
     }
 
+    // TODO log to sentry
     throw Error(`unhandled Frequency ${frequency} in frequencyToDays`);
   };
 }
