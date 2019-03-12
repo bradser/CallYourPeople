@@ -1,6 +1,6 @@
 import moment from 'moment';
 import AppLogic from '../src/AppLogic';
-import { Call, CallType, Person, Frequency } from '../src/Types';
+import { Call, CallType, Frequency, Person } from '../src/Types';
 
 class TestCase {
   constructor(
@@ -8,42 +8,44 @@ class TestCase {
     public callDuration: number,
     public frequency: Frequency,
     public daysDelta: number,
-    public notifyCount: number
+    public notifyCount: number,
   ) {}
 }
 
+// tslint:disable-next-line: max-classes-per-file
 class DuplicateTestCase {
   constructor(
     public name: string,
-    public number: string,
+    public phoneNumber: string,
     public frequency: Frequency,
     public callType: CallType,
     public callDuration: number,
     public daysDelta: number,
     public notifyCount: number,
-    public daysLeftTillCallNeeded: number
+    public daysLeftTillCallNeeded: number,
   ) {}
 }
 
 const getPerson = (
   name: string,
-  number: string,
-  frequency: Frequency
+  phoneNumber: string,
+  frequency: Frequency,
 ): Person =>
   new Person(
     {
+      emails: [],
       name,
       phones: [
         {
-          number,
-          type: 'mobile'
-        }
+          number: phoneNumber,
+          type: 'mobile',
+        },
       ],
-      emails: [],
-      postalAddresses: []
+      postalAddresses: [],
+      recordId: '',
     },
     frequency,
-    0
+    0,
   );
 
 const now = moment();
@@ -52,7 +54,7 @@ const getCall = (
   phoneNumber: string,
   callType: CallType,
   daysDelta: number,
-  callDuration: number
+  callDuration: number,
 ): Call =>
   new Call(
     phoneNumber,
@@ -63,7 +65,7 @@ const getCall = (
       .valueOf()
       .toString(),
     callDuration,
-    ''
+    '',
   );
 
 const testCases = [
@@ -98,13 +100,13 @@ const testCases = [
   [new TestCase(CallType.INCOMING, 5, Frequency.once_Every_Two_Weeks, 13, 0)],
   [new TestCase(CallType.OUTGOING, 5, Frequency.once_Every_Two_Weeks, 15, 1)],
   [new TestCase(CallType.OUTGOING, 5, Frequency.once_Every_Two_Weeks, 14, 1)],
-  [new TestCase(CallType.OUTGOING, 5, Frequency.once_Every_Two_Weeks, 13, 0)]
+  [new TestCase(CallType.OUTGOING, 5, Frequency.once_Every_Two_Weeks, 13, 0)],
 ];
 
 testCases.forEach((testCase, index) => {
   it(`case #${index}`, () => {
     const testPeople = [
-      getPerson('Shelley McIntyre', '+12062954055', testCase[0].frequency)
+      getPerson('Shelley McIntyre', '+12062954055', testCase[0].frequency),
     ];
 
     const testLog = [
@@ -112,8 +114,8 @@ testCases.forEach((testCase, index) => {
         '+12062954055',
         testCase[0].callType,
         testCase[0].daysDelta,
-        testCase[0].callDuration
-      )
+        testCase[0].callDuration,
+      ),
     ];
 
     const notify = jest.fn();
@@ -135,7 +137,7 @@ const duplicateTestCases = [
       5,
       7,
       0,
-      7
+      7,
     ),
     new DuplicateTestCase(
       'Gayle Serbus',
@@ -145,8 +147,8 @@ const duplicateTestCases = [
       5,
       7,
       0,
-      7
-    )
+      7,
+    ),
   ],
   [
     new DuplicateTestCase(
@@ -157,7 +159,7 @@ const duplicateTestCases = [
       5,
       21,
       2,
-      -7
+      -7,
     ),
     new DuplicateTestCase(
       'Gayle Serbus',
@@ -167,16 +169,16 @@ const duplicateTestCases = [
       5,
       21,
       2,
-      -7
-    )
-  ]
+      -7,
+    ),
+  ],
 ];
 
 duplicateTestCases.forEach((testCase, index) => {
   it(`duplicate case #${index}`, () => {
     const testPeople = [
-      getPerson(testCase[0].name, testCase[0].number, testCase[0].frequency),
-      getPerson(testCase[1].name, testCase[1].number, testCase[1].frequency)
+      getPerson(testCase[0].name, testCase[0].phoneNumber, testCase[0].frequency),
+      getPerson(testCase[1].name, testCase[1].phoneNumber, testCase[1].frequency),
     ];
 
     const testLog = [
@@ -184,24 +186,24 @@ duplicateTestCases.forEach((testCase, index) => {
         '+3136385505',
         testCase[0].callType,
         testCase[0].daysDelta,
-        testCase[0].callDuration
-      )
+        testCase[0].callDuration,
+      ),
     ];
 
     const notify = jest.fn();
 
     const checkedPeople = new AppLogic(notify, now.clone()).checkCallLog(
       testPeople,
-      testLog
+      testLog,
     );
 
     expect(notify).toHaveBeenCalledTimes(testCase[0].notifyCount);
 
     expect(checkedPeople[0].daysLeftTillCallNeeded).toBe(
-      testCase[0].daysLeftTillCallNeeded
+      testCase[0].daysLeftTillCallNeeded,
     );
     expect(checkedPeople[1].daysLeftTillCallNeeded).toBe(
-      testCase[1].daysLeftTillCallNeeded
+      testCase[1].daysLeftTillCallNeeded,
     );
   });
 });

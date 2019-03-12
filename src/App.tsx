@@ -4,51 +4,47 @@ import BackgroundFetch from 'react-native-background-fetch';
 import { MenuProvider } from 'react-native-popup-menu';
 import PushNotification from 'react-native-push-notification';
 import SendIntentAndroid from 'react-native-send-intent';
+import { Sentry } from 'react-native-sentry';
 import AppLogic from './AppLogic';
 import { getLog } from './CallLog';
 import { HomeScreen } from './screens/HomeScreen';
 
 export default class App extends React.Component {
-  componentDidMount() {
+  public componentDidMount() {
     SendIntentAndroid.requestIgnoreBatteryOptimizations();
 
     BackgroundFetch.configure(
       {
-        minimumFetchInterval: 15, //6 * 60,
-        stopOnTerminate: false,
+        enableHeadless: true,
+        minimumFetchInterval: 6 * 60,
         startOnBoot: true,
-        enableHeadless: true
+        stopOnTerminate: false,
       },
       async () => {
         await new AppLogic(
-          details => PushNotification.localNotification(details),
-          moment()
+          (details) => PushNotification.localNotification(details),
+          moment(),
         ).check(getLog);
 
         BackgroundFetch.finish(BackgroundFetch.FETCH_RESULT_NO_DATA);
       },
-      error => {
-        console.log('[js] RNBackgroundFetch failed to start ' + error);
-      }
+      (error) => {
+        Sentry.captureException(new Error(error.toString()));
+      },
     );
 
-    // Optional: Query the authorization status.
-    BackgroundFetch.status(status => {
+    BackgroundFetch.status((status) => {
       switch (status) {
-        case BackgroundFetch.STATUS_RESTRICTED:
-          console.log('BackgroundFetch restricted');
-          break;
-        case BackgroundFetch.STATUS_DENIED:
-          console.log('BackgroundFetch denied');
+        default:
+          Sentry.captureException(new Error(`BackgroundFetch status: ${status.toString()}`));
           break;
         case BackgroundFetch.STATUS_AVAILABLE:
-          console.log('BackgroundFetch is enabled');
           break;
       }
     });
   }
 
-  render() {
+  public render() {
     return (
       <MenuProvider>
         <HomeScreen />

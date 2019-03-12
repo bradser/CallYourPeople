@@ -1,11 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Text, View, ViewStyle } from 'react-native';
-import {
-  Menu,
-  MenuOption,
-  MenuOptions,
-  MenuTrigger
-} from 'react-native-popup-menu';
+import { Menu, MenuOption, MenuOptions, MenuTrigger } from 'react-native-popup-menu';
 import * as MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { FrequencyText, Person } from '../Types';
 
@@ -16,20 +11,20 @@ interface Props {
 }
 
 export default class FrequencyPicker extends PureComponent<Props> {
-  render() {
+  public render() {
     return (
       <Menu>
         <MenuTrigger>
           <View
             style={{
+              alignItems: 'center',
               flexDirection: 'row',
               justifyContent: 'flex-end',
-              alignItems: 'center',
-              ...this.props.styles
+              ...this.props.styles,
             }}
           >
             <Text>{FrequencyText[this.props.person.frequency]}</Text>
-            <MaterialCommunityIcon.default name="dots-vertical" size={24} />
+            <MaterialCommunityIcon.default name='dots-vertical' size={24} />
           </View>
         </MenuTrigger>
         <MenuOptions>

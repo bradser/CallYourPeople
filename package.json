@@ -19,11 +19,11 @@
     "react-native-call-log": "https://github.com/wscodelabs/react-native-call-log#0a31eb7ca98f3a049a20e4851adeb7c7aa92c1ca",
     "react-native-popup-menu": "^0.15.4",
     "react-native-push-notification": "^3.1.2",
-    "react-native-select-contact": "^1.1.1",
+    "react-native-select-contact": "1.2.0",
     "react-native-send-intent": "https://github.com/bradser/react-native-send-intent",
     "react-native-sentry": "^0.42.0",
     "react-native-table-component": "1.2.0",
-    "react-native-vector-icons": "^6.2.0"
+    "react-native-vector-icons": "6.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.1.6",
@@ -38,6 +38,8 @@
     "react-native-typescript-transformer": "1.2.11",
     "react-test-renderer": "16.6.3",
     "regenerator-runtime": "^0.13.1",
-    "ts-jest": "23.10.5"
+    "ts-jest": "23.10.5",
+    "tslint": "^5.13.1",
+    "typescript": "^3.3.3333"
   }
 }

@@ -1,10 +1,11 @@
+// tslint:disable:max-classes-per-file
 import { Contact, PhoneEntry } from 'react-native-select-contact';
 
 export class Person {
   constructor(
     public contact: Contact,
     public frequency: Frequency,
-    public daysLeftTillCallNeeded: number
+    public daysLeftTillCallNeeded: number,
   ) {}
 }
 
@@ -15,7 +16,7 @@ export enum Frequency {
   once_Every_Three_Weeks,
   once_Every_Month,
   once_Every_Two_Months,
-  once_Every_Quarter_Year
+  once_Every_Quarter_Year,
 }
 
 export const FrequencyText = [
@@ -25,7 +26,7 @@ export const FrequencyText = [
   '3 weeks',
   '1 month',
   '2 months',
-  '1/4 year'
+  '1/4 year',
 ];
 
 export class Call {
@@ -34,19 +35,23 @@ export class Call {
     public callType: CallType,
     public callDate: string,
     public callDuration: number,
-    public callDayTime: string
+    public callDayTime: string,
   ) {}
 }
 
 export enum CallType {
   INCOMING = 'INCOMING',
   OUTGOING = 'OUTGOING',
-  MISSED = 'MISSED'
+  MISSED = 'MISSED',
 }
 
 export class Found {
   constructor(
     public phone: PhoneEntry | undefined,
-    public call: Call | undefined
+    public call: Call | undefined,
   ) {}
 }
+
+export type NotifyCallback = (details: object) => void;
+
+export type GetLogCallback = () => Promise<object | []>;
