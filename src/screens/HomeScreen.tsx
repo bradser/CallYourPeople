@@ -8,7 +8,7 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-import PushNotification from 'react-native-push-notification';
+import PushNotification from 'react-native-push-notification-ce';
 import { Cell, Row, Table, TableWrapper } from 'react-native-table-component';
 import * as MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import AppLogic from '../AppLogic';
@@ -98,7 +98,9 @@ export class HomeScreen extends PureComponent<Props, State> {
           />
           <Cell
             key={2}
-            data={this.callLauncher(person, (p) => p.daysLeftTillCallNeeded.toString())}
+            data={this.callLauncher(person, (p) =>
+              p.daysLeftTillCallNeeded.toString(),
+            )}
             flex={this.columnFlexes[1]}
             style={daysLeftBackgoundColor}
           />
@@ -141,7 +143,10 @@ export class HomeScreen extends PureComponent<Props, State> {
     people[personIndex].frequency = frequency;
   }
 
-  public callLauncher = (person: Person, contentCallback: (person: Person) => string) => (
+  public callLauncher = (
+    person: Person,
+    contentCallback: (person: Person) => string,
+  ) => (
     <TouchableOpacity
       onPress={() =>
         Linking.openURL(

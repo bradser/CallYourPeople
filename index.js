@@ -1,6 +1,6 @@
 import { AppRegistry, Linking } from "react-native";
 import BackgroundFetch from "react-native-background-fetch";
-import PushNotification from "react-native-push-notification";
+import PushNotification from "react-native-push-notification-ce";
 import { Sentry } from 'react-native-sentry';
 import moment from 'moment';
 import AppLogic from "./src/AppLogic";
@@ -25,6 +25,4 @@ PushNotification.configure({
       Linking.openURL(`tel:${notification.tag}`);
     }
   },
-
-  requestPermissions: true,
 });

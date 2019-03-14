@@ -2,7 +2,7 @@ import moment from 'moment';
 import React from 'react';
 import BackgroundFetch from 'react-native-background-fetch';
 import { MenuProvider } from 'react-native-popup-menu';
-import PushNotification from 'react-native-push-notification';
+import PushNotification from 'react-native-push-notification-ce';
 import SendIntentAndroid from 'react-native-send-intent';
 import { Sentry } from 'react-native-sentry';
 import AppLogic from './AppLogic';
@@ -42,6 +42,8 @@ export default class App extends React.Component {
           break;
       }
     });
+
+    PushNotification.appStart();
   }
 
   public render() {

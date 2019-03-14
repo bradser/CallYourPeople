@@ -110,7 +110,9 @@ export default class AppLogic {
     foundPhone: PhoneEntry | undefined,
   ): void => {
     this.notifyCallback({
+      largeIcon: 'ic_contact_phone',
       message: 'They want to hear from you!',
+      smallIcon: 'ic_contact_phone',
       tag: foundPhone && foundPhone.number,
       title: `Call ${person.contact.name} now!`,
     });
