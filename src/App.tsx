@@ -16,7 +16,7 @@ export default class App extends React.Component {
     BackgroundFetch.configure(
       {
         enableHeadless: true,
-        minimumFetchInterval: 6 * 60,
+        minimumFetchInterval: 12 * 60,
         startOnBoot: true,
         stopOnTerminate: false,
       },
