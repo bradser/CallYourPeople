@@ -3,27 +3,33 @@ import AppLogic from '../src/AppLogic';
 import { Call, CallType, Frequency, Person } from '../src/Types';
 
 class TestCase {
+  public callDurationSeconds: number;
+
   constructor(
     public callType: CallType,
-    public callDuration: number,
+    callDurationMinutes: number,
     public frequency: Frequency,
     public daysDelta: number,
     public notifyCount: number,
-  ) {}
+  ) {
+    this.callDurationSeconds = callDurationMinutes * 60;
+  }
 }
 
 // tslint:disable-next-line: max-classes-per-file
-class DuplicateTestCase {
+class DuplicateTestCase extends TestCase {
   constructor(
     public name: string,
     public phoneNumber: string,
     public frequency: Frequency,
     public callType: CallType,
-    public callDuration: number,
+    callDurationMinutes: number,
     public daysDelta: number,
     public notifyCount: number,
     public daysLeftTillCallNeeded: number,
-  ) {}
+  ) {
+    super(callType, callDurationMinutes, frequency, daysDelta, notifyCount);
+  }
 }
 
 const getPerson = (
@@ -114,7 +120,7 @@ testCases.forEach((testCase, index) => {
         '+12062954055',
         testCase[0].callType,
         testCase[0].daysDelta,
-        testCase[0].callDuration,
+        testCase[0].callDurationSeconds,
       ),
     ];
 
@@ -177,8 +183,16 @@ const duplicateTestCases = [
 duplicateTestCases.forEach((testCase, index) => {
   it(`duplicate case #${index}`, () => {
     const testPeople = [
-      getPerson(testCase[0].name, testCase[0].phoneNumber, testCase[0].frequency),
-      getPerson(testCase[1].name, testCase[1].phoneNumber, testCase[1].frequency),
+      getPerson(
+        testCase[0].name,
+        testCase[0].phoneNumber,
+        testCase[0].frequency,
+      ),
+      getPerson(
+        testCase[1].name,
+        testCase[1].phoneNumber,
+        testCase[1].frequency,
+      ),
     ];
 
     const testLog = [
@@ -186,7 +200,7 @@ duplicateTestCases.forEach((testCase, index) => {
         '+3136385505',
         testCase[0].callType,
         testCase[0].daysDelta,
-        testCase[0].callDuration,
+        testCase[0].callDurationSeconds,
       ),
     ];
 

@@ -1,11 +1,11 @@
-import { AppRegistry, Linking } from "react-native";
-import BackgroundFetch from "react-native-background-fetch";
-import PushNotification from "react-native-push-notification-ce";
-import { Sentry } from 'react-native-sentry';
 import moment from 'moment';
-import AppLogic from "./src/AppLogic";
-import { getLog } from "./src/CallLog";
-import App from "./src/App";
+import { AppRegistry, Linking } from 'react-native';
+import BackgroundFetch from 'react-native-background-fetch';
+import PushNotification from 'react-native-push-notification-ce';
+import { Sentry } from 'react-native-sentry';
+import App from './src/App';
+import AppLogic from './src/AppLogic';
+import { getLog } from './src/CallLog';
 
 Sentry.config('https://72a046a322314e0e8d387ff7a2ca1ab6@sentry.io/1410623').install();
 
@@ -17,8 +17,6 @@ const MyHeadlessTask = async () => {
 
 BackgroundFetch.registerHeadlessTask(MyHeadlessTask);
 
-AppRegistry.registerComponent("CallYourPeople", () => App);
-
 PushNotification.configure({
   onNotification: (notification) => {
     if (notification.tag) {
@@ -26,3 +24,5 @@ PushNotification.configure({
     }
   },
 });
+
+AppRegistry.registerComponent("CallYourPeople", () => App);

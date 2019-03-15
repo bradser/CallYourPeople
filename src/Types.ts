@@ -54,4 +54,4 @@ export class Found {
 
 export type NotifyCallback = (details: object) => void;
 
-export type GetLogCallback = () => Promise<object | []>;
+export type GetLogCallback = () => Promise<Call[]>;

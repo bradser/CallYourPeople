@@ -1,13 +1,7 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import moment from 'moment';
 import React, { PureComponent } from 'react';
-import {
-  Linking,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-} from 'react-native';
+import { Linking, ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import PushNotification from 'react-native-push-notification-ce';
 import { Cell, Row, Table, TableWrapper } from 'react-native-table-component';
 import * as MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -15,7 +9,7 @@ import AppLogic from '../AppLogic';
 import { getLogWithPermissions } from '../CallLog';
 import FrequencyPicker from '../components/FrequencyPicker';
 import Contacts from '../Contacts';
-import { Frequency, Person } from '../Types';
+import { Frequency, NotifyCallback, Person } from '../Types';
 
 // tslint:disable-next-line: no-empty-interface
 interface Props {}
@@ -43,7 +37,16 @@ export class HomeScreen extends PureComponent<Props, State> {
   }
 
   public componentDidMount() {
-    this.check();
+    // If we are being launched by a notification, don't checkAndNotify,
+    // otherwise we may generate a new notification to replace
+    // the one that just launched the app.
+    PushNotification.showInitialNotification((result) => {
+      if (!result) {
+        this.check();
+      }
+
+      PushNotification.appStart();
+    });
   }
 
   public render() {
@@ -73,8 +76,14 @@ export class HomeScreen extends PureComponent<Props, State> {
   }
 
   public check = () =>
+    this.runAppLogic(() => undefined)
+
+  public checkAndNotify = () =>
+     this.runAppLogic((details) => PushNotification.localNotification(details))
+
+  public runAppLogic = (notificationCallback: NotifyCallback) =>
     new AppLogic(
-      (details) => PushNotification.localNotification(details),
+      notificationCallback,
       moment(),
     )
       .check(getLogWithPermissions)
@@ -189,7 +198,7 @@ export class HomeScreen extends PureComponent<Props, State> {
   public saveAndRecheck = (): void => {
     AsyncStorage.setItem('data', JSON.stringify(this.state.people));
 
-    this.check();
+    this.checkAndNotify();
   }
 
   public deletePerson = (person: Person): void => {

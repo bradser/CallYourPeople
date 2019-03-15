@@ -28,7 +28,7 @@ export default class AppLogic {
 
   public check = async (getLog: GetLogCallback): Promise<CheckOutput> => {
     let storageData: string | undefined;
-    let log = [];
+    let log: Call[] = [];
 
     try {
       [storageData, log] = await Promise.all([
@@ -148,7 +148,7 @@ export default class AppLogic {
     return daysLeft <= 0;
   }
 
-  private isVoicemail = (call: Call): boolean => call.callDuration <= 2;
+  private isVoicemail = (call: Call): boolean => call.callDuration <= 2 * 60;
 
   private callDateToDaysSinceLastCall = (callDate: string): number =>
     Math.abs(this.rightNow.diff(new Date(parseInt(callDate, 10)), 'minutes')) /
