@@ -150,7 +150,7 @@ export class HomeScreen extends PureComponent<Props, State> {
     <TouchableOpacity
       onPress={() =>
         Linking.openURL(
-          `content://com.android.contacts/contacts/lookup/${
+          `content://com.android.contacts/contacts/${
             person.contact.recordId
           }`,
         )
