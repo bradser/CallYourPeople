@@ -3,15 +3,7 @@ import { PhoneNumberUtil } from 'google-libphonenumber';
 import moment from 'moment';
 import { PhoneEntry } from 'react-native-select-contact';
 import { Sentry } from 'react-native-sentry';
-import {
-  Call,
-  CallType,
-  Found,
-  Frequency,
-  GetLogCallback,
-  NotifyCallback,
-  Person,
-} from './Types';
+import { Call, CallType, Found, Frequency, GetLogCallback, NotifyCallback, Person } from './Types';
 
 const phoneNumberUtil = PhoneNumberUtil.getInstance();
 
@@ -51,29 +43,18 @@ export default class AppLogic {
       const found = this.findPhoneAndCall(person, callLog);
 
       // If there was never a call to/from this person, notify immediately
-      if (!found.call || this.checkCall(person, found.call)) {
+      const days = found.call ? this.daysLeftTillCallNeeded(person, found.call) : 0;
+
+      if (days <= 0) {
         this.notify(person, found.phone);
       }
 
       return new Person(
         person.contact,
         person.frequency,
-        this.getDays(person, found.call),
+        days,
       );
     })
-
-  public daysLeftTillCallNeeded = (
-    person: Person,
-    callDate: string,
-  ): number => {
-    const daysSinceLastCall = this.callDateToDaysSinceLastCall(callDate);
-
-    const frequencyDays = this.frequencyToDays(person);
-
-    const daysRemaining = frequencyDays - daysSinceLastCall;
-
-    return Math.round(daysRemaining * 10) / 10;
-  }
 
   private findPhoneAndCall = (person: Person, callLog: Call[]): Found => {
     const PNFE164 = 0;
@@ -100,36 +81,21 @@ export default class AppLogic {
     );
   }
 
-  private getDays = (person: Person, foundCall: Call | undefined): number =>
-    Boolean(foundCall)
-      ? this.daysLeftTillCallNeeded(person, foundCall!!.callDate)
-      : 0
+  private daysLeftTillCallNeeded = (person: Person, call: Call): number => {
+    const daysSince = this.callDateToDaysSinceLastCall(call.callDate);
 
-  private notify = (
-    person: Person,
-    foundPhone: PhoneEntry | undefined,
-  ): void => {
-    this.notifyCallback({
-      largeIcon: 'ic_contact_phone',
-      message: 'They want to hear from you!',
-      smallIcon: 'ic_contact_phone',
-      tag: foundPhone && foundPhone.number,
-      title: `Call ${person.contact.name} now!`,
-    });
-  }
-
-  private checkCall = (person: Person, call: Call): boolean => {
     if (call.callType === CallType.MISSED) {
-      return true;
+      return -daysSince;
     }
 
     if (this.isVoicemail(call)) {
       if (call.callType === CallType.INCOMING) {
-        return true;
+        return -daysSince;
       }
 
       if (call.callType === CallType.OUTGOING) {
-        return this.callDateToDaysSinceLastCall(call.callDate) > 2;
+        // Leave a voicemail every other day, or complete a conversation
+        return this.roundDays(2 - daysSince);
       }
 
       Sentry.captureException(
@@ -140,12 +106,12 @@ export default class AppLogic {
         ),
       );
 
-      return false;
+      return 0;
     }
 
-    const daysLeft = this.daysLeftTillCallNeeded(person, call.callDate);
+    const frequencyDays = this.frequencyToDays(person);
 
-    return daysLeft <= 0;
+    return this.roundDays(frequencyDays - daysSince);
   }
 
   private isVoicemail = (call: Call): boolean => call.callDuration <= 2 * 60;
@@ -153,6 +119,8 @@ export default class AppLogic {
   private callDateToDaysSinceLastCall = (callDate: string): number =>
     Math.abs(this.rightNow.diff(new Date(parseInt(callDate, 10)), 'minutes')) /
     (60 * 24)
+
+  private roundDays = (days: number): number => Math.round(days * 10) / 10;
 
   private frequencyToDays = ({ frequency }): number => {
     switch (frequency) {
@@ -177,5 +145,18 @@ export default class AppLogic {
     );
 
     return 7;
+  }
+
+  private notify = (
+    person: Person,
+    foundPhone: PhoneEntry | undefined,
+  ): void => {
+    this.notifyCallback({
+      largeIcon: 'ic_contact_phone',
+      message: 'They want to hear from you!',
+      smallIcon: 'ic_contact_phone',
+      tag: foundPhone && foundPhone.number,
+      title: `Call ${person.contact.name} now!`,
+    });
   }
 }
