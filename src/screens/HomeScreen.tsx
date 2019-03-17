@@ -41,8 +41,10 @@ export class HomeScreen extends PureComponent<Props, State> {
     // otherwise we may generate a new notification to replace
     // the one that just launched the app.
     PushNotification.showInitialNotification((result) => {
-      if (!result) {
+      if (result) {
         this.check();
+      } else {
+        this.checkAndNotify();
       }
 
       PushNotification.appStart();
@@ -88,7 +90,7 @@ export class HomeScreen extends PureComponent<Props, State> {
     )
       .check(getLogWithPermissions)
       .then((results) => {
-        this.setState({ ...results });
+        this.setState(results);
       })
 
   public getRows = () =>
@@ -136,20 +138,22 @@ export class HomeScreen extends PureComponent<Props, State> {
   public frequencyOnSelect = (person, index) => {
     this.setState(
       (prevState) => {
-        this.setFrequency(prevState.people, person, index);
+        const newPeople = this.setFrequency(prevState.people, person, index);
 
-        return prevState;
+        return { ...prevState, people: newPeople };
       },
       () => this.saveAndRecheck(),
     );
   }
 
-  public setFrequency = (people, person, frequency): void => {
+  public setFrequency = (people, person, frequency): Person[] => {
     const personIndex = people.findIndex(
       (p) => p.contact.name === person.contact.name,
     );
 
     people[personIndex].frequency = frequency;
+
+    return people;
   }
 
   public callLauncher = (
