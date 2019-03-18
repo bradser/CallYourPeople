@@ -1,5 +1,5 @@
 import { PermissionsAndroid } from 'react-native';
-import { selectContactPhone } from 'react-native-select-contact';
+import { selectContact } from 'react-native-select-contact';
 
 export default () =>
   PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_CONTACTS, {
@@ -8,4 +8,4 @@ export default () =>
       'Call Your People needs access to your contacts ' +
       "so you can select who's phone numbers to track.",
     title: 'Call Your People Contacts Permission',
-  }).then(() => selectContactPhone());
+  }).then(() => selectContact());

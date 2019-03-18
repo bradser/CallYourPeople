@@ -183,12 +183,12 @@ export class HomeScreen extends PureComponent<Props, State> {
   )
 
   public addPerson = (): void => {
-    Contacts().then((selection) => {
-      if (!selection) {
+    Contacts().then((selectedContact) => {
+      if (!selectedContact) {
         return;
       }
 
-      const newPerson = new Person(selection.contact, Frequency.once_A_Week, 0);
+      const newPerson = new Person(selectedContact, Frequency.once_A_Week, 0);
 
       this.setState(
         (prevState) => ({
