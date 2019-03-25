@@ -1,5 +1,7 @@
+import { PhoneNumberUtil } from 'google-libphonenumber';
 import { PermissionsAndroid } from 'react-native';
 import CallLogs from 'react-native-call-log';
+import { formatPhoneNumber } from './Helpers';
 import { Call, GetLogCallback } from './Types';
 
 export const getLogWithPermissions: GetLogCallback = async () => {
@@ -20,7 +22,13 @@ export const getLogWithPermissions: GetLogCallback = async () => {
 export const getLog: GetLogCallback = () => {
   return new Promise((resolve) =>
     CallLogs.show((logs: string) => {
-      const parsedLogs = JSON.parse(logs) as Call[];
+      const phoneNumberUtil = PhoneNumberUtil.getInstance();
+
+      const parsedLogs = JSON.parse(logs, (key, value) =>
+        key === 'phoneNumber'
+          ? formatPhoneNumber(phoneNumberUtil, value)
+          : value,
+      ) as Call[];
 
       resolve(parsedLogs);
     }),

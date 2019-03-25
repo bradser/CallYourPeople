@@ -1,15 +1,21 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import moment from 'moment';
 import React, { PureComponent } from 'react';
-import { Linking, ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import {
+  Linking,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 import PushNotification from 'react-native-push-notification-ce';
 import { Cell, Row, Table, TableWrapper } from 'react-native-table-component';
 import * as MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import AppLogic from '../AppLogic';
 import { getLogWithPermissions } from '../CallLog';
+import AddPersonButton from '../components/AddPersonButton';
 import FrequencyPicker from '../components/FrequencyPicker';
-import Contacts from '../Contacts';
-import { Frequency, NotifyCallback, Person } from '../Types';
+import { NotifyCallback, Person } from '../Types';
 
 // tslint:disable-next-line: no-empty-interface
 interface Props {}
@@ -66,34 +72,30 @@ export class HomeScreen extends PureComponent<Props, State> {
           />
           {this.getRows()}
         </Table>
-        <MaterialIcon.Button
-          name='person-add'
+        <AddPersonButton
           onPress={this.addPerson}
-          style={styles.addButton}
-        >
-          Add Person
-        </MaterialIcon.Button>
+        />
+        {this.link(
+          'Conversation Tips',
+          'https://fortheinterested.com/ask-better-questions/',
+        )}
       </ScrollView>
     );
   }
 
-  public check = () =>
-    this.runAppLogic(() => undefined)
+  private check = () => this.runAppLogic(() => undefined);
 
-  public checkAndNotify = () =>
-     this.runAppLogic((details) => PushNotification.localNotification(details))
+  private checkAndNotify = () =>
+    this.runAppLogic((details) => PushNotification.localNotification(details))
 
-  public runAppLogic = (notificationCallback: NotifyCallback) =>
-    new AppLogic(
-      notificationCallback,
-      moment(),
-    )
+  private runAppLogic = (notificationCallback: NotifyCallback) =>
+    new AppLogic(notificationCallback, moment())
       .check(getLogWithPermissions)
       .then((results) => {
         this.setState(results);
       })
 
-  public getRows = () =>
+  private getRows = () =>
     this.state.people.map((person, personIndex) => {
       const daysLeftBackgoundColor =
         person.daysLeftTillCallNeeded <= 0
@@ -135,7 +137,7 @@ export class HomeScreen extends PureComponent<Props, State> {
       );
     })
 
-  public frequencyOnSelect = (person, index) => {
+  private frequencyOnSelect = (person, index) => {
     this.setState(
       (prevState) => {
         const newPeople = this.setFrequency(prevState.people, person, index);
@@ -146,7 +148,7 @@ export class HomeScreen extends PureComponent<Props, State> {
     );
   }
 
-  public setFrequency = (people, person, frequency): Person[] => {
+  private setFrequency = (people, person, frequency): Person[] => {
     const personIndex = people.findIndex(
       (p) => p.contact.name === person.contact.name,
     );
@@ -156,24 +158,22 @@ export class HomeScreen extends PureComponent<Props, State> {
     return people;
   }
 
-  public callLauncher = (
+  private callLauncher = (
     person: Person,
     contentCallback: (person: Person) => string,
-  ) => (
-    <TouchableOpacity
-      onPress={() =>
-        Linking.openURL(
-          `content://com.android.contacts/contacts/${
-            person.contact.recordId
-          }`,
-        )
-      }
-    >
-      <Text style={styles.cell}>{contentCallback(person)}</Text>
+  ) =>
+    this.link(
+      `content://com.android.contacts/contacts/${person.contact.recordId}`,
+      contentCallback(person),
+    )
+
+  private link = (url: string, content: string) => (
+    <TouchableOpacity onPress={() => Linking.openURL(url)}>
+      <Text style={styles.cell}>{content}</Text>
     </TouchableOpacity>
   )
 
-  public deleteButton = (person) => (
+  private deleteButton = (person) => (
     <TouchableOpacity
       onPress={() => this.deletePerson(person)}
       style={styles.cell}
@@ -182,30 +182,23 @@ export class HomeScreen extends PureComponent<Props, State> {
     </TouchableOpacity>
   )
 
-  public addPerson = (): void => {
-    Contacts().then((selectedContact) => {
-      if (!selectedContact) {
-        return;
-      }
-
-      const newPerson = new Person(selectedContact, Frequency.once_A_Week, 0);
-
-      this.setState(
-        (prevState) => ({
-          people: [...prevState.people, newPerson],
-        }),
-        () => this.saveAndRecheck(),
-      );
-    });
+  private addPerson = (person: Person): void => {
+    // TODO: overwrite duplicate person
+    this.setState(
+      (prevState) => ({
+        people: [...prevState.people, person],
+      }),
+      () => this.saveAndRecheck(),
+    );
   }
 
-  public saveAndRecheck = (): void => {
+  private saveAndRecheck = (): void => {
     AsyncStorage.setItem('data', JSON.stringify(this.state.people));
 
     this.checkAndNotify();
   }
 
-  public deletePerson = (person: Person): void => {
+  private deletePerson = (person: Person): void => {
     this.setState(
       (prevState) => ({
         people: prevState.people.filter(

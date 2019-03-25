@@ -152,6 +152,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-device-info')
     compile project(':react-native-sentry')
     compile project(':react-native-send-intent')
     compile project(':@react-native-community_async-storage')

@@ -43,7 +43,6 @@ export default class App extends React.Component {
       }
     });
 
-    PushNotification.appStart();
   }
 
   public render() {

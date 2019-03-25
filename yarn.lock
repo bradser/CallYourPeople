@@ -4939,6 +4939,11 @@ react-native-background-fetch@2.5.1:
   version "1.0.6"
   resolved "https://github.com/wscodelabs/react-native-call-log#0a31eb7ca98f3a049a20e4851adeb7c7aa92c1ca"
 
+react-native-device-info@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-1.1.0.tgz#bcf5b0d4522413eb9970e4299d5bed29ba28b602"
+  integrity sha512-RfWBWTHTyFDDC/Xg4FG0VXE/hv98JkkCGCy5yUzSPT4lIQVHRo5/vN73T4dYR8P9wA8MSlATtqm2Wx+TOnk/Kg==
+
 react-native-popup-menu@^0.15.4:
   version "0.15.4"
   resolved "https://registry.yarnpkg.com/react-native-popup-menu/-/react-native-popup-menu-0.15.4.tgz#65630ad1dad797c8f910ae9724504f0f26be82f5"

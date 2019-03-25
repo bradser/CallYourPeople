@@ -1,11 +1,8 @@
 import AsyncStorage from '@react-native-community/async-storage';
-import { PhoneNumberUtil } from 'google-libphonenumber';
 import moment from 'moment';
 import { PhoneEntry } from 'react-native-select-contact';
 import { Sentry } from 'react-native-sentry';
 import { Call, CallType, Found, Frequency, GetLogCallback, NotifyCallback, Person } from './Types';
-
-const phoneNumberUtil = PhoneNumberUtil.getInstance();
 
 export class CheckOutput {
   constructor(public people: Person[], public log: any) {}
@@ -57,19 +54,10 @@ export default class AppLogic {
     })
 
   private findPhoneAndCall = (person: Person, callLog: Call[]): Found => {
-    const PNFE164 = 0;
     let phone: PhoneEntry | undefined;
 
     const call = callLog.find((c) => {
-      phone = person.contact.phones.find((p) => {
-        try {
-          const parsedPhone = phoneNumberUtil.parse(p.number, 'US');
-
-          return c.phoneNumber === phoneNumberUtil.format(parsedPhone, PNFE164);
-        } catch (error) {
-          return false;
-        }
-      });
+      phone = person.contact.phones.find((p) => (c.phoneNumber === p.number));
 
       return Boolean(phone);
     });
@@ -95,6 +83,7 @@ export default class AppLogic {
 
       if (call.callType === CallType.OUTGOING) {
         // Leave a voicemail every other day, or complete a conversation
+        // TODO: a user setting?
         return this.roundDays(2 - daysSince);
       }
 
@@ -114,6 +103,7 @@ export default class AppLogic {
     return this.roundDays(frequencyDays - daysSince);
   }
 
+  // TODO: a user setting?
   private isVoicemail = (call: Call): boolean => call.callDuration <= 2 * 60;
 
   private callDateToDaysSinceLastCall = (callDate: string): number =>
