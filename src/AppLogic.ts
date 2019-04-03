@@ -2,7 +2,16 @@ import AsyncStorage from '@react-native-community/async-storage';
 import moment from 'moment';
 import { PhoneEntry } from 'react-native-select-contact';
 import { Sentry } from 'react-native-sentry';
-import { Call, CallType, Found, Frequency, GetLogCallback, NotifyCallback, Person } from './Types';
+import {
+  Call,
+  CallType,
+  Found,
+  Frequency,
+  GetLogCallback,
+  ModifiedCalls,
+  NotifyCallback,
+  Person,
+} from './Types';
 
 export class CheckOutput {
   constructor(public people: Person[], public log: any) {}
@@ -17,11 +26,13 @@ export default class AppLogic {
 
   public check = async (getLog: GetLogCallback): Promise<CheckOutput> => {
     let storageData: string | undefined;
+    let storageSettings: string | undefined;
     let log: Call[] = [];
 
     try {
-      [storageData, log] = await Promise.all([
+      [storageData, storageSettings, log] = await Promise.all([
         AsyncStorage.getItem('data'),
+        AsyncStorage.getItem('settings'),
         getLog(),
       ]);
     } catch (error) {
@@ -30,34 +41,70 @@ export default class AppLogic {
 
     const storagePeople = storageData ? JSON.parse(storageData) : [];
 
-    const checkedPeople = this.checkCallLog(storagePeople, log);
+    const modifiedCalls = storageSettings
+      ? JSON.parse(storageSettings).modifiedCalls
+      : [];
+
+    const checkedPeople = this.checkCallLog(storagePeople, modifiedCalls, log);
 
     return new CheckOutput(checkedPeople, log);
   }
 
-  public checkCallLog = (people: Person[], callLog: Call[]): Person[] =>
+  public checkCallLog = (
+    people: Person[],
+    modifiedCalls: ModifiedCalls[],
+    callLog: Call[],
+  ): Person[] =>
     people.map((person: Person) => {
-      const found = this.findPhoneAndCall(person, callLog);
+      const procesedLog = this.processModifiedCalls(
+        person,
+        modifiedCalls,
+        callLog,
+      );
+
+      const found = this.findPhoneAndCall(person, procesedLog);
 
       // If there was never a call to/from this person, notify immediately
-      const days = found.call ? this.daysLeftTillCallNeeded(person, found.call) : 0;
+      const days = found.call
+        ? this.daysLeftTillCallNeeded(person, found.call)
+        : 0;
 
       if (days <= 0) {
         this.notify(person, found.phone);
       }
 
-      return new Person(
-        person.contact,
-        person.frequency,
-        days,
-      );
+      return new Person(person.contact, person.frequency, days);
     })
+
+  public processModifiedCalls = (
+    person: Person,
+    modifiedCalls: ModifiedCalls[],
+    callLog: Call[],
+  ): Call[] => {
+    const modified = modifiedCalls.find((m) => m.name === person.contact.name);
+
+    if (modified) {
+      const processed = callLog.filter(
+        (call) =>
+          !modified.removed.find(
+            (r) =>
+              r.callDate === call.callDate && r.phoneNumber === call.phoneNumber,
+          ),
+      );
+
+      return processed
+        .concat(modified.added)
+        .sort((a, b) => (a.callDate < b.callDate ? -1 : 1));
+    }
+
+    return callLog;
+  }
 
   private findPhoneAndCall = (person: Person, callLog: Call[]): Found => {
     let phone: PhoneEntry | undefined;
 
     const call = callLog.find((c) => {
-      phone = person.contact.phones.find((p) => (c.phoneNumber === p.number));
+      phone = person.contact.phones.find((p) => c.phoneNumber === p.number);
 
       return Boolean(phone);
     });
@@ -84,6 +131,7 @@ export default class AppLogic {
       if (call.callType === CallType.OUTGOING) {
         // Leave a voicemail every other day, or complete a conversation
         // TODO: a user setting?
+        // TODO: only if the next call is outside of the frequency
         return this.roundDays(2 - daysSince);
       }
 

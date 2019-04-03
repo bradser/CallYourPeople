@@ -1,20 +1,16 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import moment from 'moment';
-import React, { PureComponent } from 'react';
-import {
-  Linking,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-} from 'react-native';
+import React, { Component } from 'react';
+import { ScrollView, StyleSheet } from 'react-native';
+import { IconButton } from 'react-native-paper';
 import PushNotification from 'react-native-push-notification-ce';
 import { Cell, Row, Table, TableWrapper } from 'react-native-table-component';
-import * as MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import AppLogic from '../AppLogic';
 import { getLogWithPermissions } from '../CallLog';
 import AddPersonButton from '../components/AddPersonButton';
 import FrequencyPicker from '../components/FrequencyPicker';
+import Link from '../components/Link';
+import TouchableOpacityButton from '../components/TouchableOpacityButton';
 import { NotifyCallback, Person } from '../Types';
 
 // tslint:disable-next-line: no-empty-interface
@@ -25,7 +21,7 @@ interface State {
   log: any | undefined;
 }
 
-export class HomeScreen extends PureComponent<Props, State> {
+export default class HomeScreen extends Component<Props, State> {
   public static navigationOptions = {
     title: 'Call Your People!',
   };
@@ -72,13 +68,11 @@ export class HomeScreen extends PureComponent<Props, State> {
           />
           {this.getRows()}
         </Table>
-        <AddPersonButton
-          onPress={this.addPerson}
+        <AddPersonButton onPress={this.addPerson} />
+        <Link
+          text='Conversation Tips'
+          url='https://fortheinterested.com/ask-better-questions/'
         />
-        {this.link(
-          'Conversation Tips',
-          'https://fortheinterested.com/ask-better-questions/',
-        )}
       </ScrollView>
     );
   }
@@ -161,25 +155,20 @@ export class HomeScreen extends PureComponent<Props, State> {
   private callLauncher = (
     person: Person,
     contentCallback: (person: Person) => string,
-  ) =>
-    this.link(
-      `content://com.android.contacts/contacts/${person.contact.recordId}`,
-      contentCallback(person),
-    )
-
-  private link = (url: string, content: string) => (
-    <TouchableOpacity onPress={() => Linking.openURL(url)}>
-      <Text style={styles.cell}>{content}</Text>
-    </TouchableOpacity>
+  ) => (
+    <TouchableOpacityButton
+      onPress={() => this.props.navigation.navigate('Details')}
+      text={contentCallback(person)}
+    />
   )
 
-  private deleteButton = (person) => (
-    <TouchableOpacity
+  private deleteButton = (person: Person) => (
+    <IconButton
       onPress={() => this.deletePerson(person)}
-      style={styles.cell}
-    >
-      <MaterialIcon.default size={20} name='delete' />
-    </TouchableOpacity>
+      size={20}
+      icon='delete'
+      style={{alignSelf: 'center'}}
+    />
   )
 
   private addPerson = (person: Person): void => {

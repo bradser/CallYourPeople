@@ -63,7 +63,7 @@ export const runTestCase = (testCase, index) => {
 
       const notify = jest.fn();
 
-      new AppLogic(notify, now.clone()).checkCallLog(testPeople, testLog);
+      new AppLogic(notify, now.clone()).checkCallLog(testPeople, [], testLog);
 
       expect(notify).toHaveBeenCalledTimes(testCase[0].notifyCount);
     });

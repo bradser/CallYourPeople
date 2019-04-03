@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.1.0",
+    "@types/react-navigation": "^3.0.6",
     "google-libphonenumber": "^3.2.2",
     "moment": "^2.24.0",
     "react": "16.6.1",
@@ -18,13 +19,16 @@
     "react-native-background-fetch": "2.5.1",
     "react-native-call-log": "https://github.com/wscodelabs/react-native-call-log#0a31eb7ca98f3a049a20e4851adeb7c7aa92c1ca",
     "react-native-device-info": "^1.1.0",
+    "react-native-gesture-handler": "^1.1.0",
+    "react-native-paper": "^2.15.0",
     "react-native-popup-menu": "^0.15.4",
     "react-native-push-notification-ce": "^3.1.7",
     "react-native-select-contact": "1.2.0",
     "react-native-send-intent": "https://github.com/bradser/react-native-send-intent",
     "react-native-sentry": "^0.42.0",
     "react-native-table-component": "1.2.0",
-    "react-native-vector-icons": "6.4.0"
+    "react-native-vector-icons": "6.4.0",
+    "react-navigation": "^3.5.1"
   },
   "devDependencies": {
     "@babel/core": "^7.1.6",

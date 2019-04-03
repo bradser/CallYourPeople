@@ -1,15 +1,29 @@
 import moment from 'moment';
-import React from 'react';
+import React, { Component } from 'react';
 import BackgroundFetch from 'react-native-background-fetch';
 import { MenuProvider } from 'react-native-popup-menu';
 import PushNotification from 'react-native-push-notification-ce';
 import SendIntentAndroid from 'react-native-send-intent';
 import { Sentry } from 'react-native-sentry';
+import { createAppContainer, createStackNavigator } from 'react-navigation';
 import AppLogic from './AppLogic';
 import { getLog } from './CallLog';
-import { HomeScreen } from './screens/HomeScreen';
+import DetailsScreen from './screens/DetailsScreen';
+import HomeScreen from './screens/HomeScreen';
 
-export default class App extends React.Component {
+const AppNavigator = createStackNavigator(
+  {
+    Details: DetailsScreen,
+    Home: HomeScreen,
+  },
+  {
+    initialRouteName: 'Home',
+  },
+);
+
+const AppContainer = createAppContainer(AppNavigator);
+
+export default class App extends Component {
   public componentDidMount() {
     SendIntentAndroid.requestIgnoreBatteryOptimizations();
 
@@ -48,7 +62,7 @@ export default class App extends React.Component {
   public render() {
     return (
       <MenuProvider>
-        <HomeScreen />
+        <AppContainer />
       </MenuProvider>
     );
   }

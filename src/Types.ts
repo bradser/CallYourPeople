@@ -47,7 +47,7 @@ export enum CallType {
 
 export class Found {
   constructor(
-    public phone: PhoneEntry | undefined,
+    public phone: PhoneEntry,
     public call: Call | undefined,
   ) {}
 }
@@ -55,3 +55,11 @@ export class Found {
 export type NotifyCallback = (details: object) => void;
 
 export type GetLogCallback = () => Promise<Call[]>;
+
+export class ModifiedCalls {
+  constructor(
+    public name: string,
+    public added: Call[],
+    public removed: Call[],
+  ) {}
+}

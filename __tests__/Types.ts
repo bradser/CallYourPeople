@@ -1,6 +1,6 @@
 import { CallType, Frequency } from '../src/Types';
 
-export class TestCase {
+export class CallTestCase {
   public callDurationSeconds: number;
 
   constructor(
@@ -15,7 +15,7 @@ export class TestCase {
 }
 
 // tslint:disable-next-line: max-classes-per-file
-export class DuplicateTestCase extends TestCase {
+export class PersonCallTestCase extends CallTestCase {
   constructor(
     public name: string,
     public phoneNumber: string,
