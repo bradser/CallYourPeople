@@ -3,8 +3,8 @@ import React, { PureComponent } from 'react';
 import { StyleSheet } from 'react-native';
 import { Contact } from 'react-native-select-contact';
 import * as MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import Contacts from '../Contacts';
-import { formatPhoneNumber } from '../Helpers';
+import Contacts from '../lib/Contacts';
+import { formatPhoneNumber } from '../lib/Helpers';
 import { Frequency, Person } from '../Types';
 
 interface Props {

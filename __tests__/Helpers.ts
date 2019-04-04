@@ -1,6 +1,6 @@
 
 import moment from 'moment';
-import AppLogic from '../src/AppLogic';
+import AppLogic from '../src/lib/AppLogic';
 import { Call, CallType, Frequency, Person } from '../src/Types';
 
 export const getPerson = (

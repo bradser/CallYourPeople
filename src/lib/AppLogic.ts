@@ -11,7 +11,7 @@ import {
   ModifiedCalls,
   NotifyCallback,
   Person,
-} from './Types';
+} from '../Types';
 
 export class CheckOutput {
   constructor(public people: Person[], public log: any) {}

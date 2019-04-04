@@ -6,6 +6,8 @@ export class Person {
     public contact: Contact,
     public frequency: Frequency,
     public daysLeftTillCallNeeded: number,
+    public added: Call[],
+    public removed: Call[],
   ) {}
 }
 

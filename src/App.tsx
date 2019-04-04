@@ -1,3 +1,4 @@
+import { onError, Provider } from 'mobx-react';
 import moment from 'moment';
 import React, { Component } from 'react';
 import BackgroundFetch from 'react-native-background-fetch';
@@ -6,10 +7,15 @@ import PushNotification from 'react-native-push-notification-ce';
 import SendIntentAndroid from 'react-native-send-intent';
 import { Sentry } from 'react-native-sentry';
 import { createAppContainer, createStackNavigator } from 'react-navigation';
-import AppLogic from './AppLogic';
-import { getLog } from './CallLog';
+import AppLogic from './lib/AppLogic';
+import { getLog } from './lib/CallLog';
+import { Store } from './lib/Store';
 import DetailsScreen from './screens/DetailsScreen';
 import HomeScreen from './screens/HomeScreen';
+
+onError((error) => {
+  Sentry.captureException(error);
+});
 
 const AppNavigator = createStackNavigator(
   {
@@ -22,6 +28,8 @@ const AppNavigator = createStackNavigator(
 );
 
 const AppContainer = createAppContainer(AppNavigator);
+
+const store = new Store();
 
 export default class App extends Component {
   public componentDidMount() {
@@ -43,14 +51,16 @@ export default class App extends Component {
         BackgroundFetch.finish(BackgroundFetch.FETCH_RESULT_NO_DATA);
       },
       (error) => {
-        Sentry.captureException(new Error(error.toString()));
+        Sentry.captureException(new Error(error.toString())); // TODO: see if this is an error object
       },
     );
 
     BackgroundFetch.status((status) => {
       switch (status) {
         default:
-          Sentry.captureException(new Error(`BackgroundFetch status: ${status.toString()}`));
+          Sentry.captureException(
+            new Error(`BackgroundFetch status: ${status.toString()}`),
+          );
           break;
         case BackgroundFetch.STATUS_AVAILABLE:
           break;
@@ -61,9 +71,11 @@ export default class App extends Component {
 
   public render() {
     return (
-      <MenuProvider>
-        <AppContainer />
-      </MenuProvider>
+      <Provider store={store}>
+        <MenuProvider>
+          <AppContainer />
+        </MenuProvider>
+      </Provider>
     );
   }
 }

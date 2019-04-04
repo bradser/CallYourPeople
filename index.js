@@ -4,8 +4,8 @@ import BackgroundFetch from 'react-native-background-fetch';
 import PushNotification from 'react-native-push-notification-ce';
 import { Sentry } from 'react-native-sentry';
 import App from './src/App';
-import AppLogic from './src/AppLogic';
-import { getLog } from './src/CallLog';
+import AppLogic from './src/lib/AppLogic';
+import { getLog } from './src//lib/CallLog';
 
 Sentry.config('https://72a046a322314e0e8d387ff7a2ca1ab6@sentry.io/1410623').install();
 

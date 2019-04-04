@@ -1,5 +1,5 @@
 import moment from 'moment';
-import AppLogic from '../../src/AppLogic';
+import AppLogic from '../../src/lib/AppLogic';
 import { CallType, Frequency, ModifiedCalls } from '../../src/Types';
 import { getCall, getPerson } from '../Helpers';
 import { PersonCallTestCase } from '../Types';
