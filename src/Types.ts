@@ -5,7 +5,6 @@ export class Person {
   constructor(
     public contact: Contact,
     public frequency: Frequency,
-    public daysLeftTillCallNeeded: number,
     public added: Call[],
     public removed: Call[],
   ) {}
@@ -58,10 +57,14 @@ export type NotifyCallback = (details: object) => void;
 
 export type GetLogCallback = () => Promise<Call[]>;
 
-export class ModifiedCalls {
+export class ViewPerson {
   constructor(
     public name: string,
-    public added: Call[],
-    public removed: Call[],
+    public frequency: Frequency,
+    public daysLeftTillCallNeeded: number,
   ) {}
+}
+
+export class CheckOutput {
+  constructor(public viewPeople: ViewPerson[], public log: any) {}
 }

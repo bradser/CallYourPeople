@@ -1,4 +1,6 @@
-import { CallType, Frequency } from '../src/Types';
+// tslint:disable: max-classes-per-file
+
+import { CallType, Frequency, Call } from '../src/Types';
 
 export class CallTestCase {
   public callDurationSeconds: number;
@@ -14,8 +16,22 @@ export class CallTestCase {
   }
 }
 
-// tslint:disable-next-line: max-classes-per-file
 export class PersonCallTestCase extends CallTestCase {
+  constructor(
+    public name: string,
+    public phoneNumber: string,
+    public frequency: Frequency,
+    public callType: CallType, // TODO: verify super is overridden
+    callDurationMinutes: number,
+    public daysDelta: number,
+    public notifyCount: number,
+    public daysLeftTillCallNeeded: number,
+  ) {
+    super(callType, callDurationMinutes, frequency, daysDelta, notifyCount);
+  }
+}
+
+export class PersonModifiedCallTestCase extends PersonCallTestCase {
   constructor(
     public name: string,
     public phoneNumber: string,
@@ -25,7 +41,8 @@ export class PersonCallTestCase extends CallTestCase {
     public daysDelta: number,
     public notifyCount: number,
     public daysLeftTillCallNeeded: number,
+    public modified: Call[],
   ) {
-    super(callType, callDurationMinutes, frequency, daysDelta, notifyCount);
+    super(name, phoneNumber, frequency, callType, callDurationMinutes, daysDelta, notifyCount, daysLeftTillCallNeeded);
   }
 }

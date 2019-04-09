@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
-import { Text, TextStyle, TouchableOpacity } from 'react-native';
+import { TextStyle, TouchableOpacity } from 'react-native';
+import { Text } from 'react-native-paper';
 
 interface Props {
   onPress: () => void;

@@ -1,24 +1,24 @@
 import { inject, observer } from 'mobx-react';
 import moment from 'moment';
 import React, { Component } from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
-import { IconButton } from 'react-native-paper';
+import { ScrollView, StyleSheet, View } from 'react-native';
+import { DataTable } from 'react-native-paper';
 import PushNotification from 'react-native-push-notification-ce';
-import { Cell, Row, Table, TableWrapper } from 'react-native-table-component';
+import { NavigationInjectedProps } from 'react-navigation';
 import AddPersonButton from '../components/AddPersonButton';
-import FrequencyPicker from '../components/FrequencyPicker';
 import Link from '../components/Link';
-import TouchableOpacityButton from '../components/TouchableOpacityButton';
 import AppLogic from '../lib/AppLogic';
 import { getLogWithPermissions } from '../lib/CallLog';
 import { Store } from '../lib/Store';
-import { NotifyCallback, Person } from '../Types';
+import { FrequencyText, NotifyCallback, Person, ViewPerson } from '../Types';
+import { CYMGreen } from './../lib/Constants';
 
-interface Props {
+interface Props extends NavigationInjectedProps {
   store?: Store;
 }
 
 interface State {
+  viewPeople?: ViewPerson[];
   log?: any;
 }
 
@@ -29,19 +29,12 @@ export default inject('store')(
         title: 'Call Your People!',
       };
 
-      private readonly columnFlexes = [1, 0.35, 0.7, 0.17];
-      private readonly personListHeader = [
-        'Name',
-        'Days\nLeft',
-        'Frequency',
-        '',
-      ];
-
       constructor(props: Props) {
         super(props);
 
         this.state = {
           log: [],
+          viewPeople: [],
         };
       }
 
@@ -58,25 +51,23 @@ export default inject('store')(
 
       public render() {
         return (
-          <ScrollView style={styles.container}>
-            <Table
-              borderStyle={{ borderWidth: 2, borderColor: '#c8e1ff' }}
-              style={styles.table}
-            >
-              <Row
-                data={this.personListHeader}
-                style={styles.head}
-                textStyle={styles.cell}
-                flexArr={this.columnFlexes}
-              />
-              {this.getRows()}
-            </Table>
+          <View style={styles.containerView}>
+            <ScrollView style={styles.scrollView}>
+              <DataTable style={styles.list}>
+                <DataTable.Header>
+                  <DataTable.Title>Name</DataTable.Title>
+                  <DataTable.Title>Days Left</DataTable.Title>
+                  <DataTable.Title>Frequency</DataTable.Title>
+                </DataTable.Header>
+                {this.getRows()}
+              </DataTable>
+            </ScrollView>
             <AddPersonButton onPress={this.addPerson} />
             <Link
               text='Conversation Tips'
               url='https://fortheinterested.com/ask-better-questions/'
             />
-          </ScrollView>
+          </View>
         );
       }
 
@@ -89,84 +80,41 @@ export default inject('store')(
 
       private runAppLogic = (notificationCallback: NotifyCallback) =>
         new AppLogic(notificationCallback, moment())
-          .check(getLogWithPermissions)
+          .check(getLogWithPermissions, this.props.store!)
           .then((results) => {
-            this.setState({ log: results.log });
-
-            this.props.store!.people = results.people;
+            this.setState(results);
           })
 
       private getRows = () =>
-        this.props.store!.people.map((person, personIndex) => {
+        this.state.viewPeople!.map((person, index) => {
           const daysLeftBackgoundColor =
             person.daysLeftTillCallNeeded <= 0
-              ? { backgroundColor: 'lawngreen' }
-              : {};
+              ? { ...styles.cell, backgroundColor: CYMGreen }
+              : styles.cell;
 
           return (
-            <TableWrapper key={personIndex} style={{ flexDirection: 'row' }}>
-              <Cell
-                key={1}
-                data={this.callLauncher(person, (p) => p.contact.name)}
-                flex={this.columnFlexes[0]}
-              />
-              <Cell
-                key={2}
-                data={this.callLauncher(person, (p) =>
-                  p.daysLeftTillCallNeeded.toString(),
-                )}
-                flex={this.columnFlexes[1]}
-                style={daysLeftBackgoundColor}
-              />
-              <Cell
-                key={3}
-                data={
-                  <FrequencyPicker
-                    person={person}
-                    onSelect={() => {
-                      /**/
-                    }}
-                    styles={styles.cell}
-                  />
-                }
-                flex={this.columnFlexes[2]}
-              />
-              <Cell
-                key={4}
-                data={this.deleteButton(person)}
-                flex={this.columnFlexes[3]}
-              />
-            </TableWrapper>
+            <DataTable.Row
+              key={index}
+              onPress={() =>
+                this.props.navigation.navigate('Details', {
+                  log: this.state.log,
+                  name: person.name,
+                })
+              }
+            >
+              <DataTable.Cell>{person.name}</DataTable.Cell>
+              <DataTable.Cell numeric style={daysLeftBackgoundColor}>
+                {person.daysLeftTillCallNeeded.toString()}
+              </DataTable.Cell>
+              <DataTable.Cell numeric>
+                {FrequencyText[person.frequency]}
+              </DataTable.Cell>
+            </DataTable.Row>
           );
         })
 
-      private callLauncher = (
-        person: Person,
-        contentCallback: (person: Person) => string,
-      ) => (
-        <TouchableOpacityButton
-          onPress={() => this.props.navigation.navigate('Details')}
-          text={contentCallback(person)}
-        />
-      )
-
-      private deleteButton = (person: Person) => (
-        <IconButton
-          onPress={() => this.deletePerson(person)}
-          size={20}
-          icon='delete'
-          style={{ alignSelf: 'center' }}
-        />
-      )
-
       private addPerson = (person: Person): void => {
         this.props.store!.add(person);
-
-        this.checkAndNotify();
-      }
-
-      private deletePerson = (person: Person): void => {
-        this.props.store!.remove(person);
 
         this.checkAndNotify();
       }
@@ -175,9 +123,8 @@ export default inject('store')(
 );
 
 const styles = StyleSheet.create({
-  addButton: { alignSelf: 'center' },
-  cell: { margin: 2, textAlign: 'center' },
-  container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff' },
-  head: { height: 40, backgroundColor: '#f1f8ff' },
-  table: { marginBottom: 5 },
+  cell: { paddingRight: 5 },
+  containerView: { flex: 1 },
+  list: { margin: 5 },
+  scrollView: { padding: 10 },
 });

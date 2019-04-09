@@ -6,6 +6,7 @@ export const formatPhoneNumber = (
   phoneNumber: string,
 ): string => {
   let formattedPhone;
+
   try {
     const parsedPhone = phoneNumberUtil.parse(phoneNumber, DeviceInfo.getDeviceCountry());
 

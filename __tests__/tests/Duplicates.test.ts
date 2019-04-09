@@ -82,7 +82,6 @@ duplicateTestCases.forEach((testCase, index) => {
 
     const checkedPeople = new AppLogic(notify, now.clone()).checkCallLog(
       testPeople,
-      [],
       testLog,
     );
 

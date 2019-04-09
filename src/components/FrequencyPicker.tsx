@@ -1,43 +1,68 @@
 import React, { PureComponent } from 'react';
-import { Text, View, ViewStyle } from 'react-native';
-import { Menu, MenuOption, MenuOptions, MenuTrigger } from 'react-native-popup-menu';
-import * as MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { View, ViewStyle } from 'react-native';
+import { Button, Menu, Text } from 'react-native-paper';
 import { FrequencyText, Person } from '../Types';
 
 interface Props {
   person: Person;
-  onSelect: (person: Person, index: number) => void;
-  styles: ViewStyle;
+  onSelect: (index: number) => void;
+  style?: ViewStyle;
 }
 
-export default class FrequencyPicker extends PureComponent<Props> {
+interface State {
+  visible: boolean;
+}
+
+export default class FrequencyPicker extends PureComponent<Props, State> {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      visible: false,
+    };
+  }
+
   public render() {
     return (
-      <Menu>
-        <MenuTrigger>
+      <Menu
+        visible={this.state.visible}
+        onDismiss={this.closeMenu}
+        anchor={
           <View
-            style={{
-              alignItems: 'center',
-              flexDirection: 'row',
-              justifyContent: 'flex-end',
-              ...this.props.styles,
-            }}
+            style={
+              {
+                // flex: 1,
+                // flexDirection: 'row',
+                //width: 400
+              }
+            }
           >
-            <Text>{FrequencyText[this.props.person.frequency]}</Text>
-            <MaterialCommunityIcon.default name='dots-vertical' size={24} />
+            <Text>Frequency:</Text>
+            <Button mode='outlined' onPress={this.openMenu}
+            style={{width: 110}}>
+              {FrequencyText[this.props.person.frequency]}
+            </Button>
           </View>
-        </MenuTrigger>
-        <MenuOptions>
-          {FrequencyText.map((frequencyText, index) => (
-            <MenuOption
-              key={index}
-              value={index}
-              text={frequencyText}
-              onSelect={() => this.props.onSelect(this.props.person, index)}
-            />
-          ))}
-        </MenuOptions>
+        }
+      >
+        {FrequencyText.map((frequencyText, index) => (
+          <Menu.Item
+            key={index}
+            title={frequencyText}
+            onPress={() => this.select(index)}
+          />
+        ))}
       </Menu>
     );
+  }
+
+  private openMenu = () => this.setState({ visible: true });
+
+  private closeMenu = () => this.setState({ visible: false });
+
+  private select = (index: number): void => {
+    this.props.onSelect(index);
+
+    this.closeMenu();
   }
 }

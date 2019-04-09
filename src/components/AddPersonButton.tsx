@@ -1,11 +1,12 @@
 import { PhoneNumberUtil } from 'google-libphonenumber';
 import React, { PureComponent } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { FAB } from 'react-native-paper';
 import { Contact } from 'react-native-select-contact';
-import * as MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import Contacts from '../lib/Contacts';
 import { formatPhoneNumber } from '../lib/Helpers';
 import { Frequency, Person } from '../Types';
+import { CYMGreen } from './../lib/Constants';
 
 interface Props {
   onPress: (person: Person) => void;
@@ -16,13 +17,9 @@ export default class AddPersonButton extends PureComponent<Props> {
 
   public render() {
     return (
-      <MaterialIcon.Button
-        name='person-add'
-        onPress={this.addPerson}
-        style={styles.addButton}
-      >
-        Add Person
-      </MaterialIcon.Button>
+      <View style={styles.view}>
+        <FAB icon='person-add' onPress={this.addPerson} style={styles.fab} />
+      </View>
     );
   }
 
@@ -38,7 +35,8 @@ export default class AddPersonButton extends PureComponent<Props> {
         const newPerson = new Person(
           this.formatPhones(selectedContact),
           Frequency.once_A_Week,
-          0,
+          [],
+          [],
         );
 
         this.props.onPress(newPerson);
@@ -57,5 +55,14 @@ export default class AddPersonButton extends PureComponent<Props> {
 }
 
 const styles = StyleSheet.create({
-  addButton: { alignSelf: 'center' },
+  fab: {
+    backgroundColor: CYMGreen,
+  },
+
+  view: {
+    bottom: 0,
+    margin: 15,
+    position: 'absolute',
+    right: 0,
+  },
 });

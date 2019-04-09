@@ -1,16 +1,59 @@
-import { observable } from 'mobx';
+import { IObservableArray, observable, runInAction } from 'mobx';
+import { AsyncStorage } from 'react-native';
 import { Person } from '../Types';
 
 export class Store {
-  public people: Person[] = observable([]);
+  public people = (observable([]) as unknown) as IObservableArray<Person>;
+
+  constructor() {
+    AsyncStorage.getItem('store').then((data) => {
+      if (data) {
+        runInAction(() => {
+          this.people.replace(JSON.parse(data));
+        });
+      }
+    });
+  }
 
   public add = (person: Person): void => {
-    // TODO: if already there, don't re-add
-    this.people.push(person);
+    runInAction(() => {
+      const index = this.findIndex(person);
+
+      if (index === -1) {
+        this.people.push(person);
+
+        this.save();
+      }
+    });
   }
 
   public remove = (person: Person): void => {
-    // TODO: find based on name
-    this.people.splice(this.people.indexOf(person), 1);
+    runInAction(() => {
+      const index = this.findIndex(person);
+
+      if (index !== -1) {
+        this.people.splice(index, 1);
+
+        this.save();
+      }
+    });
+  }
+
+  public findIndex = (person: Person): number => {
+    return this.people.findIndex((p) => p.contact.name === person.contact.name);
+  }
+
+  public setFrequency = (person: Person, frequency: number): void => {
+    runInAction(() => {
+      const index = this.findIndex(person);
+
+      this.people[index].frequency = frequency;
+
+      this.save();
+    });
+  }
+
+  private save = (): void => {
+    AsyncStorage.setItem('store', JSON.stringify(this.people.toJS()));
   }
 }

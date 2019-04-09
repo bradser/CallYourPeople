@@ -1,13 +1,16 @@
 import { inject, observer } from 'mobx-react';
 import React, { Component } from 'react';
 import { View } from 'react-native';
-import { IconButton } from 'react-native-paper';
+import { IconButton, Text, Title, Divider } from 'react-native-paper';
+import { NavigationInjectedProps } from 'react-navigation';
+import AddCallsPicker from '../components/AddCallsPicker';
+import FrequencyPicker from '../components/FrequencyPicker';
 import { Store } from '../lib/Store';
+import { Call, Person } from '../Types';
+import RemoveCallsPicker from '../components/RemoveCallsPicker';
 
-interface Props {
+interface Props extends NavigationInjectedProps {
   store?: Store;
-  name: string;
-  onChanged: (items: string[]) => void;
 }
 
 interface State {
@@ -16,7 +19,7 @@ interface State {
 
 export default inject('store')(
   observer(
-    class DetailsScreen  extends Component<Props, State> {
+    class DetailsScreen extends Component<Props, State> {
       public static navigationOptions = ({ navigation }) => {
         return {
           headerLeft: (
@@ -30,14 +33,52 @@ export default inject('store')(
         };
       }
 
-      public render() {
-        return <View />;
+      private readonly person: Person;
+      private readonly log: Call[];
+
+      constructor(props) {
+        super(props);
+        const name = this.props.navigation.getParam('name') as string;
+
+        this.person = this.props.store!.people.find(
+          (p) => p.contact.name === name,
+        )!;
+
+        this.log = this.props.navigation.getParam('log') as Call[];
       }
 
-      private frequencyOnSelect = (person, index) => {
-        /*this.props.store.setFrequency(person, index);
+      public render() {
+        return (
+          <View>
+            <Title>{this.person!.contact.name}</Title>
+              <FrequencyPicker
+                person={this.person!}
+                onSelect={this.frequencyOnSelect}
+              />
+            <Divider />
+            <AddCallsPicker person={this.person} log={this.log} />
+            <Divider />
+            <RemoveCallsPicker person={this.person} log={this.log} />
+            {this.deleteButton(this.person!)}
+          </View>
+        );
+      }
 
-        this.checkAndNotify();*/
+      private frequencyOnSelect = (index: number): void => {
+        this.props.store!.setFrequency(this.person, index);
+      }
+
+      private deleteButton = (person: Person) => (
+        <IconButton
+          onPress={() => this.deletePerson(person)}
+          size={20}
+          icon='delete'
+          style={{ alignSelf: 'center' }}
+        />
+      )
+
+      private deletePerson = (person: Person): void => {
+        this.props.store!.remove(person);
       }
     },
   ),

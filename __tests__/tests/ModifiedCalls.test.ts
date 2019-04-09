@@ -1,6 +1,6 @@
 import moment from 'moment';
 import AppLogic from '../../src/lib/AppLogic';
-import { CallType, Frequency, ModifiedCalls } from '../../src/Types';
+import { CallType, Frequency } from '../../src/Types';
 import { getCall, getPerson } from '../Helpers';
 import { PersonCallTestCase } from '../Types';
 
@@ -60,26 +60,13 @@ addedCallsTestCases.forEach((testCase, index) => {
         testCase[0].name,
         testCase[0].phoneNumber,
         testCase[0].frequency,
+        [],
+        [],
       ),
       getPerson(
         testCase[1].name,
         testCase[1].phoneNumber,
         testCase[1].frequency,
-      ),
-    ];
-
-    const testLog = [
-      getCall(now)(
-        testCase[0].phoneNumber,
-        testCase[0].callType,
-        testCase[0].daysDelta,
-        testCase[0].callDurationSeconds,
-      ),
-    ];
-
-    const modifiedCalls = [
-      new ModifiedCalls(
-        testCase[1].name,
         [
           getCall(now)(
             testCase[1].phoneNumber,
@@ -92,11 +79,19 @@ addedCallsTestCases.forEach((testCase, index) => {
       ),
     ];
 
+    const testLog = [
+      getCall(now)(
+        testCase[0].phoneNumber,
+        testCase[0].callType,
+        testCase[0].daysDelta,
+        testCase[0].callDurationSeconds,
+      ),
+    ];
+
     const notify = jest.fn();
 
     const checkedPeople = new AppLogic(notify, now.clone()).checkCallLog(
       testPeople,
-      modifiedCalls,
       testLog,
     );
 
@@ -173,6 +168,15 @@ removedCallsTestCases.forEach((testCase, index) => {
         testCase[1].name,
         testCase[1].phoneNumber,
         testCase[1].frequency,
+        [],
+        [
+          getCall(now)(
+            testCase[1].phoneNumber,
+            testCase[1].callType,
+            testCase[1].daysDelta,
+            testCase[1].callDurationSeconds,
+          ),
+        ],
       ),
     ];
 
@@ -191,26 +195,10 @@ removedCallsTestCases.forEach((testCase, index) => {
       ),
     ];
 
-    const modifiedCalls = [
-      new ModifiedCalls(
-        testCase[1].name,
-        [],
-        [
-          getCall(now)(
-            testCase[1].phoneNumber,
-            testCase[1].callType,
-            testCase[1].daysDelta,
-            testCase[1].callDurationSeconds,
-          ),
-        ],
-      ),
-    ];
-
     const notify = jest.fn();
 
     const checkedPeople = new AppLogic(notify, now.clone()).checkCallLog(
       testPeople,
-      modifiedCalls,
       testLog,
     );
 

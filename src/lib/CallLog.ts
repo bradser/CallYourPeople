@@ -1,8 +1,8 @@
 import { PhoneNumberUtil } from 'google-libphonenumber';
 import { PermissionsAndroid } from 'react-native';
 import CallLogs from 'react-native-call-log';
-import { formatPhoneNumber } from './Helpers';
 import { Call, GetLogCallback } from '../Types';
+import { formatPhoneNumber } from './Helpers';
 
 export const getLogWithPermissions: GetLogCallback = async () => {
   const granted = await PermissionsAndroid.request(

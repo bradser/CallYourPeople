@@ -1,66 +1,45 @@
-import AsyncStorage from '@react-native-community/async-storage';
 import moment from 'moment';
 import { PhoneEntry } from 'react-native-select-contact';
 import { Sentry } from 'react-native-sentry';
 import {
   Call,
   CallType,
+  CheckOutput,
   Found,
   Frequency,
   GetLogCallback,
-  ModifiedCalls,
   NotifyCallback,
   Person,
+  ViewPerson,
 } from '../Types';
+import { Store } from './Store';
 
-export class CheckOutput {
-  constructor(public people: Person[], public log: any) {}
-}
-
-// tslint:disable-next-line: max-classes-per-file
 export default class AppLogic {
   constructor(
     private notifyCallback: NotifyCallback,
     private rightNow: moment.Moment,
   ) {}
 
-  public check = async (getLog: GetLogCallback): Promise<CheckOutput> => {
-    let storageData: string | undefined;
-    let storageSettings: string | undefined;
-    let log: Call[] = [];
-
+  public check = async (
+    getLog: GetLogCallback,
+    store: Store,
+  ): Promise<CheckOutput> => {
     try {
-      [storageData, storageSettings, log] = await Promise.all([
-        AsyncStorage.getItem('data'),
-        AsyncStorage.getItem('settings'),
-        getLog(),
-      ]);
+      const log: Call[] = await getLog();
+
+      const viewPeople = this.checkCallLog(store.people, log);
+
+      return new CheckOutput(viewPeople, log);
     } catch (error) {
       Sentry.captureException(error);
+
+      throw error;
     }
-
-    const storagePeople = storageData ? JSON.parse(storageData) : [];
-
-    const modifiedCalls = storageSettings
-      ? JSON.parse(storageSettings).modifiedCalls
-      : [];
-
-    const checkedPeople = this.checkCallLog(storagePeople, modifiedCalls, log);
-
-    return new CheckOutput(checkedPeople, log);
   }
 
-  public checkCallLog = (
-    people: Person[],
-    modifiedCalls: ModifiedCalls[],
-    callLog: Call[],
-  ): Person[] =>
+  public checkCallLog = (people: Person[], callLog: Call[]): ViewPerson[] =>
     people.map((person: Person) => {
-      const procesedLog = this.processModifiedCalls(
-        person,
-        modifiedCalls,
-        callLog,
-      );
+      const procesedLog = this.processModifiedCalls(person, callLog);
 
       const found = this.findPhoneAndCall(person, procesedLog);
 
@@ -73,31 +52,25 @@ export default class AppLogic {
         this.notify(person, found.phone);
       }
 
-      return new Person(person.contact, person.frequency, days);
+      return new ViewPerson(person.contact.name, person.frequency, days);
     })
 
-  public processModifiedCalls = (
-    person: Person,
-    modifiedCalls: ModifiedCalls[],
-    callLog: Call[],
-  ): Call[] => {
-    const modified = modifiedCalls.find((m) => m.name === person.contact.name);
+  public processModifiedCalls = (person: Person, callLog: Call[]): Call[] => {
+    const processed =
+      person.removed.length > 0
+        ? callLog.filter(
+            (call) =>
+              !person.removed.find(
+                (r) =>
+                  r.callDate === call.callDate &&
+                  r.phoneNumber === call.phoneNumber,
+              ),
+          )
+        : callLog;
 
-    if (modified) {
-      const processed = callLog.filter(
-        (call) =>
-          !modified.removed.find(
-            (r) =>
-              r.callDate === call.callDate && r.phoneNumber === call.phoneNumber,
-          ),
-      );
-
-      return processed
-        .concat(modified.added)
-        .sort((a, b) => (a.callDate < b.callDate ? -1 : 1));
-    }
-
-    return callLog;
+    return processed
+      .concat(person.added)
+      .sort((a, b) => (a.callDate < b.callDate ? -1 : 1));
   }
 
   private findPhoneAndCall = (person: Person, callLog: Call[]): Found => {
@@ -131,7 +104,7 @@ export default class AppLogic {
       if (call.callType === CallType.OUTGOING) {
         // Leave a voicemail every other day, or complete a conversation
         // TODO: a user setting?
-        // TODO: only if the next call is outside of the frequency
+        // TODO: only if the next call is outside of the frequency?
         return this.roundDays(2 - daysSince);
       }
 

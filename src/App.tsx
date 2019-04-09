@@ -2,7 +2,7 @@ import { onError, Provider } from 'mobx-react';
 import moment from 'moment';
 import React, { Component } from 'react';
 import BackgroundFetch from 'react-native-background-fetch';
-import { MenuProvider } from 'react-native-popup-menu';
+import { Provider as PaperProvider } from 'react-native-paper';
 import PushNotification from 'react-native-push-notification-ce';
 import SendIntentAndroid from 'react-native-send-intent';
 import { Sentry } from 'react-native-sentry';
@@ -46,7 +46,7 @@ export default class App extends Component {
         await new AppLogic(
           (details) => PushNotification.localNotification(details),
           moment(),
-        ).check(getLog);
+        ).check(getLog, store);
 
         BackgroundFetch.finish(BackgroundFetch.FETCH_RESULT_NO_DATA);
       },
@@ -67,14 +67,17 @@ export default class App extends Component {
       }
     });
 
+    // TODO: update contacts upon launch, for updated phone numbers (don't cache)
+    // outline icons w/ white, for non-dark-mode UI
+    // sorting in UI
   }
 
   public render() {
     return (
       <Provider store={store}>
-        <MenuProvider>
+        <PaperProvider>
           <AppContainer />
-        </MenuProvider>
+        </PaperProvider>
       </Provider>
     );
   }
