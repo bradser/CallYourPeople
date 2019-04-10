@@ -1,13 +1,13 @@
 import { inject, observer } from 'mobx-react';
 import React, { Component } from 'react';
 import { View } from 'react-native';
-import { IconButton, Text, Title, Divider } from 'react-native-paper';
+import { Divider, IconButton, Text, Title } from 'react-native-paper';
 import { NavigationInjectedProps } from 'react-navigation';
 import AddCallsPicker from '../components/AddCallsPicker';
 import FrequencyPicker from '../components/FrequencyPicker';
+import RemoveCallsPicker from '../components/RemoveCallsPicker';
 import { Store } from '../lib/Store';
 import { Call, Person } from '../Types';
-import RemoveCallsPicker from '../components/RemoveCallsPicker';
 
 interface Props extends NavigationInjectedProps {
   store?: Store;

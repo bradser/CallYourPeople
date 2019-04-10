@@ -1,4 +1,4 @@
-import { PhoneNumberUtil } from 'google-libphonenumber';
+import { PhoneNumberFormat, PhoneNumberUtil } from 'google-libphonenumber';
 import DeviceInfo from 'react-native-device-info';
 
 export const formatPhoneNumber = (
@@ -8,10 +8,19 @@ export const formatPhoneNumber = (
   let formattedPhone;
 
   try {
-    const parsedPhone = phoneNumberUtil.parse(phoneNumber, DeviceInfo.getDeviceCountry());
+    if (PhoneNumberUtil.isViablePhoneNumber(phoneNumber)) {
+      const parsedPhone = phoneNumberUtil.parse(
+        phoneNumber,
+        DeviceInfo.getDeviceCountry(),
+      );
 
-    const PNFE164 = 0;
-    formattedPhone = phoneNumberUtil.format(parsedPhone, PNFE164);
+      formattedPhone = phoneNumberUtil.format(
+        parsedPhone,
+        PhoneNumberFormat.E164,
+      );
+    } else {
+      formattedPhone = phoneNumber;
+    }
   } catch (error) {
     formattedPhone = phoneNumber;
   }

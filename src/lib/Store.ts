@@ -1,5 +1,5 @@
+import AsyncStorage from '@react-native-community/async-storage';
 import { IObservableArray, observable, runInAction } from 'mobx';
-import { AsyncStorage } from 'react-native';
 import { Person } from '../Types';
 
 export class Store {

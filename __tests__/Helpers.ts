@@ -34,16 +34,18 @@ export const getCall = (now) => (
   callDuration: number,
 ): Call =>
   new Call(
+    '',
+    callDuration,
+    '',
     phoneNumber,
-    callType,
+    0,
     now
       .clone()
       // Rather than days, to work around https://github.com/moment/moment/issues/2430
       .subtract(daysDelta * 24, 'hours')
       .valueOf()
       .toString(),
-    callDuration,
-    '',
+    callType,
   );
 
 export const runTestCase = (testCase, index) => {

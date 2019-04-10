@@ -2,11 +2,11 @@
 
 buildscript {
     ext {
-        buildToolsVersion = "27.0.3"
+        buildToolsVersion = "28.0.3"
         minSdkVersion = 19
-        compileSdkVersion = 27
-        targetSdkVersion = 26
-        supportLibVersion = "27.1.1"
+        compileSdkVersion = 28
+        targetSdkVersion = 28
+        supportLibVersion = "28.0.0"
     }
     repositories {
         google()
@@ -32,14 +32,8 @@ allprojects {
             // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
             url "$rootDir/../node_modules/react-native/android"
         }
-        google()
         maven {
             url "$rootDir/../node_modules/react-native-background-fetch/android/libs"
         }
     }
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.4'
-    distributionUrl = distributionUrl.replace("bin", "all")
 }

@@ -30,12 +30,13 @@ export default class ModalDialog extends Component<Props, State> {
         <Portal>
           <Modal visible={this.state.visible}>
             <ScrollView>
-              {this.props.log.map((call) => (
+              {this.props.log.map((call, index) => (
                 <List.Item
+                  key={index}
                   title={() => (
                     <TouchableOpacity onPress={() => this.selectCall(call)}>
-                      <Text>{call.callDayTime}</Text>
-                      <Text>{call.callDuration}</Text>
+                      <Text>{call.dateTime}</Text>
+                      <Text>{call.duration}</Text>
                     </TouchableOpacity>
                   )}
                 />

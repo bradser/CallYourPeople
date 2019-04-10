@@ -33,7 +33,7 @@ export default class AppLogic {
     } catch (error) {
       Sentry.captureException(error);
 
-      throw error;
+      return new CheckOutput([], []);
     }
   }
 
@@ -62,7 +62,7 @@ export default class AppLogic {
             (call) =>
               !person.removed.find(
                 (r) =>
-                  r.callDate === call.callDate &&
+                  r.timestamp === call.timestamp &&
                   r.phoneNumber === call.phoneNumber,
               ),
           )
@@ -70,7 +70,7 @@ export default class AppLogic {
 
     return processed
       .concat(person.added)
-      .sort((a, b) => (a.callDate < b.callDate ? -1 : 1));
+      .sort((a, b) => (a.timestamp < b.timestamp ? 1 : -1));
   }
 
   private findPhoneAndCall = (person: Person, callLog: Call[]): Found => {
@@ -90,18 +90,18 @@ export default class AppLogic {
   }
 
   private daysLeftTillCallNeeded = (person: Person, call: Call): number => {
-    const daysSince = this.callDateToDaysSinceLastCall(call.callDate);
+    const daysSince = this.callDateToDaysSinceLastCall(call.timestamp);
 
-    if (call.callType === CallType.MISSED) {
+    if (call.type === CallType.MISSED) {
       return -daysSince;
     }
 
     if (this.isVoicemail(call)) {
-      if (call.callType === CallType.INCOMING) {
+      if (call.type === CallType.INCOMING) {
         return -daysSince;
       }
 
-      if (call.callType === CallType.OUTGOING) {
+      if (call.type === CallType.OUTGOING) {
         // Leave a voicemail every other day, or complete a conversation
         // TODO: a user setting?
         // TODO: only if the next call is outside of the frequency?
@@ -110,9 +110,7 @@ export default class AppLogic {
 
       Sentry.captureException(
         new Error(
-          `unexpected CallType ${
-            call.callType
-          } in checkCall's isVoicemail check`,
+          `unexpected CallType ${call.type} in checkCall's isVoicemail check`,
         ),
       );
 
@@ -125,10 +123,10 @@ export default class AppLogic {
   }
 
   // TODO: a user setting?
-  private isVoicemail = (call: Call): boolean => call.callDuration <= 2 * 60;
+  private isVoicemail = (call: Call): boolean => call.duration <= 2 * 60;
 
-  private callDateToDaysSinceLastCall = (callDate: string): number =>
-    Math.abs(this.rightNow.diff(new Date(parseInt(callDate, 10)), 'minutes')) /
+  private callDateToDaysSinceLastCall = (timestamp: string): number =>
+    Math.abs(this.rightNow.diff(new Date(parseInt(timestamp, 10)), 'minutes')) /
     (60 * 24)
 
   private roundDays = (days: number): number => Math.round(days * 10) / 10;

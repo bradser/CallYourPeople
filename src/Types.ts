@@ -32,11 +32,13 @@ export const FrequencyText = [
 
 export class Call {
   constructor(
+    public dateTime: string,
+    public duration: number,
+    public name: string,
     public phoneNumber: string,
-    public callType: CallType,
-    public callDate: string,
-    public callDuration: number,
-    public callDayTime: string,
+    public rawType: number,
+    public timestamp: string,
+    public type: CallType,
   ) {}
 }
 
@@ -44,6 +46,7 @@ export enum CallType {
   INCOMING = 'INCOMING',
   OUTGOING = 'OUTGOING',
   MISSED = 'MISSED',
+  UNKNOWN = 'UNKNOWN',
 }
 
 export class Found {

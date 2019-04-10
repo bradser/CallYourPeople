@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Linking, StyleSheet, TextStyle } from 'react-native';
+import { Linking, StyleSheet } from 'react-native';
 import TouchableOpacityButton from './TouchableOpacityButton';
 
 interface Props {
@@ -20,5 +20,5 @@ export default class Link extends PureComponent<Props> {
 }
 
 const styles = StyleSheet.create({
-  style: { color: 'blue', margin: 15 },
+  style: { color: 'blue', marginLeft: 15, marginBottom: 30 },
 });

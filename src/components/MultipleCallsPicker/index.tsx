@@ -16,9 +16,10 @@ export default class MultpleCallsPicker extends Component<Props> {
     return (
       <List.Section title={this.props.title}>
         <ModalDialog log={this.props.log} onSelect={this.selectCall}>
-          {this.props.selected.map((call) => (
+          {this.props.selected.map((call, index) => (
             <List.Item
-              title={call.callDayTime}
+              key={index}
+              title={call.dateTime}
               right={() => (
                 <TouchableOpacity onPress={() => this.removeCall(call)}>
                   <List.Icon icon='delete' color='black' />
@@ -37,7 +38,7 @@ export default class MultpleCallsPicker extends Component<Props> {
 
   private removeCall = (call: Call): void => {
     this.props.onSelect(
-      this.props.selected.filter((c) => c.callDate === call.callDate),
+      this.props.selected.filter((c) => c.timestamp === call.timestamp),
     );
   }
 }

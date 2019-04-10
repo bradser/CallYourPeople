@@ -10,7 +10,13 @@ import Link from '../components/Link';
 import AppLogic from '../lib/AppLogic';
 import { getLogWithPermissions } from '../lib/CallLog';
 import { Store } from '../lib/Store';
-import { FrequencyText, NotifyCallback, Person, ViewPerson } from '../Types';
+import {
+  DetailsNavigationProps,
+  FrequencyText,
+  NotifyCallback,
+  Person,
+  ViewPerson,
+} from '../Types';
 import { CYMGreen } from './../lib/Constants';
 
 interface Props extends NavigationInjectedProps {
@@ -53,20 +59,20 @@ export default inject('store')(
         return (
           <View style={styles.containerView}>
             <ScrollView style={styles.scrollView}>
-              <DataTable style={styles.list}>
+              <DataTable>
                 <DataTable.Header>
                   <DataTable.Title>Name</DataTable.Title>
-                  <DataTable.Title>Days Left</DataTable.Title>
-                  <DataTable.Title>Frequency</DataTable.Title>
+                  <DataTable.Title numeric>Days Left</DataTable.Title>
+                  <DataTable.Title numeric>Frequency</DataTable.Title>
                 </DataTable.Header>
                 {this.getRows()}
               </DataTable>
             </ScrollView>
-            <AddPersonButton onPress={this.addPerson} />
             <Link
               text='Conversation Tips'
               url='https://fortheinterested.com/ask-better-questions/'
             />
+            <AddPersonButton onPress={this.addPerson} />
           </View>
         );
       }
@@ -125,6 +131,5 @@ export default inject('store')(
 const styles = StyleSheet.create({
   cell: { paddingRight: 5 },
   containerView: { flex: 1 },
-  list: { margin: 5 },
   scrollView: { padding: 10 },
 });

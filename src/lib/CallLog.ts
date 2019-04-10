@@ -16,21 +16,20 @@ export const getLogWithPermissions: GetLogCallback = async () => {
     },
   );
 
-  return granted === PermissionsAndroid.RESULTS.GRANTED ? getLog() : [];
+  return granted === PermissionsAndroid.RESULTS.GRANTED
+    ? await getLog()
+    : await [];
 };
 
-export const getLog: GetLogCallback = () => {
-  return new Promise((resolve) =>
-    CallLogs.show((logs: string) => {
-      const phoneNumberUtil = PhoneNumberUtil.getInstance();
+export const getLog: GetLogCallback = async () => {
+  const log = (await CallLogs.loadAll()) as Call[];
 
-      const parsedLogs = JSON.parse(logs, (key, value) =>
-        key === 'phoneNumber'
-          ? formatPhoneNumber(phoneNumberUtil, value)
-          : value,
-      ) as Call[];
+  const phoneNumberUtil = PhoneNumberUtil.getInstance();
 
-      resolve(parsedLogs);
-    }),
-  );
+  const parsedLog = log.map((call) => ({
+    ...call,
+    phoneNumber: formatPhoneNumber(phoneNumberUtil, call.phoneNumber),
+  }));
+
+  return parsedLog;
 };
