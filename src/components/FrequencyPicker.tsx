@@ -1,12 +1,12 @@
 import React, { PureComponent } from 'react';
-import { View, ViewStyle } from 'react-native';
-import { Button, Menu, Text } from 'react-native-paper';
+import { StyleSheet, View } from 'react-native';
+import { Button, Menu, Subheading } from 'react-native-paper';
+import { materialUILayout } from '../lib/Constants';
 import { FrequencyText, Person } from '../Types';
 
 interface Props {
   person: Person;
   onSelect: (index: number) => void;
-  style?: ViewStyle;
 }
 
 interface State {
@@ -24,35 +24,26 @@ export default class FrequencyPicker extends PureComponent<Props, State> {
 
   public render() {
     return (
-      <Menu
-        visible={this.state.visible}
-        onDismiss={this.closeMenu}
-        anchor={
-          <View
-            style={
-              {
-                // flex: 1,
-                // flexDirection: 'row',
-                //width: 400
-              }
-            }
-          >
-            <Text>Frequency:</Text>
-            <Button mode='outlined' onPress={this.openMenu}
-            style={{width: 110}}>
+      <View style={styles.view}>
+        <Subheading style={styles.label}>Frequency:</Subheading>
+        <Menu
+          visible={this.state.visible}
+          onDismiss={this.closeMenu}
+          anchor={
+            <Button mode='outlined' color='black' onPress={this.openMenu}>
               {FrequencyText[this.props.person.frequency]}
             </Button>
-          </View>
-        }
-      >
-        {FrequencyText.map((frequencyText, index) => (
-          <Menu.Item
-            key={index}
-            title={frequencyText}
-            onPress={() => this.select(index)}
-          />
-        ))}
-      </Menu>
+          }
+        >
+          {FrequencyText.map((frequencyText, index) => (
+            <Menu.Item
+              key={index}
+              title={frequencyText}
+              onPress={() => this.select(index)}
+            />
+          ))}
+        </Menu>
+      </View>
     );
   }
 
@@ -66,3 +57,12 @@ export default class FrequencyPicker extends PureComponent<Props, State> {
     this.closeMenu();
   }
 }
+
+const styles = StyleSheet.create({
+  label: { marginRight: materialUILayout.horizontalSpace },
+  view: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+});

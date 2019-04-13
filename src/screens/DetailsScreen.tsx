@@ -1,11 +1,14 @@
 import { inject, observer } from 'mobx-react';
 import React, { Component } from 'react';
-import { View } from 'react-native';
-import { Divider, IconButton, Text, Title } from 'react-native-paper';
+import { StyleSheet } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+import { Divider, IconButton, Title } from 'react-native-paper';
 import { NavigationInjectedProps } from 'react-navigation';
 import AddCallsPicker from '../components/AddCallsPicker';
+import DeletePersonButton from '../components/DeletePersonButton';
 import FrequencyPicker from '../components/FrequencyPicker';
 import RemoveCallsPicker from '../components/RemoveCallsPicker';
+import { cymGreen, materialUILayout } from '../lib/Constants';
 import { Store } from '../lib/Store';
 import { Call, Person } from '../Types';
 
@@ -13,13 +16,9 @@ interface Props extends NavigationInjectedProps {
   store?: Store;
 }
 
-interface State {
-  items: string[];
-}
-
 export default inject('store')(
   observer(
-    class DetailsScreen extends Component<Props, State> {
+    class DetailsScreen extends Component<Props> {
       public static navigationOptions = ({ navigation }) => {
         return {
           headerLeft: (
@@ -29,57 +28,60 @@ export default inject('store')(
               size={20}
             />
           ),
+          headerStyle: { backgroundColor: cymGreen },
           title: 'Details',
         };
       }
 
-      private readonly person: Person;
       private readonly log: Call[];
+      private readonly name: string;
 
       constructor(props) {
         super(props);
-        const name = this.props.navigation.getParam('name') as string;
-
-        this.person = this.props.store!.people.find(
-          (p) => p.contact.name === name,
-        )!;
 
         this.log = this.props.navigation.getParam('log') as Call[];
+
+        this.name = this.props.navigation.getParam('name') as string;
       }
 
       public render() {
-        return (
-          <View>
-            <Title>{this.person!.contact.name}</Title>
-              <FrequencyPicker
-                person={this.person!}
-                onSelect={this.frequencyOnSelect}
-              />
-            <Divider />
-            <AddCallsPicker person={this.person} log={this.log} />
-            <Divider />
-            <RemoveCallsPicker person={this.person} log={this.log} />
-            {this.deleteButton(this.person!)}
-          </View>
-        );
+        // May be null upon delete
+        const person = this.props.store!.find(this.name);
+
+        return person ? (
+          <ScrollView style={styles.scrollView}>
+            <Title style={styles.name}>{person.contact.name}</Title>
+            <FrequencyPicker
+              person={person}
+              onSelect={this.frequencyOnSelect(person)}
+            />
+            <Divider style={styles.divider} />
+            <AddCallsPicker person={person} log={this.log} />
+            <Divider style={styles.divider} />
+            <RemoveCallsPicker person={person} log={this.log} />
+            <Divider style={styles.divider} />
+            <DeletePersonButton person={person} onPress={this.deletePerson} />
+          </ScrollView>
+        ) : null;
       }
 
-      private frequencyOnSelect = (index: number): void => {
-        this.props.store!.setFrequency(this.person, index);
+      private frequencyOnSelect = (person: Person) => (index: number): void => {
+        this.props.store!.update(person, { frequency: index });
       }
-
-      private deleteButton = (person: Person) => (
-        <IconButton
-          onPress={() => this.deletePerson(person)}
-          size={20}
-          icon='delete'
-          style={{ alignSelf: 'center' }}
-        />
-      )
 
       private deletePerson = (person: Person): void => {
         this.props.store!.remove(person);
+
+        this.props.navigation.goBack();
       }
     },
   ),
 );
+
+const styles = StyleSheet.create({
+  divider: {
+    marginVertical: materialUILayout.rowMargin,
+  },
+  name: { height: materialUILayout.rowHeight },
+  scrollView: { margin: materialUILayout.margin },
+});

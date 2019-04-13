@@ -71,3 +71,10 @@ export class ViewPerson {
 export class CheckOutput {
   constructor(public viewPeople: ViewPerson[], public log: any) {}
 }
+
+export class DetailsNavigationProps {
+  constructor(
+    public log: Call[],
+    public name: string,
+  ) {}
+}

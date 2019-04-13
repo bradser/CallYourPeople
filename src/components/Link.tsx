@@ -1,17 +1,18 @@
 import React, { PureComponent } from 'react';
-import { Linking, StyleSheet } from 'react-native';
+import { Linking, StyleSheet, TextStyle } from 'react-native';
 import TouchableOpacityButton from './TouchableOpacityButton';
 
 interface Props {
   url: string;
   text: string;
+  style: TextStyle;
 }
 
 export default class Link extends PureComponent<Props> {
   public render() {
     return (
       <TouchableOpacityButton
-        style={styles.style}
+        style={{ ...styles.style, ...this.props.style }}
         text={this.props.text}
         onPress={() => Linking.openURL(this.props.url)}
       />
@@ -20,5 +21,5 @@ export default class Link extends PureComponent<Props> {
 }
 
 const styles = StyleSheet.create({
-  style: { color: 'blue', marginLeft: 15, marginBottom: 30 },
+  style: { color: 'blue' },
 });

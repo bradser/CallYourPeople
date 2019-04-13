@@ -4,8 +4,8 @@ import React, { Component } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { DataTable } from 'react-native-paper';
 import PushNotification from 'react-native-push-notification-ce';
-import { NavigationInjectedProps } from 'react-navigation';
-import AddPersonButton from '../components/AddPersonButton';
+import { NavigationEvents, NavigationInjectedProps } from 'react-navigation';
+import AddPersonFAB from '../components/AddPersonFAB';
 import Link from '../components/Link';
 import AppLogic from '../lib/AppLogic';
 import { getLogWithPermissions } from '../lib/CallLog';
@@ -17,7 +17,7 @@ import {
   Person,
   ViewPerson,
 } from '../Types';
-import { CYMGreen } from './../lib/Constants';
+import { cymGreen, materialUILayout } from './../lib/Constants';
 
 interface Props extends NavigationInjectedProps {
   store?: Store;
@@ -32,6 +32,7 @@ export default inject('store')(
   observer(
     class HomeScreen extends Component<Props, State> {
       public static navigationOptions = {
+        headerStyle: { backgroundColor: cymGreen },
         title: 'Call Your People!',
       };
 
@@ -58,6 +59,7 @@ export default inject('store')(
       public render() {
         return (
           <View style={styles.containerView}>
+            <NavigationEvents onWillFocus={this.checkAndNotify} />
             <ScrollView style={styles.scrollView}>
               <DataTable>
                 <DataTable.Header>
@@ -71,8 +73,9 @@ export default inject('store')(
             <Link
               text='Conversation Tips'
               url='https://fortheinterested.com/ask-better-questions/'
+              style={styles.link}
             />
-            <AddPersonButton onPress={this.addPerson} />
+            <AddPersonFAB onPress={this.addPerson} />
           </View>
         );
       }
@@ -95,20 +98,22 @@ export default inject('store')(
         this.state.viewPeople!.map((person, index) => {
           const daysLeftBackgoundColor =
             person.daysLeftTillCallNeeded <= 0
-              ? { ...styles.cell, backgroundColor: CYMGreen }
-              : styles.cell;
+              ? { ...styles.cellDaysLeft, backgroundColor: cymGreen }
+              : styles.cellDaysLeft;
 
           return (
             <DataTable.Row
               key={index}
               onPress={() =>
-                this.props.navigation.navigate('Details', {
-                  log: this.state.log,
-                  name: person.name,
-                })
+                this.props.navigation.navigate(
+                  'Details',
+                  new DetailsNavigationProps(this.state.log, person.name),
+                )
               }
             >
-              <DataTable.Cell>{person.name}</DataTable.Cell>
+              <DataTable.Cell style={styles.cellName}>
+                {person.name}
+              </DataTable.Cell>
               <DataTable.Cell numeric style={daysLeftBackgoundColor}>
                 {person.daysLeftTillCallNeeded.toString()}
               </DataTable.Cell>
@@ -129,7 +134,12 @@ export default inject('store')(
 );
 
 const styles = StyleSheet.create({
-  cell: { paddingRight: 5 },
+  cellDaysLeft: { flex: 0.7, paddingRight: materialUILayout.horizontalSpace },
+  cellName: { flex: 1.3, paddingRight: materialUILayout.horizontalSpace },
   containerView: { flex: 1 },
-  scrollView: { padding: 10 },
+  link: {
+    marginBottom: materialUILayout.margin * 2,
+    marginLeft: materialUILayout.margin,
+  },
+  scrollView: { margin: materialUILayout.margin },
 });

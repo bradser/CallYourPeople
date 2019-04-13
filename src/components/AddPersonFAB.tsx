@@ -1,18 +1,18 @@
 import { PhoneNumberUtil } from 'google-libphonenumber';
 import React, { PureComponent } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Alert, StyleSheet, View } from 'react-native';
 import { FAB } from 'react-native-paper';
 import { Contact } from 'react-native-select-contact';
+import { cymGreen, materialUILayout } from '../lib/Constants';
 import Contacts from '../lib/Contacts';
 import { formatPhoneNumber } from '../lib/Helpers';
 import { Frequency, Person } from '../Types';
-import { CYMGreen } from './../lib/Constants';
 
 interface Props {
   onPress: (person: Person) => void;
 }
 
-export default class AddPersonButton extends PureComponent<Props> {
+export default class AddPersonFAB extends PureComponent<Props> {
   private phoneNumberUtil = PhoneNumberUtil.getInstance();
 
   public render() {
@@ -27,7 +27,7 @@ export default class AddPersonButton extends PureComponent<Props> {
     Contacts().then((selectedContact) => {
       if (selectedContact) {
         if (!selectedContact.phones || selectedContact.phones.length === 0) {
-          alert('This contact has no phone number.');
+          Alert.alert('This contact has no phone number.');
 
           return;
         }
@@ -56,12 +56,11 @@ export default class AddPersonButton extends PureComponent<Props> {
 
 const styles = StyleSheet.create({
   fab: {
-    backgroundColor: CYMGreen,
+    backgroundColor: cymGreen,
   },
-
   view: {
     bottom: 0,
-    margin: 15,
+    margin: materialUILayout.margin,
     position: 'absolute',
     right: 0,
   },

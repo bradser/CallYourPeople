@@ -3,14 +3,17 @@ import { AppRegistry, Linking } from 'react-native';
 import BackgroundFetch from 'react-native-background-fetch';
 import PushNotification from 'react-native-push-notification-ce';
 import { Sentry } from 'react-native-sentry';
+import { getLog } from './src//lib/CallLog';
 import App from './src/App';
 import AppLogic from './src/lib/AppLogic';
-import { getLog } from './src//lib/CallLog';
+import { Store } from './src/lib/Store';
 
 Sentry.config('https://72a046a322314e0e8d387ff7a2ca1ab6@sentry.io/1410623').install();
 
 const MyHeadlessTask = async () => {
-  await new AppLogic((details) => PushNotification.localNotification(details), moment()).check(getLog);
+  const store = new Store();
+
+  await new AppLogic((details) => PushNotification.localNotification(details), moment()).check(getLog, store);
 
   BackgroundFetch.finish();
 };

@@ -5,6 +5,27 @@ export const formatPhoneNumber = (
   phoneNumberUtil: PhoneNumberUtil,
   phoneNumber: string,
 ): string => {
+  return format(
+    phoneNumberUtil,
+    phoneNumber,
+    phoneNumber,
+    PhoneNumberFormat.E164,
+  );
+};
+
+export const prettifyPhoneNumber = (
+  phoneNumberUtil: PhoneNumberUtil,
+  phoneNumber: string,
+): string => {
+  return format(phoneNumberUtil, phoneNumber, '', PhoneNumberFormat.NATIONAL);
+};
+
+const format = (
+  phoneNumberUtil: PhoneNumberUtil,
+  phoneNumber: string,
+  defaultPhoneNumber: string,
+  formatType: number,
+): string => {
   let formattedPhone;
 
   try {
@@ -14,15 +35,12 @@ export const formatPhoneNumber = (
         DeviceInfo.getDeviceCountry(),
       );
 
-      formattedPhone = phoneNumberUtil.format(
-        parsedPhone,
-        PhoneNumberFormat.E164,
-      );
+      formattedPhone = phoneNumberUtil.format(parsedPhone, formatType);
     } else {
-      formattedPhone = phoneNumber;
+      formattedPhone = defaultPhoneNumber;
     }
   } catch (error) {
-    formattedPhone = phoneNumber;
+    formattedPhone = defaultPhoneNumber;
   }
 
   return formattedPhone;

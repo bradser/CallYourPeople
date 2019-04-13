@@ -2,7 +2,7 @@ import { inject, observer } from 'mobx-react';
 import React, { Component } from 'react';
 import { Store } from '../lib/Store';
 import { Call, Person } from '../Types';
-import MultpleCallsPicker from './MultipleCallsPicker';
+import CallsPicker from './CallsPicker';
 
 interface Props {
   store?: Store;
@@ -15,16 +15,19 @@ export default inject('store')(
     class RemoveCallsPicker extends Component<Props> {
       public render() {
         return (
-          <MultpleCallsPicker
+          <CallsPicker
             title='Remove Calls'
             log={this.props.log}
             selected={this.props.person.removed}
-            onSelect={(newSelected) => {
-              this.props.person.removed = newSelected;
-            }}
+            onSelect={this.removeCalls}
           />
         );
       }
+
+      private removeCalls = (newSelected: Call[]): void =>
+        this.props.store!.update(this.props.person, {
+          removed: newSelected,
+        })
     },
   ),
 );
