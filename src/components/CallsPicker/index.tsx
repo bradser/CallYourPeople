@@ -13,7 +13,6 @@ interface Props {
 }
 
 export default class CallsPicker extends Component<Props> {
-  // TODO filter out selected from log
   public render() {
     const filteredLog = this.filterCurrentSelectionsAddedRemoved();
 

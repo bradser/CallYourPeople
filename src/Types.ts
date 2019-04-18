@@ -1,5 +1,6 @@
 // tslint:disable:max-classes-per-file
 import { Contact, PhoneEntry } from 'react-native-select-contact';
+import { NavigationParams } from 'react-navigation';
 
 export class Person {
   constructor(
@@ -72,7 +73,7 @@ export class CheckOutput {
   constructor(public viewPeople: ViewPerson[], public log: any) {}
 }
 
-export class DetailsNavigationProps {
+export class DetailsNavigationProps implements NavigationParams {
   constructor(
     public log: Call[],
     public name: string,

@@ -70,6 +70,9 @@ export default class App extends Component {
     // TODO: update contacts upon launch, for updated phone numbers (don't cache)
     // outline icons w/ white, for non-dark-mode UI
     // sorting in UI
+    // settings
+    // save to cloud
+    // pick color
   }
 
   public render() {

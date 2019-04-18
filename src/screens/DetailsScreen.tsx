@@ -3,16 +3,16 @@ import React, { Component } from 'react';
 import { StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Divider, IconButton, Title } from 'react-native-paper';
-import { NavigationInjectedProps } from 'react-navigation';
+import { NavigationInjectedProps, NavigationScreenProps } from 'react-navigation';
 import AddCallsPicker from '../components/AddCallsPicker';
 import DeletePersonButton from '../components/DeletePersonButton';
 import FrequencyPicker from '../components/FrequencyPicker';
 import RemoveCallsPicker from '../components/RemoveCallsPicker';
 import { cymGreen, materialUILayout } from '../lib/Constants';
 import { Store } from '../lib/Store';
-import { Call, Person } from '../Types';
+import { Call, Person, DetailsNavigationProps } from '../Types';
 
-interface Props extends NavigationInjectedProps {
+interface Props extends NavigationInjectedProps<DetailsNavigationProps> {
   store?: Store;
 }
 
@@ -39,9 +39,9 @@ export default inject('store')(
       constructor(props) {
         super(props);
 
-        this.log = this.props.navigation.getParam('log') as Call[];
+        this.log = this.props.navigation.state.params!.log;
 
-        this.name = this.props.navigation.getParam('name') as string;
+        this.name = this.props.navigation.state.params!.name;
       }
 
       public render() {
