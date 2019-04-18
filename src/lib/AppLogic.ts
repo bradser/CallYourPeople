@@ -38,22 +38,24 @@ export default class AppLogic {
   }
 
   public checkCallLog = (people: Person[], callLog: Call[]): ViewPerson[] =>
-    people.map((person: Person) => {
-      const procesedLog = this.processModifiedCalls(person, callLog);
+    people
+      .map((person: Person) => {
+        const procesedLog = this.processModifiedCalls(person, callLog);
 
-      const found = this.findPhoneAndCall(person, procesedLog);
+        const found = this.findPhoneAndCall(person, procesedLog);
 
-      // If there was never a call to/from this person, notify immediately
-      const days = found.call
-        ? this.daysLeftTillCallNeeded(person, found.call)
-        : 0;
+        // If there was never a call to/from this person, notify immediately
+        const days = found.call
+          ? this.daysLeftTillCallNeeded(person, found.call)
+          : 0;
 
-      if (days <= 0) {
-        this.notify(person, found.phone);
-      }
+        if (days <= 0) {
+          this.notify(person, found.phone);
+        }
 
-      return new ViewPerson(person.contact.name, person.frequency, days);
-    })
+        return new ViewPerson(person.contact.name, person.frequency, days);
+      })
+      .sort(this.sortByDaysThenName)
 
   public processModifiedCalls = (person: Person, callLog: Call[]): Call[] => {
     const processed =
@@ -72,6 +74,15 @@ export default class AppLogic {
       .concat(person.added)
       .sort((a, b) => (a.timestamp < b.timestamp ? 1 : -1));
   }
+
+  private sortByDaysThenName = (a: ViewPerson, b: ViewPerson): number =>
+    a.daysLeftTillCallNeeded === b.daysLeftTillCallNeeded
+      ? a.name <= b.name
+        ? -1
+        : 1
+      : a.daysLeftTillCallNeeded < b.daysLeftTillCallNeeded
+      ? -1
+      : 1
 
   private findPhoneAndCall = (person: Person, callLog: Call[]): Found => {
     let phone: PhoneEntry | undefined;
