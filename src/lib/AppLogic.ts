@@ -58,7 +58,7 @@ export default class AppLogic {
       .sort(this.sortByDaysThenName)
 
   public processModifiedCalls = (person: Person, callLog: Call[]): Call[] => {
-    const processed =
+    const removed =
       person.removed.length > 0
         ? callLog.filter(
             (call) =>
@@ -70,8 +70,16 @@ export default class AppLogic {
           )
         : callLog;
 
-    return processed
-      .concat(person.added)
+    const added =
+      person.added.length > 0
+        ? person.added.map((call) => ({
+            ...call,
+            phoneNumber: person.contact.phones[0].number,
+          }))
+        : removed;
+
+    return removed
+      .concat(added)
       .sort((a, b) => (a.timestamp < b.timestamp ? 1 : -1));
   }
 
@@ -80,7 +88,7 @@ export default class AppLogic {
       ? a.name <= b.name
         ? -1
         : 1
-      : a.daysLeftTillCallNeeded < b.daysLeftTillCallNeeded
+      : a.daysLeftTillCallNeeded <= b.daysLeftTillCallNeeded
       ? -1
       : 1
 
