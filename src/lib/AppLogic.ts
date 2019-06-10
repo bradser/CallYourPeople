@@ -46,14 +46,14 @@ export default class AppLogic {
 
         // If there was never a call to/from this person, notify immediately
         const days = found.call
-          ? this.daysLeftTillCallNeeded(person, found.call)
+          ? this.roundDaysLeftTillCallNeeded(person, found.call)
           : 0;
 
         if (days <= 0) {
-          this.notify(person, found.phone);
+          this.notify(person);
         }
 
-        return new ViewPerson(person.contact.name, person.frequency, days);
+        return new ViewPerson(person.contact, person.frequency, days);
       })
       .sort(this.sortByDaysThenName)
 
@@ -124,7 +124,7 @@ export default class AppLogic {
         // Leave a voicemail every other day, or complete a conversation
         // TODO: a user setting?
         // TODO: only if the next call is outside of the frequency?
-        return this.roundDays(2 - daysSince);
+        return 2 - daysSince;
       }
 
       Sentry.captureException(
@@ -138,8 +138,11 @@ export default class AppLogic {
 
     const frequencyDays = this.frequencyToDays(person);
 
-    return this.roundDays(frequencyDays - daysSince);
+    return frequencyDays - daysSince;
   }
+
+  private roundDaysLeftTillCallNeeded = (person: Person, call: Call): number =>
+    this.roundDays(this.daysLeftTillCallNeeded(person, call))
 
   // TODO: a user setting?
   private isVoicemail = (call: Call): boolean => call.duration <= 2 * 60;
@@ -175,15 +178,12 @@ export default class AppLogic {
     return 7;
   }
 
-  private notify = (
-    person: Person,
-    foundPhone: PhoneEntry | undefined,
-  ): void => {
+  private notify = (person: Person): void => {
     this.notifyCallback({
       largeIcon: 'ic_contact_phone',
       message: 'They want to hear from you!',
       smallIcon: 'ic_contact_phone',
-      tag: foundPhone && foundPhone.number,
+      tag: person.contact.recordId,
       title: `Call ${person.contact.name} now!`,
     });
   }

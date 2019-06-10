@@ -1,6 +1,6 @@
 // tslint:disable: max-classes-per-file
 
-import { CallType, Frequency, Call } from '../src/Types';
+import { Call, CallType, Frequency } from '../src/Types';
 
 export class CallTestCase {
   public callDurationSeconds: number;

@@ -51,10 +51,7 @@ export enum CallType {
 }
 
 export class Found {
-  constructor(
-    public phone: PhoneEntry,
-    public call: Call | undefined,
-  ) {}
+  constructor(public phone: PhoneEntry, public call: Call | undefined) {}
 }
 
 export type NotifyCallback = (details: object) => void;
@@ -63,19 +60,16 @@ export type GetLogCallback = () => Promise<Call[]>;
 
 export class ViewPerson {
   constructor(
-    public name: string,
+    public contact: Contact,
     public frequency: Frequency,
     public daysLeftTillCallNeeded: number,
   ) {}
 }
 
 export class CheckOutput {
-  constructor(public viewPeople: ViewPerson[], public log: any) {}
+  constructor(public viewPeople: ViewPerson[], public log: Call[]) {}
 }
 
 export class DetailsNavigationProps implements NavigationParams {
-  constructor(
-    public log: Call[],
-    public name: string,
-  ) {}
+  constructor(public log: Call[], public contact: Contact) {}
 }

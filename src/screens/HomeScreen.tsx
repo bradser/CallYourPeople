@@ -1,31 +1,27 @@
 import { inject, observer } from 'mobx-react';
 import moment from 'moment';
 import React, { Component } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
-import { DataTable } from 'react-native-paper';
+import { Dimensions, StyleSheet, View } from 'react-native';
+import { Text } from 'react-native-paper';
 import PushNotification from 'react-native-push-notification-ce';
+import { NavigationState, Route, TabBar, TabView } from 'react-native-tab-view';
 import { NavigationEvents, NavigationInjectedProps } from 'react-navigation';
 import AddPersonFAB from '../components/AddPersonFAB';
 import Link from '../components/Link';
+import Table from '../components/Table';
 import AppLogic from '../lib/AppLogic';
 import { getLogWithPermissions } from '../lib/CallLog';
 import { Store } from '../lib/Store';
-import {
-  DetailsNavigationProps,
-  FrequencyText,
-  NotifyCallback,
-  Person,
-  ViewPerson,
-} from '../Types';
+import { Call, NotifyCallback, Person, ViewPerson } from '../Types';
 import { cymGreen, materialUILayout } from './../lib/Constants';
 
 interface Props extends NavigationInjectedProps {
   store?: Store;
 }
 
-interface State {
-  viewPeople?: ViewPerson[];
-  log?: any;
+interface State extends NavigationState<Route> {
+  viewPeople: ViewPerson[];
+  log: Call[];
 }
 
 export default inject('store')(
@@ -40,7 +36,12 @@ export default inject('store')(
         super(props);
 
         this.state = {
+          index: 0,
           log: [],
+          routes: [
+            { key: 'callNow', title: 'Call Now' },
+            { key: 'callSoon', title: 'Call Soon' },
+          ],
           viewPeople: [],
         };
       }
@@ -50,7 +51,9 @@ export default inject('store')(
         // otherwise we may generate a new notification to replace
         // the one that just launched the app.
         PushNotification.showInitialNotification((result) => {
-          result ? this.check() : this.checkAndNotify();
+          (result ? this.check() : this.checkAndNotify()).then(
+            this.initializeTabIndex,
+          );
 
           PushNotification.appStart();
         });
@@ -59,17 +62,23 @@ export default inject('store')(
       public render() {
         return (
           <View style={styles.containerView}>
-            <NavigationEvents onWillFocus={this.checkAndNotify} />
-            <ScrollView style={styles.scrollView}>
-              <DataTable>
-                <DataTable.Header>
-                  <DataTable.Title>Name</DataTable.Title>
-                  <DataTable.Title numeric>Days Left</DataTable.Title>
-                  <DataTable.Title numeric>Frequency</DataTable.Title>
-                </DataTable.Header>
-                {this.getRows()}
-              </DataTable>
-            </ScrollView>
+            <NavigationEvents onWillFocus={this.check} />
+            <TabView
+              navigationState={this.state}
+              renderScene={this.renderScene}
+              onIndexChange={this.setIndex}
+              initialLayout={{ width: Dimensions.get('window').width }}
+              renderTabBar={(props) => (
+                <TabBar
+                  {...props}
+                  indicatorStyle={{ backgroundColor: 'white' }}
+                  style={{ backgroundColor: cymGreen, color: 'black' }}
+                  renderLabel={({ route }) => (
+                    <Text style={{ color: 'black' }}>{route.title}</Text>
+                  )}
+                />
+              )}
+            />
             <Link
               text='Conversation Tips'
               url='https://fortheinterested.com/ask-better-questions/'
@@ -79,6 +88,49 @@ export default inject('store')(
           </View>
         );
       }
+
+      private renderScene = ({ route }) => {
+        switch (route.key) {
+          case 'callNow':
+            return this.callNowTable();
+          case 'callSoon':
+            return this.callSoonTable();
+          default:
+            return null;
+        }
+      }
+
+      private setIndex = (index) => this.setState({ index });
+
+      private initializeTabIndex = (state: State) =>
+        this.setState({
+          index:
+            state.viewPeople.filter((p) => p.daysLeftTillCallNeeded <= 0).length >
+            0
+              ? 0
+              : 1,
+        })
+
+      private callNowTable = () =>
+        this.callTable(
+          this.state.viewPeople.filter((p) => p.daysLeftTillCallNeeded <= 0),
+          'Days Since',
+        )
+
+      private callSoonTable = () =>
+        this.callTable(
+          this.state.viewPeople.filter((p) => p.daysLeftTillCallNeeded > 0),
+          'Days Until',
+        )
+
+      private callTable = (viewPeople, daysLabel) => (
+        <Table
+          navigation={this.props.navigation}
+          log={this.state.log}
+          viewPeople={viewPeople}
+          daysLabel={daysLabel}
+        />
+      )
 
       private check = () => this.runAppLogic(() => undefined);
 
@@ -92,37 +144,9 @@ export default inject('store')(
           .check(getLogWithPermissions, this.props.store!)
           .then((results) => {
             this.setState(results);
+
+            return results;
           })
-
-      private getRows = () =>
-        this.state.viewPeople!.map((person, index) => {
-          const daysLeftBackgoundColor =
-            person.daysLeftTillCallNeeded <= 0
-              ? { ...styles.cellDaysLeft, backgroundColor: cymGreen }
-              : styles.cellDaysLeft;
-
-          return (
-            <DataTable.Row
-              key={index}
-              onPress={() =>
-                this.props.navigation.navigate(
-                  'Details',
-                  new DetailsNavigationProps(this.state.log, person.name),
-                )
-              }
-            >
-              <DataTable.Cell style={styles.cellName}>
-                {person.name}
-              </DataTable.Cell>
-              <DataTable.Cell numeric style={daysLeftBackgoundColor}>
-                {person.daysLeftTillCallNeeded.toString()}
-              </DataTable.Cell>
-              <DataTable.Cell numeric>
-                {FrequencyText[person.frequency]}
-              </DataTable.Cell>
-            </DataTable.Row>
-          );
-        })
 
       private addPerson = (person: Person): void => {
         this.props.store!.add(person);
@@ -134,12 +158,9 @@ export default inject('store')(
 );
 
 const styles = StyleSheet.create({
-  cellDaysLeft: { flex: 0.7, paddingRight: materialUILayout.horizontalSpace },
-  cellName: { flex: 1.3, paddingRight: materialUILayout.horizontalSpace },
   containerView: { flex: 1 },
   link: {
     marginBottom: materialUILayout.margin * 2,
     marginLeft: materialUILayout.margin,
   },
-  scrollView: { margin: materialUILayout.margin },
 });

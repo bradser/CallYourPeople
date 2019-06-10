@@ -58,7 +58,7 @@ export default class ModalDialog extends Component<Props, State> {
   }
 
   private getListItemText = (call: Call): string => {
-    return `${prettifyPhoneNumber(
+    return `${call.name || prettifyPhoneNumber(
       this.phoneNumberUtil,
       call.phoneNumber,
     )} - ${Math.round(call.duration / 60).toString()} minutes`;

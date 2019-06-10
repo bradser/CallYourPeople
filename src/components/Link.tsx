@@ -20,6 +20,14 @@ export default class Link extends PureComponent<Props> {
   }
 }
 
+export const contactLink = (recordId: string): Promise<any> => (
+  Linking.openURL(
+    `content://com.android.contacts/contacts/${
+      recordId
+    }`,
+  )
+);
+
 const styles = StyleSheet.create({
   style: { color: 'blue' },
 });

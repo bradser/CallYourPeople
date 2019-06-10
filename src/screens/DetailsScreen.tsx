@@ -1,16 +1,19 @@
 import { inject, observer } from 'mobx-react';
 import React, { Component } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Divider, IconButton, Title } from 'react-native-paper';
-import { NavigationInjectedProps, NavigationScreenProps } from 'react-navigation';
+import { Contact } from 'react-native-select-contact';
+import Icon from 'react-native-vector-icons/dist/MaterialIcons';
+import { NavigationInjectedProps } from 'react-navigation';
 import AddCallsPicker from '../components/AddCallsPicker';
 import DeletePersonButton from '../components/DeletePersonButton';
 import FrequencyPicker from '../components/FrequencyPicker';
+import { contactLink } from '../components/Link';
 import RemoveCallsPicker from '../components/RemoveCallsPicker';
 import { cymGreen, materialUILayout } from '../lib/Constants';
 import { Store } from '../lib/Store';
-import { Call, Person, DetailsNavigationProps } from '../Types';
+import { Call, DetailsNavigationProps, Person } from '../Types';
 
 interface Props extends NavigationInjectedProps<DetailsNavigationProps> {
   store?: Store;
@@ -34,36 +37,47 @@ export default inject('store')(
       }
 
       private readonly log: Call[];
-      private readonly name: string;
+      private readonly contact: Contact;
 
       constructor(props) {
         super(props);
 
-        this.log = this.props.navigation.state.params!.log;
+        const params = this.props.navigation.state.params!;
 
-        this.name = this.props.navigation.state.params!.name;
+        this.log = params.log;
+
+        this.contact = params.contact;
       }
 
       public render() {
         // May be null upon delete
-        const person = this.props.store!.find(this.name);
+        const person =
+          this.contact && this.props.store!.find(this.contact.name);
 
         return person ? (
           <ScrollView style={styles.scrollView}>
-            <Title style={styles.name}>{person.contact.name}</Title>
+            <TouchableOpacity
+              style={styles.name}
+              onPress={() => contactLink(person.contact.recordId)}
+            >
+              <Icon name='phone' size={30} />
+              <Title>{person.contact.name}</Title>
+            </TouchableOpacity>
             <FrequencyPicker
               person={person}
               onSelect={this.frequencyOnSelect(person)}
             />
-            <Divider style={styles.divider} />
+            {this.divider()}
             <AddCallsPicker person={person} log={this.log} />
-            <Divider style={styles.divider} />
+            {this.divider()}
             <RemoveCallsPicker person={person} log={this.log} />
-            <Divider style={styles.divider} />
+            {this.divider()}
             <DeletePersonButton person={person} onPress={this.deletePerson} />
           </ScrollView>
         ) : null;
       }
+
+      private divider = () => <Divider style={styles.divider} />;
 
       private frequencyOnSelect = (person: Person) => (index: number): void => {
         this.props.store!.update(person, { frequency: index });
@@ -82,6 +96,11 @@ const styles = StyleSheet.create({
   divider: {
     marginVertical: materialUILayout.rowMargin,
   },
-  name: { height: materialUILayout.rowHeight },
+  name: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    height: materialUILayout.rowHeight,
+    justifyContent: 'center',
+  },
   scrollView: { margin: materialUILayout.margin },
 });
