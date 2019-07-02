@@ -6,7 +6,7 @@
     "start": "react-native start",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
-    "test": "jest",
+    "test": "jest __tests__/tests",
     "prettier": "prettier --single-quote --write '**/*.{ts,tsx,.js}'"
   },
   "dependencies": {
@@ -19,17 +19,17 @@
     "react-native": "0.59.4",
     "react-native-background-fetch": "2.5.1",
     "react-native-call-log": "2.1.1",
-    "react-native-device-info": "^1.1.0",
+    "react-native-device-info": "2.1.3",
     "react-native-gesture-handler": "^1.2.1",
     "react-native-paper": "^2.15.0",
-    "react-native-push-notification-ce": "^3.1.7",
+    "react-native-push-notification-ce": "https://github.com/xuwilliam/react-native-push-notification-CE",
     "react-native-reanimated": "^1.0.1",
     "react-native-select-contact": "1.2.0",
     "react-native-send-intent": "https://github.com/bradser/react-native-send-intent#FLAG_ACTIVITY_NEW_TASK",
     "react-native-sentry": "^0.42.0",
-    "react-native-tab-view": "^2.4.0",
+    "react-native-tab-view": "2.7.0",
     "react-native-vector-icons": "6.4.2",
-    "react-navigation": "3.6.1"
+    "react-navigation": "3.11.0"
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",

@@ -2,7 +2,7 @@ import { inject, observer } from 'mobx-react';
 import React, { Component } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Divider, IconButton, Title } from 'react-native-paper';
+import { Divider, IconButton, TextInput, Title } from 'react-native-paper';
 import { Contact } from 'react-native-select-contact';
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 import { NavigationInjectedProps } from 'react-navigation';
@@ -11,7 +11,7 @@ import DeletePersonButton from '../components/DeletePersonButton';
 import FrequencyPicker from '../components/FrequencyPicker';
 import { contactLink } from '../components/Link';
 import RemoveCallsPicker from '../components/RemoveCallsPicker';
-import { cymGreen, materialUILayout } from '../lib/Constants';
+import { cypGreen, materialUILayout } from '../lib/Constants';
 import { Store } from '../lib/Store';
 import { Call, DetailsNavigationProps, Person } from '../Types';
 
@@ -31,7 +31,7 @@ export default inject('store')(
               size={20}
             />
           ),
-          headerStyle: { backgroundColor: cymGreen },
+          headerStyle: { backgroundColor: cypGreen },
           title: 'Details',
         };
       }
@@ -58,16 +58,23 @@ export default inject('store')(
           <ScrollView style={styles.scrollView}>
             <TouchableOpacity
               style={styles.name}
-              onPress={() => contactLink(person.contact.recordId)}
+              onPress={this.contactLink(person)}
             >
-              <Icon name='phone' size={30} />
+              <Icon name='phone' size={30} style={styles.icon} />
               <Title>{person.contact.name}</Title>
             </TouchableOpacity>
             <FrequencyPicker
               person={person}
               onSelect={this.frequencyOnSelect(person)}
             />
-            {this.divider()}
+            <TextInput
+              label='Notes:'
+              placeholder='Best time to call?'
+              multiline={true}
+              value={person.note}
+              onChangeText={this.saveNote(person)}
+              style={styles.divide}
+            />
             <AddCallsPicker person={person} log={this.log} />
             {this.divider()}
             <RemoveCallsPicker person={person} log={this.log} />
@@ -77,10 +84,18 @@ export default inject('store')(
         ) : null;
       }
 
-      private divider = () => <Divider style={styles.divider} />;
+      private divider = () => <Divider style={styles.divide} />;
+
+      private contactLink = (person: Person) => (): void => {
+        contactLink(person.contact.recordId);
+      }
 
       private frequencyOnSelect = (person: Person) => (index: number): void => {
         this.props.store!.update(person, { frequency: index });
+      }
+
+      private saveNote = (person: Person) => (text: string): void => {
+        this.props.store!.update(person, { note: text });
       }
 
       private deletePerson = (person: Person): void => {
@@ -93,14 +108,21 @@ export default inject('store')(
 );
 
 const styles = StyleSheet.create({
-  divider: {
+  divide: {
     marginVertical: materialUILayout.rowMargin,
+  },
+  icon: {
+    marginRight: materialUILayout.smallSpace,
   },
   name: {
     alignItems: 'center',
     flexDirection: 'row',
     height: materialUILayout.rowHeight,
     justifyContent: 'center',
+  },
+  notes: {
+    backgroundColor: 'white',
+    marginVertical: materialUILayout.rowMargin,
   },
   scrollView: { margin: materialUILayout.margin },
 });

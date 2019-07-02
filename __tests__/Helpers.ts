@@ -25,6 +25,7 @@ export const getPerson = (
     frequency,
     added,
     removed,
+    '',
   );
 
 export const getCall = (now) => (
@@ -42,7 +43,7 @@ export const getCall = (now) => (
     now
       .clone()
       // Rather than days, to work around https://github.com/moment/moment/issues/2430
-      .subtract(daysDelta * 24, 'hours')
+      .add(daysDelta * 24, 'hours')
       .valueOf()
       .toString(),
     callType,

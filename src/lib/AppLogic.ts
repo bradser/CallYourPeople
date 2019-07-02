@@ -40,9 +40,9 @@ export default class AppLogic {
   public checkCallLog = (people: Person[], callLog: Call[]): ViewPerson[] =>
     people
       .map((person: Person) => {
-        const procesedLog = this.processModifiedCalls(person, callLog);
+        const processedLog = this.processModifiedCalls(person, callLog);
 
-        const found = this.findPhoneAndCall(person, procesedLog);
+        const found = this.findPhoneAndCall(person, processedLog);
 
         // If there was never a call to/from this person, notify immediately
         const days = found.call
@@ -76,7 +76,7 @@ export default class AppLogic {
             ...call,
             phoneNumber: person.contact.phones[0].number,
           }))
-        : removed;
+        : [];
 
     return removed
       .concat(added)
@@ -85,7 +85,7 @@ export default class AppLogic {
 
   private sortByDaysThenName = (a: ViewPerson, b: ViewPerson): number =>
     a.daysLeftTillCallNeeded === b.daysLeftTillCallNeeded
-      ? a.name <= b.name
+      ? a.contact.name <= b.contact.name
         ? -1
         : 1
       : a.daysLeftTillCallNeeded <= b.daysLeftTillCallNeeded

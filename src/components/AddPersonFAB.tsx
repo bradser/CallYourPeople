@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 import { FAB } from 'react-native-paper';
 import { Contact } from 'react-native-select-contact';
-import { cymGreen, materialUILayout } from '../lib/Constants';
+import { cypGreen, materialUILayout } from '../lib/Constants';
 import Contacts from '../lib/Contacts';
 import { formatPhoneNumber } from '../lib/Helpers';
 import { Frequency, Person } from '../Types';
@@ -56,7 +56,7 @@ export default class AddPersonFAB extends PureComponent<Props> {
 
 const styles = StyleSheet.create({
   fab: {
-    backgroundColor: cymGreen,
+    backgroundColor: cypGreen,
   },
   view: {
     bottom: 0,

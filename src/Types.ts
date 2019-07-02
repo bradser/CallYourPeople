@@ -8,6 +8,7 @@ export class Person {
     public frequency: Frequency,
     public added: Call[],
     public removed: Call[],
+    public note: string,
   ) {}
 }
 

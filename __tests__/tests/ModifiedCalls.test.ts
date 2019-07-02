@@ -12,8 +12,8 @@ const addedCallsTestCases = [
       Frequency.once_Every_Two_Weeks,
       CallType.OUTGOING,
       5,
-      7,
-      0,
+      -7,
+      1,
       7,
     ),
     new PersonCallTestCase(
@@ -22,9 +22,9 @@ const addedCallsTestCases = [
       Frequency.once_Every_Two_Weeks,
       CallType.OUTGOING,
       5,
-      21,
-      0,
-      7,
+      -21,
+      1,
+      -7,
     ),
   ],
   [
@@ -34,7 +34,7 @@ const addedCallsTestCases = [
       Frequency.once_Every_Two_Weeks,
       CallType.OUTGOING,
       5,
-      21,
+      -21,
       2,
       -7,
     ),
@@ -44,9 +44,9 @@ const addedCallsTestCases = [
       Frequency.once_Every_Two_Weeks,
       CallType.OUTGOING,
       5,
-      28,
+      -28,
       2,
-      -7,
+      -14,
     ),
   ],
 ];
@@ -54,6 +54,20 @@ const addedCallsTestCases = [
 addedCallsTestCases.forEach((testCase, index) => {
   it(`added calls case #${index}`, () => {
     const now = moment();
+
+    const firstCall = getCall(now)(
+      testCase[0].phoneNumber,
+      testCase[0].callType,
+      testCase[0].daysDelta,
+      testCase[0].callDurationSeconds,
+    );
+
+    const secondCall = getCall(now)(
+      testCase[1].phoneNumber,
+      testCase[1].callType,
+      testCase[1].daysDelta,
+      testCase[1].callDurationSeconds,
+    );
 
     const testPeople = [
       getPerson(
@@ -67,26 +81,12 @@ addedCallsTestCases.forEach((testCase, index) => {
         testCase[1].name,
         testCase[1].phoneNumber,
         testCase[1].frequency,
-        [
-          getCall(now)(
-            testCase[1].phoneNumber,
-            testCase[0].callType,
-            testCase[0].daysDelta,
-            testCase[0].callDurationSeconds,
-          ),
-        ],
+        [secondCall],
         [],
       ),
     ];
 
-    const testLog = [
-      getCall(now)(
-        testCase[0].phoneNumber,
-        testCase[0].callType,
-        testCase[0].daysDelta,
-        testCase[0].callDurationSeconds,
-      ),
-    ];
+    const testLog = [firstCall];
 
     const notify = jest.fn();
 
@@ -95,14 +95,18 @@ addedCallsTestCases.forEach((testCase, index) => {
       testLog,
     );
 
-    expect(notify).toHaveBeenCalledTimes(testCase[0].notifyCount);
+    const sortedtestCases = testCase.sort((tc1, tc2) =>
+      tc1.daysLeftTillCallNeeded < tc2.daysLeftTillCallNeeded ? -1 : 1,
+    );
+
+    expect(notify).toHaveBeenCalledTimes(sortedtestCases[0].notifyCount);
 
     expect(checkedPeople[0].daysLeftTillCallNeeded).toBe(
-      testCase[0].daysLeftTillCallNeeded,
+      sortedtestCases[0].daysLeftTillCallNeeded,
     );
 
     expect(checkedPeople[1].daysLeftTillCallNeeded).toBe(
-      testCase[1].daysLeftTillCallNeeded,
+      sortedtestCases[1].daysLeftTillCallNeeded,
     );
   });
 });
@@ -116,7 +120,7 @@ const removedCallsTestCases = [
       CallType.OUTGOING,
       5,
       7,
-      1,
+      0,
       7,
     ),
     new PersonCallTestCase(
@@ -126,8 +130,8 @@ const removedCallsTestCases = [
       CallType.OUTGOING,
       5,
       7,
-      1,
       0,
+      7,
     ),
   ],
   [
@@ -149,7 +153,7 @@ const removedCallsTestCases = [
       5,
       28,
       2,
-      0,
+      -14,
     ),
   ],
 ];
@@ -157,6 +161,27 @@ const removedCallsTestCases = [
 removedCallsTestCases.forEach((testCase, index) => {
   it(`removed calls case #${index}`, () => {
     const now = moment();
+
+    const firstCall = getCall(now)(
+      testCase[0].phoneNumber,
+      testCase[0].callType,
+      testCase[0].daysDelta,
+      testCase[0].callDurationSeconds,
+    );
+
+    const secondCall = getCall(now)(
+      testCase[1].phoneNumber,
+      testCase[1].callType,
+      testCase[1].daysDelta - 1,
+      testCase[1].callDurationSeconds,
+    );
+
+    const thirdCall = getCall(now)(
+      testCase[1].phoneNumber,
+      testCase[1].callType,
+      testCase[1].daysDelta,
+      testCase[1].callDurationSeconds,
+    );
 
     const testPeople = [
       getPerson(
@@ -169,31 +194,11 @@ removedCallsTestCases.forEach((testCase, index) => {
         testCase[1].phoneNumber,
         testCase[1].frequency,
         [],
-        [
-          getCall(now)(
-            testCase[1].phoneNumber,
-            testCase[1].callType,
-            testCase[1].daysDelta,
-            testCase[1].callDurationSeconds,
-          ),
-        ],
+        [secondCall],
       ),
     ];
 
-    const testLog = [
-      getCall(now)(
-        testCase[0].phoneNumber,
-        testCase[0].callType,
-        testCase[0].daysDelta,
-        testCase[0].callDurationSeconds,
-      ),
-      getCall(now)(
-        testCase[1].phoneNumber,
-        testCase[1].callType,
-        testCase[1].daysDelta,
-        testCase[1].callDurationSeconds,
-      ),
-    ];
+    const testLog = [firstCall, secondCall, thirdCall];
 
     const notify = jest.fn();
 
@@ -202,14 +207,18 @@ removedCallsTestCases.forEach((testCase, index) => {
       testLog,
     );
 
-    expect(notify).toHaveBeenCalledTimes(testCase[0].notifyCount);
+    const sortedtestCases = testCase.sort((tc1, tc2) =>
+      tc1.daysLeftTillCallNeeded < tc2.daysLeftTillCallNeeded ? -1 : 1,
+    );
+
+    expect(notify).toHaveBeenCalledTimes(sortedtestCases[0].notifyCount);
 
     expect(checkedPeople[0].daysLeftTillCallNeeded).toBe(
-      testCase[0].daysLeftTillCallNeeded,
+      sortedtestCases[0].daysLeftTillCallNeeded,
     );
 
     expect(checkedPeople[1].daysLeftTillCallNeeded).toBe(
-      testCase[1].daysLeftTillCallNeeded,
+      sortedtestCases[1].daysLeftTillCallNeeded,
     );
   });
 });

@@ -2,7 +2,7 @@ import { PhoneNumberUtil } from 'google-libphonenumber';
 import React, { Component } from 'react';
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Button, FAB, List, Modal, Portal } from 'react-native-paper';
-import { cymGreen, materialUILayout } from '../../lib/Constants';
+import { cypGreen, materialUILayout } from '../../lib/Constants';
 import { prettifyPhoneNumber } from '../../lib/Helpers';
 import { Call } from '../../Types';
 
@@ -81,7 +81,7 @@ export default class ModalDialog extends Component<Props, State> {
 
 const styles = StyleSheet.create({
   fab: {
-    backgroundColor: cymGreen,
+    backgroundColor: cypGreen,
     height: 40,
     marginLeft: materialUILayout.smallSpace,
     marginRight: materialUILayout.margin,

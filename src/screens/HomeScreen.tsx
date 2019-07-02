@@ -13,7 +13,7 @@ import AppLogic from '../lib/AppLogic';
 import { getLogWithPermissions } from '../lib/CallLog';
 import { Store } from '../lib/Store';
 import { Call, NotifyCallback, Person, ViewPerson } from '../Types';
-import { cymGreen, materialUILayout } from './../lib/Constants';
+import { cypGreen, materialUILayout } from './../lib/Constants';
 
 interface Props extends NavigationInjectedProps {
   store?: Store;
@@ -28,7 +28,7 @@ export default inject('store')(
   observer(
     class HomeScreen extends Component<Props, State> {
       public static navigationOptions = {
-        headerStyle: { backgroundColor: cymGreen },
+        headerStyle: { backgroundColor: cypGreen },
         title: 'Call Your People!',
       };
 
@@ -72,7 +72,7 @@ export default inject('store')(
                 <TabBar
                   {...props}
                   indicatorStyle={{ backgroundColor: 'white' }}
-                  style={{ backgroundColor: cymGreen, color: 'black' }}
+                  style={{ backgroundColor: cypGreen, color: 'black' }}
                   renderLabel={({ route }) => (
                     <Text style={{ color: 'black' }}>{route.title}</Text>
                   )}

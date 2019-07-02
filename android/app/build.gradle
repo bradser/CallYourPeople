@@ -154,9 +154,9 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-device-info')
     implementation project(':react-native-reanimated')
     compile project(':react-native-gesture-handler')
-    compile project(':react-native-device-info')
     compile project(':react-native-sentry')
     compile project(':react-native-send-intent')
     compile project(':@react-native-community_async-storage')

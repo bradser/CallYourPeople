@@ -2,13 +2,14 @@ import { onError, Provider } from 'mobx-react';
 import moment from 'moment';
 import React, { Component } from 'react';
 import BackgroundFetch from 'react-native-background-fetch';
-import { Provider as PaperProvider } from 'react-native-paper';
+import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import PushNotification from 'react-native-push-notification-ce';
 import SendIntentAndroid from 'react-native-send-intent';
 import { Sentry } from 'react-native-sentry';
 import { createAppContainer, createStackNavigator } from 'react-navigation';
 import AppLogic from './lib/AppLogic';
 import { getLog } from './lib/CallLog';
+import { cypGreen } from './lib/Constants';
 import { Store } from './lib/Store';
 import DetailsScreen from './screens/DetailsScreen';
 import HomeScreen from './screens/HomeScreen';
@@ -78,10 +79,18 @@ export default class App extends Component {
   public render() {
     return (
       <Provider store={store}>
-        <PaperProvider>
+        <PaperProvider theme={theme}>
           <AppContainer />
         </PaperProvider>
       </Provider>
     );
   }
 }
+
+const theme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    background: 'white',
+  },
+};
