@@ -9,7 +9,6 @@ import { Sentry } from 'react-native-sentry';
 import { createAppContainer, createStackNavigator } from 'react-navigation';
 import AppLogic from './lib/AppLogic';
 import { getLog } from './lib/CallLog';
-import { cypGreen } from './lib/Constants';
 import { Store } from './lib/Store';
 import DetailsScreen from './screens/DetailsScreen';
 import HomeScreen from './screens/HomeScreen';
