@@ -16,9 +16,7 @@ export const getLogWithPermissions: GetLogCallback = async () => {
     },
   );
 
-  return granted === PermissionsAndroid.RESULTS.GRANTED
-    ? await getLog()
-    : [];
+  return granted === PermissionsAndroid.RESULTS.GRANTED ? await getLog() : [];
 };
 
 export const getLog: GetLogCallback = async () => {
@@ -26,10 +24,19 @@ export const getLog: GetLogCallback = async () => {
 
   const phoneNumberUtil = PhoneNumberUtil.getInstance();
 
-  const parsedLog = log.map((call) => ({
-    ...call,
-    phoneNumber: formatPhoneNumber(phoneNumberUtil, call.phoneNumber),
-  }));
+  const parsedLog = log.map(
+    (call) =>
+      new Call(
+        call.dateTime,
+        call.duration,
+        call.name,
+
+        formatPhoneNumber(phoneNumberUtil, call.phoneNumber),
+        call.rawType,
+        call.timestamp,
+        call.type,
+      ),
+  );
 
   return parsedLog;
 };

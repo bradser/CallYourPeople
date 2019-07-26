@@ -37,6 +37,7 @@ export default class AddPersonFAB extends PureComponent<Props> {
           Frequency.once_A_Week,
           [],
           [],
+          [],
           '',
         );
 

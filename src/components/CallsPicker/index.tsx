@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { IconButton, Subheading } from 'react-native-paper';
-import { Call } from '../../Types';
+import { Call, SelectedItem } from '../../Types';
+import ItemsPicker from '../ItemsPicker';
 import ModalDialog from './ModalDialog';
 
 interface Props {
@@ -13,26 +13,24 @@ interface Props {
 }
 
 export default class CallsPicker extends Component<Props> {
+  private modalDialog: ModalDialog | null = null;
+
   public render() {
     const filteredLog = this.filterCurrentSelectionsAddedRemoved();
 
     return (
       <View>
-        <Subheading>{this.props.title}</Subheading>
-        <ModalDialog log={filteredLog} onSelect={this.selectCall}>
-          <View style={styles.view}>
-            {this.props.selected.map((call, index) => (
-              <View key={index} style={styles.itemView}>
-                <Subheading>{call.dateTime}</Subheading>
-                <IconButton
-                  onPress={() => this.removeCall(call)}
-                  icon='delete'
-                  size={20}
-                />
-              </View>
-            ))}
-          </View>
-        </ModalDialog>
+        <ItemsPicker
+          title={this.props.title}
+          selected={this.props.selected}
+          onAdd={this.add}
+          onRemove={this.removeCall}
+        />
+        <ModalDialog
+          log={filteredLog}
+          onSelect={this.selectCall}
+          ref={this.setModalDialogRef}
+        />
       </View>
     );
   }
@@ -47,25 +45,19 @@ export default class CallsPicker extends Component<Props> {
       : filteredCurrentSelections;
   }
 
-  private selectCall = (call: Call): void =>
-    this.select(this.props.selected.concat(call))
+  private add = (): void => {
+    this.modalDialog!.open();
+  }
 
-  private removeCall = (call: Call): void =>
-    this.select(
-      this.props.selected.filter((c: Call) => c.timestamp !== call.timestamp),
+  private removeCall = (call: SelectedItem): void =>
+    this.props.onSelect(
+      this.props.selected.filter((c: Call) => c.getId() !== call.getId()),
     )
 
-  private select = (newSelected: Call[]): void =>
-    this.props.onSelect(newSelected)
-}
+  private selectCall = (call: Call): void =>
+    this.props.onSelect(this.props.selected.concat(call))
 
-const styles = StyleSheet.create({
-  itemView: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
-  view: {
-    flex: 1,
-  },
-});
+  private setModalDialogRef = (md: ModalDialog): void => {
+    this.modalDialog = md;
+  }
+}

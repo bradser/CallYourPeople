@@ -1,6 +1,6 @@
 import moment from 'moment';
 import AppLogic from '../src/lib/AppLogic';
-import { Call, CallType, Frequency, Person } from '../src/Types';
+import { Call, CallType, DateItem, Frequency, Person } from '../src/Types';
 
 export const getPerson = (
   name: string,
@@ -8,6 +8,7 @@ export const getPerson = (
   frequency: Frequency,
   added: Call[] = [],
   removed: Call[] = [],
+  nonCall: DateItem[] = [],
 ): Person =>
   new Person(
     {
@@ -25,6 +26,7 @@ export const getPerson = (
     frequency,
     added,
     removed,
+    nonCall,
     '',
   );
 

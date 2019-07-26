@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import { IObservableArray, observable, runInAction } from 'mobx';
 import Sentry from 'react-native-sentry';
-import { Person } from '../Types';
+import { Call, DateItem, Person } from '../Types';
 
 export class Store {
   public people = (observable([]) as unknown) as IObservableArray<Person>;
@@ -10,7 +10,31 @@ export class Store {
     AsyncStorage.getItem('store').then((data) => {
       if (data) {
         runInAction(() => {
-          this.people.replace(JSON.parse(data));
+          this.people.replace(
+            JSON.parse(data, (key, value) => {
+              if (key === 'nonCall') {
+                return value.map((item: string) => new DateItem(item));
+              }
+
+              if (key === 'added' || key === 'removed') {
+                return value.map((item: Call) => {
+                  const call = new Call(
+                    item.dateTime,
+                    item.duration,
+                    item.name,
+                    item.phoneNumber,
+                    item.rawType,
+                    item.timestamp,
+                    item.type,
+                  );
+
+                  return call;
+                });
+              }
+
+              return value;
+            }),
+          );
         });
       }
     });

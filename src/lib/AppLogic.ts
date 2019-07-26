@@ -15,6 +15,8 @@ import {
 import { Store } from './Store';
 
 export default class AppLogic {
+  private static VOICEMAIL_LENGTH = 2 * 60;
+
   constructor(
     private notifyCallback: NotifyCallback,
     private rightNow: moment.Moment,
@@ -70,16 +72,35 @@ export default class AppLogic {
           )
         : callLog;
 
-    const added =
-      person.added.length > 0
-        ? person.added.map((call) => ({
-            ...call,
-            phoneNumber: person.contact.phones[0].number,
-          }))
-        : [];
+    const added = person.added.map((
+      (call) =>
+        new Call(
+          call.dateTime,
+          AppLogic.VOICEMAIL_LENGTH + 1,
+          call.name,
+          person.contact.phones[0].number,
+          call.rawType,
+          call.timestamp,
+          CallType.INCOMING,
+        )
+    ));
+
+    const nonCall = person.nonCall.map(
+            (nc) =>
+              new Call(
+                nc.toDateString(),
+                AppLogic.VOICEMAIL_LENGTH + 1,
+                '',
+                person.contact.phones[0].number,
+                0,
+                nc.getId(),
+                CallType.INCOMING,
+              ),
+          );
 
     return removed
       .concat(added)
+      .concat(nonCall)
       .sort((a, b) => (a.timestamp < b.timestamp ? 1 : -1));
   }
 
@@ -145,7 +166,8 @@ export default class AppLogic {
     this.roundDays(this.daysLeftTillCallNeeded(person, call))
 
   // TODO: a user setting?
-  private isVoicemail = (call: Call): boolean => call.duration <= 2 * 60;
+  private isVoicemail = (call: Call): boolean =>
+    call.duration <= AppLogic.VOICEMAIL_LENGTH
 
   private callDateToDaysSinceLastCall = (timestamp: string): number =>
     Math.abs(this.rightNow.diff(new Date(parseInt(timestamp, 10)), 'minutes')) /

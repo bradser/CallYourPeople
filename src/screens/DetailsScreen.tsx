@@ -14,6 +14,7 @@ import RemoveCallsPicker from '../components/RemoveCallsPicker';
 import { cypGreen, materialUILayout } from '../lib/Constants';
 import { Store } from '../lib/Store';
 import { Call, DetailsNavigationProps, Person } from '../Types';
+import DatesPicker from '../components/DatesPicker';
 
 interface Props extends NavigationInjectedProps<DetailsNavigationProps> {
   store?: Store;
@@ -79,6 +80,7 @@ export default inject('store')(
             {this.divider()}
             <RemoveCallsPicker person={person} log={this.log} />
             {this.divider()}
+            <DatesPicker person={person} />
             <DeletePersonButton person={person} onPress={this.deletePerson} />
           </ScrollView>
         ) : null;

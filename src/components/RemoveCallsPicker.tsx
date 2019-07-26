@@ -19,10 +19,16 @@ export default inject('store')(
             title='Remove Calls'
             log={this.props.log}
             selected={this.props.person.removed}
+            filter={this.filter}
             onSelect={this.removeCalls}
           />
         );
       }
+
+      private filter = (value: Call): boolean =>
+      !!this.props.person.contact.phones.find(
+        (phone) => phone.number === value.phoneNumber,
+      )
 
       private removeCalls = (newSelected: Call[]): void =>
         this.props.store!.update(this.props.person, {

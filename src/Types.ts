@@ -8,6 +8,7 @@ export class Person {
     public frequency: Frequency,
     public added: Call[],
     public removed: Call[],
+    public nonCall: DateItem[],
     public note: string,
   ) {}
 }
@@ -32,7 +33,12 @@ export const FrequencyText = [
   '1/4 year',
 ];
 
-export class Call {
+export interface SelectedItem {
+  getLabel(): string;
+  getId(): string;
+}
+
+export class Call implements SelectedItem {
   constructor(
     public dateTime: string,
     public duration: number,
@@ -42,6 +48,9 @@ export class Call {
     public timestamp: string,
     public type: CallType,
   ) {}
+
+  public getLabel = () => this.dateTime;
+  public getId = () => this.timestamp;
 }
 
 export enum CallType {
@@ -73,4 +82,9 @@ export class CheckOutput {
 
 export class DetailsNavigationProps implements NavigationParams {
   constructor(public log: Call[], public contact: Contact) {}
+}
+
+export class DateItem extends Date implements SelectedItem {
+  public getLabel = () => this.toDateString();
+  public getId = () => this.valueOf().toString();
 }

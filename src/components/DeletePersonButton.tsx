@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Alert, StyleSheet } from 'react-native';
 import { Button } from 'react-native-paper';
+import { materialUILayout } from '../lib/Constants';
 import { Person } from '../Types';
 
 interface Props {
@@ -43,5 +44,5 @@ export default class DeletePersonButton extends Component<Props> {
 }
 
 const styles = StyleSheet.create({
-  deleteButton: { alignSelf: 'center' },
+  deleteButton: { alignSelf: 'center', marginTop: materialUILayout.highRowHeight },
 });
