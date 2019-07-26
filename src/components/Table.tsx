@@ -8,7 +8,7 @@ import {
   Call,
   DetailsNavigationProps,
   FrequencyText,
-  ViewPerson,
+  ViewPerson
 } from '../Types';
 import { materialUILayout } from './../lib/Constants';
 
@@ -28,14 +28,18 @@ export default inject('store')(
 
       public render() {
         return (
-          <DataTable>
-            <DataTable.Header>
-              <DataTable.Title style={styles.cellName}>Name</DataTable.Title>
-              <DataTable.Title numeric style={styles.cellDaysLeft}>{this.props.daysLabel}</DataTable.Title>
-              <DataTable.Title numeric>Frequency</DataTable.Title>
-            </DataTable.Header>
-            <ScrollView>{this.getRows()}</ScrollView>
-          </DataTable>
+          <ScrollView>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title style={styles.cellName}>Name</DataTable.Title>
+                <DataTable.Title numeric style={styles.cellDaysLeft}>
+                  {this.props.daysLabel}
+                </DataTable.Title>
+                <DataTable.Title numeric>Frequency</DataTable.Title>
+              </DataTable.Header>
+              {this.getRows()}
+            </DataTable>
+          </ScrollView>
         );
       }
 
@@ -46,7 +50,7 @@ export default inject('store')(
             onPress={() =>
               this.props.navigation.navigate(
                 'Details',
-                new DetailsNavigationProps(this.props.log, person.contact),
+                new DetailsNavigationProps(this.props.log, person.contact)
               )
             }
           >
@@ -60,13 +64,13 @@ export default inject('store')(
               {FrequencyText[person.frequency]}
             </DataTable.Cell>
           </DataTable.Row>
-        ))
-    },
-  ),
+        ));
+    }
+  )
 );
 
 const styles = StyleSheet.create({
   cellDaysLeft: { paddingRight: materialUILayout.horizontalSpace },
   cellName: { flex: 2.4, paddingRight: materialUILayout.horizontalSpace },
-  scrollView: { margin: materialUILayout.margin },
+  scrollView: { margin: materialUILayout.margin }
 });

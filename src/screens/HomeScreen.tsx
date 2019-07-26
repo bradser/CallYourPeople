@@ -160,7 +160,8 @@ export default inject('store')(
 const styles = StyleSheet.create({
   containerView: { flex: 1 },
   link: {
-    marginBottom: materialUILayout.margin * 2,
+    marginBottom: materialUILayout.highRowHeight,
     marginLeft: materialUILayout.margin,
+    marginTop: materialUILayout.margin,
   },
 });
