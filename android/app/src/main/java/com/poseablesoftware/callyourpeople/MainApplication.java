@@ -1,4 +1,4 @@
-package com.caseycooper.callyourpeople;
+package com.poseablesoftware.callyourpeople;
 
 import android.app.Application;
 

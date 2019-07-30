@@ -73,7 +73,11 @@ import com.android.build.OutputFile
  */
 
 project.ext.react = [
-    entryFile: "index.js"
+    entryFile: "index.js",
+    bundleAssetName: "index.android.bundle",
+    bundleInDebug: false,
+    bundleInRelease: true,
+    bundleInPaidRelease: true
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
@@ -96,7 +100,7 @@ def enableSeparateBuildPerCPUArchitecture = false
 /**
  * Run Proguard to shrink the Java bytecode in release builds.
  */
-def enableProguardInReleaseBuilds = false
+def enableProguardInReleaseBuilds = true
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -108,7 +112,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.caseycooper.callyourpeople"
+        applicationId "com.poseablesoftware.callyourpeople"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

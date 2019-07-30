@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:330945320944:android:d3271faca8430a8a",
+        "mobilesdk_app_id": "1:330945320944:android:b981750ce7c3df53",
         "android_client_info": {
-          "package_name": "com.caseycooper.callyourpeople"
+          "package_name": "com.poseablesoftware.callyourpeople"
         }
       },
       "oauth_client": [
@@ -25,15 +25,13 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
+          "other_platform_oauth_client": [
+            {
+              "client_id": "330945320944-rr79g772il3hd0t6rbrkbhng6hppus1b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

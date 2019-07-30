@@ -1,4 +1,4 @@
-export const cypGreen = 'lawngreen';
+export const cypGreen = 'greenyellow';
 
 export const materialUILayout = {
   buttonHeight: 36,

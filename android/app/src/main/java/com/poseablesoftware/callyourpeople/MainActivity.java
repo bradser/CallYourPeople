@@ -1,4 +1,4 @@
-package com.caseycooper.callyourpeople;
+package com.poseablesoftware.callyourpeople;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
