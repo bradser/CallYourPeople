@@ -1,6 +1,7 @@
 // tslint:disable:max-classes-per-file
 import { Contact, PhoneEntry } from 'react-native-select-contact';
 import { NavigationParams } from 'react-navigation';
+import { decorate, observable } from "mobx"
 
 export class Person {
   constructor(
@@ -12,6 +13,15 @@ export class Person {
     public note: string,
   ) {}
 }
+
+decorate(Person, {
+  contact: observable,
+  frequency: observable,
+  added: observable,
+  removed: observable,
+  nonCall: observable,
+  note: observable,
+});
 
 export enum Frequency {
   twice_A_Week,

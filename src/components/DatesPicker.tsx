@@ -33,10 +33,7 @@ export default inject('store')(
 
           if (action !== DatePickerAndroid.dismissedAction) {
             this.props.store!.update(this.props.person, {
-              nonCall: [
-                ...this.props.person.nonCall,
-                new DateItem(year, month, day),
-              ],
+              nonCall: this.props.person.nonCall.concat(new DateItem(year, month, day)),
             });
           }
         } catch (ex) {

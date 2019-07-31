@@ -1,4 +1,4 @@
-import { onError, Provider } from 'mobx-react';
+import { Provider } from 'mobx-react';
 import moment from 'moment';
 import React, { Component } from 'react';
 import BackgroundFetch from 'react-native-background-fetch';
@@ -12,10 +12,6 @@ import { getLog } from './lib/CallLog';
 import { Store } from './lib/Store';
 import DetailsScreen from './screens/DetailsScreen';
 import HomeScreen from './screens/HomeScreen';
-
-onError((error) => {
-  Sentry.captureException(error);
-});
 
 const AppNavigator = createStackNavigator(
   {
