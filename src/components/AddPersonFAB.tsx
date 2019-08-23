@@ -18,7 +18,12 @@ export default class AddPersonFAB extends PureComponent<Props> {
   public render() {
     return (
       <View style={styles.view}>
-        <FAB icon='person-add' onPress={this.addPerson} style={styles.fab} />
+        <FAB
+          icon='person-add'
+          onPress={this.addPerson}
+          style={styles.fab}
+          accessibilityLabel={'Add Contact'}
+        />
       </View>
     );
   }
@@ -59,6 +64,7 @@ export default class AddPersonFAB extends PureComponent<Props> {
 const styles = StyleSheet.create({
   fab: {
     backgroundColor: cypGreen,
+    color: 'black',
   },
   view: {
     bottom: 0,

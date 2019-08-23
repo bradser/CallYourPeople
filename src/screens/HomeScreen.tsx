@@ -12,7 +12,13 @@ import Table from '../components/Table';
 import AppLogic from '../lib/AppLogic';
 import { getLogWithPermissions } from '../lib/CallLog';
 import { Store } from '../lib/Store';
-import { Call, NotifyCallback, Person, ViewPerson } from '../Types';
+import {
+  Call,
+  CheckOutput,
+  NotifyCallback,
+  Person,
+  ViewPerson,
+} from '../Types';
 import { cypGreen, materialUILayout } from './../lib/Constants';
 
 interface Props extends NavigationInjectedProps {
@@ -39,8 +45,16 @@ export default inject('store')(
           index: 0,
           log: [],
           routes: [
-            { key: 'callNow', title: 'Call Now' },
-            { key: 'callSoon', title: 'Call Soon' },
+            {
+              accessibilityLabel: 'Call these people now!',
+              key: 'callNow',
+              title: 'Call Now',
+            },
+            {
+              accessibilityLabel: 'Call these people soon!',
+              key: 'callSoon',
+              title: 'Call Soon',
+            },
           ],
           viewPeople: [],
         };
@@ -74,7 +88,12 @@ export default inject('store')(
                   indicatorStyle={{ backgroundColor: 'white' }}
                   style={{ backgroundColor: cypGreen, color: 'black' }}
                   renderLabel={({ route }) => (
-                    <Text style={{ color: 'black' }}>{route.title}</Text>
+                    <Text
+                      style={{ color: 'black' }}
+                      accessibilityHint={route.title}
+                    >
+                      {route.title}
+                    </Text>
                   )}
                 />
               )}
@@ -102,11 +121,11 @@ export default inject('store')(
 
       private setIndex = (index) => this.setState({ index });
 
-      private initializeTabIndex = (state: State) =>
+      private initializeTabIndex = (results: CheckOutput) =>
         this.setState({
           index:
-            state.viewPeople.filter((p) => p.daysLeftTillCallNeeded <= 0).length >
-            0
+            results.viewPeople.filter((p) => p.daysLeftTillCallNeeded <= 0)
+              .length > 0
               ? 0
               : 1,
         })
