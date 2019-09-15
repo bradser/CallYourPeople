@@ -12,6 +12,10 @@ target 'CallYourMom' do
   
 
   platform :ios, '9.0'
+  pod 'RNIap', :path => '../node_modules/react-native-iap'
+
+  pod 'react-native-build-config', :path => '../node_modules/react-native-build-config'
+
   target 'CallYourMomTests' do
     inherit! :search_paths
     # Pods for testing

@@ -2,6 +2,7 @@ import { Provider } from 'mobx-react';
 import moment from 'moment';
 import React, { Component } from 'react';
 import BackgroundFetch from 'react-native-background-fetch';
+import * as RNIap from 'react-native-iap';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import PushNotification from 'react-native-push-notification-ce';
 import SendIntentAndroid from 'react-native-send-intent';
@@ -69,6 +70,13 @@ export default class App extends Component {
     // settings
     // save to cloud
     // pick color
+    // reminder schedule
+    // voice mail length
+    // voice mail reminder length
+  }
+
+  public componentWillUnmount() {
+    RNIap.endConnection();
   }
 
   public render() {

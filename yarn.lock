@@ -2361,6 +2361,11 @@ domexception@^1.0.1:
   dependencies:
     webidl-conversions "^4.0.2"
 
+dooboolab-welcome@^1.1.0:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/dooboolab-welcome/-/dooboolab-welcome-1.1.1.tgz#ca2184f6e1f568865d707a6ce3bda7e003550f54"
+  integrity sha512-tQ/9NBCGnalHwKOBjDqTD4t4wQpDfSSbxQGctzkzaLHR3AhN0wCBkIs05JciVtvl/jfLZ+DgAndktAMk3Bu7Vw==
+
 ecc-jsbn@~0.1.1:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/ecc-jsbn/-/ecc-jsbn-0.1.2.tgz#3a83a904e54353287874c564b7549386849a98c9"
@@ -5919,6 +5924,11 @@ react-native-background-fetch@2.5.1:
     plist "^2.0.1"
     xcode "^0.9.1"
 
+react-native-build-config@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/react-native-build-config/-/react-native-build-config-0.3.1.tgz#c92e3b2d2262bcfec506a8ec3faa3d60b17dc625"
+  integrity sha512-zCWGZxH/yfVxW1ad/poDBZzkSZekabzXPao61J5SaydIcihYJOqmRSJ7PWdH8i+karAPhsu1h3YoeqDTMxfODA==
+
 react-native-call-log@2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/react-native-call-log/-/react-native-call-log-2.1.1.tgz#37a6625444f4e03c8ff3256435f8011ac5c288fe"
@@ -5950,6 +5960,12 @@ react-native-gesture-handler@^1.2.1:
     hoist-non-react-statics "^2.3.1"
     invariant "^2.2.2"
     prop-types "^15.5.10"
+
+"react-native-iap@https://github.com/bradser/react-native-iap#curious":
+  version "2.4.4"
+  resolved "https://github.com/bradser/react-native-iap#ce6a46cc9a5023f2b73092ed9ca549ab6c3c4e6a"
+  dependencies:
+    dooboolab-welcome "^1.1.0"
 
 react-native-paper@^2.15.0:
   version "2.15.2"

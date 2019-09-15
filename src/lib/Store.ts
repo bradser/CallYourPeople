@@ -72,6 +72,8 @@ export class Store {
   public findIndex = (person: Person): number =>
     this.people.findIndex((p) => p.contact.name === person.contact.name)
 
+  public peopleCount = (): number => this.people.length;
+
   public update = (person: Person, properties: object): void => {
     runInAction(() => {
       const index = this.findIndex(person);

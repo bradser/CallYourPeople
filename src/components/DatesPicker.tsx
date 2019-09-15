@@ -2,6 +2,7 @@ import { inject, observer } from 'mobx-react';
 import React, { Component } from 'react';
 import { DatePickerAndroid, StyleSheet } from 'react-native';
 import Sentry from 'react-native-sentry';
+import Fremium from '../lib/Fremium';
 import { Store } from '../lib/Store';
 import { DateItem, Person, SelectedItem } from '../Types';
 import ItemsPicker from './ItemsPicker';
@@ -19,10 +20,20 @@ export default inject('store')(
           <ItemsPicker
             title={'Dates'}
             selected={this.props.person.nonCall}
-            onAdd={this.add}
+            onAdd={this.fremiumAdd}
             onRemove={this.removeDateItem}
           />
         );
+      }
+
+      private fremiumAdd = async (): Promise<any> => {
+        const fremium = new Fremium(this.props.store!);
+
+        if (await fremium.isPremium()) {
+          await this.add();
+        } else {
+          await fremium.check();
+        }
       }
 
       private add = async (): Promise<void> => {
@@ -33,7 +44,9 @@ export default inject('store')(
 
           if (action !== DatePickerAndroid.dismissedAction) {
             this.props.store!.update(this.props.person, {
-              nonCall: this.props.person.nonCall.concat(new DateItem(year, month, day)),
+              nonCall: this.props.person.nonCall.concat(
+                new DateItem(year, month, day),
+              ),
             });
           }
         } catch (ex) {

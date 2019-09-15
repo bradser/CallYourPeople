@@ -7,6 +7,7 @@ import { Contact } from 'react-native-select-contact';
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 import { NavigationInjectedProps } from 'react-navigation';
 import AddCallsPicker from '../components/AddCallsPicker';
+import DatesPicker from '../components/DatesPicker';
 import DeletePersonButton from '../components/DeletePersonButton';
 import FrequencyPicker from '../components/FrequencyPicker';
 import { contactLink } from '../components/Link';
@@ -14,7 +15,6 @@ import RemoveCallsPicker from '../components/RemoveCallsPicker';
 import { cypGreen, materialUILayout } from '../lib/Constants';
 import { Store } from '../lib/Store';
 import { Call, DetailsNavigationProps, Person } from '../Types';
-import DatesPicker from '../components/DatesPicker';
 
 interface Props extends NavigationInjectedProps<DetailsNavigationProps> {
   store?: Store;
