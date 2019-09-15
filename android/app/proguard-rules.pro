@@ -19,3 +19,5 @@
 -dontwarn com.amazon.**
 -keep class com.amazon.** {*;}
 -keepattributes *Annotation*
+
+-keep class com.google.android.gms.ads.identifier.AdvertisingIdClient

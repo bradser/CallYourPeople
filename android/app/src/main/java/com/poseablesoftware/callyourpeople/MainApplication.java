@@ -13,7 +13,9 @@ import com.microsoft.appcenter.reactnative.appcenter.AppCenterReactNativePackage
 import com.swmansion.reanimated.ReanimatedPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
+
 import io.sentry.RNSentryPackage;
+
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -29,56 +31,57 @@ import java.util.List;
 
 public class MainApplication extends Application implements ReactApplication {
 
-  private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
+    private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
 
         @Override
         protected String getJSBundleFile() {
-        return CodePush.getJSBundleFile();
+            return CodePush.getJSBundleFile();
         }
-    
+
+        @Override
+        public boolean getUseDeveloperSupport() {
+            return BuildConfig.DEBUG;
+        }
+
+        @Override
+        protected List<ReactPackage> getPackages() {
+            return Arrays.<ReactPackage>asList(
+                    new MainReactPackage(),
+                    new RNBuildConfigPackage(BuildConfig.class),
+                    new RNIapPackage(),
+                    new CodePush(getResources().getString(R.string.reactNativeCodePush_androidDeploymentKey), getApplicationContext(), BuildConfig.DEBUG),
+                    new AppCenterReactNativeAnalyticsPackage(MainApplication.this, getResources().getString(R.string.appCenterAnalytics_whenToEnableAnalytics)),
+                    new AppCenterReactNativePackage(MainApplication.this),
+                    new ReanimatedPackage(),
+                    new RNGestureHandlerPackage(),
+                    new RNDeviceInfo(),
+                    new RNSentryPackage(),
+                    new RNSendIntentPackage(),
+                    new AsyncStoragePackage(),
+                    new VectorIconsPackage(),
+                    new RNBackgroundFetchPackage(),
+                    new SelectContactPackage(),
+                    new CallLogPackage(),
+                    new ReactNativePushNotificationPackage(),
+                    new AdsPackage()
+            );
+        }
+
+        @Override
+        protected String getJSMainModuleName() {
+            return "index";
+        }
+    };
+
     @Override
-    public boolean getUseDeveloperSupport() {
-      return BuildConfig.DEBUG;
+    public ReactNativeHost getReactNativeHost() {
+        return mReactNativeHost;
     }
 
     @Override
-    protected List<ReactPackage> getPackages() {
-      return Arrays.<ReactPackage>asList(
-          new MainReactPackage(),
-            new RNBuildConfigPackage(BuildConfig.class),
-            new RNIapPackage(),
-            new CodePush(getResources().getString(R.string.reactNativeCodePush_androidDeploymentKey), getApplicationContext(), BuildConfig.DEBUG),
-            new AppCenterReactNativeAnalyticsPackage(MainApplication.this, getResources().getString(R.string.appCenterAnalytics_whenToEnableAnalytics)),
-            new AppCenterReactNativePackage(MainApplication.this),
-            new ReanimatedPackage(),
-            new RNGestureHandlerPackage(),
-            new RNDeviceInfo(),
-            new RNSentryPackage(),
-            new RNSendIntentPackage(),
-            new AsyncStoragePackage(),
-            new VectorIconsPackage(),
-            new RNBackgroundFetchPackage(),
-            new SelectContactPackage(),
-            new CallLogPackage(),
-            new ReactNativePushNotificationPackage()
-      );
+    public void onCreate() {
+        super.onCreate();
+
+        SoLoader.init(this, /* native exopackage */ false);
     }
-
-    @Override
-    protected String getJSMainModuleName() {
-      return "index";
-    }
-  };
-
-  @Override
-  public ReactNativeHost getReactNativeHost() {
-    return mReactNativeHost;
-  }
-
-  @Override
-  public void onCreate() {
-    super.onCreate();
-
-    SoLoader.init(this, /* native exopackage */ false);
-  }
 }

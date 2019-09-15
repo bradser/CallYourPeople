@@ -2,7 +2,7 @@ import { inject, observer } from 'mobx-react';
 import moment from 'moment';
 import React, { Component } from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
-import { Text } from 'react-native-paper';
+import { Button, Text } from 'react-native-paper';
 import PushNotification from 'react-native-push-notification-ce';
 import { NavigationState, Route, TabBar, TabView } from 'react-native-tab-view';
 import { NavigationEvents, NavigationInjectedProps } from 'react-navigation';
@@ -11,6 +11,7 @@ import Link from '../components/Link';
 import Table from '../components/Table';
 import AppLogic from '../lib/AppLogic';
 import { getLogWithPermissions } from '../lib/CallLog';
+import Fremium from '../lib/Fremium';
 import { Store } from '../lib/Store';
 import {
   Call,
@@ -38,6 +39,8 @@ export default inject('store')(
         title: 'Call Your People!',
       };
 
+      private fremium: Fremium;
+
       constructor(props: Props) {
         super(props);
 
@@ -58,6 +61,8 @@ export default inject('store')(
           ],
           viewPeople: [],
         };
+
+        this.fremium = new Fremium(this.props.store!);
       }
 
       public componentDidMount() {
@@ -101,9 +106,25 @@ export default inject('store')(
             <Link
               text='Conversation Tips'
               url='https://fortheinterested.com/ask-better-questions/'
-              style={styles.link}
+              style={
+                this.props.store!.settings.isPremium
+                  ? styles.premiumLink
+                  : styles.link
+              }
             />
-            <AddPersonFAB onPress={this.addPerson} />
+            {this.props.store && !this.props.store!.settings.isPremium && (
+              <Button
+                mode='contained'
+                style={styles.premiumButton}
+                onPress={this.fremiumUpgrade}
+              >
+                Upgrade to Premium
+              </Button>
+            )}
+            <AddPersonFAB
+              onPress={this.addPerson}
+              navigation={this.props.navigation}
+            />
           </View>
         );
       }
@@ -172,6 +193,10 @@ export default inject('store')(
 
         this.checkAndNotify();
       }
+
+      private fremiumUpgrade = (): void => {
+        this.fremium.upgrade();
+      }
     },
   ),
 );
@@ -179,6 +204,16 @@ export default inject('store')(
 const styles = StyleSheet.create({
   containerView: { flex: 1 },
   link: {
+    marginBottom: materialUILayout.margin,
+    marginLeft: materialUILayout.margin,
+    marginTop: materialUILayout.margin,
+  },
+  premiumButton: {
+    marginBottom: materialUILayout.smallSpace,
+    marginLeft: materialUILayout.smallSpace,
+    marginRight: materialUILayout.smallSpace,
+  },
+  premiumLink: {
     marginBottom: materialUILayout.highRowHeight,
     marginLeft: materialUILayout.margin,
     marginTop: materialUILayout.margin,

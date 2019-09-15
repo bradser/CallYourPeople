@@ -9,16 +9,18 @@ export default class Fremium {
     this.store = store;
   }
 
-  public isPremium = async (): Promise<boolean> => {
-    const history = await RNIap.getPurchaseHistory();
+  public initialize = async (): Promise<void> => {
+    if (!this.store.settings.isPremium) {
+      const history = await RNIap.getPurchaseHistory();
 
-    return history.length > 0;
+      this.store.setIsPremium(history.length > 0);
+    }
   }
 
-  public canAddContacts = async (): Promise<boolean> =>
-    this.store.peopleCount() < 4 || (await this.isPremium())
+  public canAddContacts = (): boolean =>
+    this.store.people.length < 4 || this.store.settings.isPremium
 
-  public check = async (): Promise<any> => {
+  public upgrade = async (): Promise<void> => {
     try {
       const products = await RNIap.getProducts(['Premium']);
 
@@ -31,6 +33,8 @@ export default class Fremium {
           await RNIap.notifyFulfillmentAmazon(purchase.receiptId, 'FULFILLED');
 
           await RNIap.consumeAllItems();
+
+          this.store.setIsPremium(true);
         }
       }
     } catch (error) {

@@ -27,12 +27,10 @@ export default inject('store')(
       }
 
       private fremiumAdd = async (): Promise<any> => {
-        const fremium = new Fremium(this.props.store!);
-
-        if (await fremium.isPremium()) {
+        if (this.props.store!.settings.isPremium) {
           await this.add();
         } else {
-          await fremium.check();
+          await new Fremium(this.props.store!).upgrade();
         }
       }
 

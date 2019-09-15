@@ -5,9 +5,12 @@ import { Call, DateItem, Person } from '../Types';
 
 export class Store {
   public people = (observable([]) as unknown) as IObservableArray<Person>;
+  public settings = observable({
+    isPremium: false,
+  });
 
   constructor() {
-    AsyncStorage.getItem('store').then((data) => {
+    AsyncStorage.getItem('people').then((data) => {
       if (data) {
         runInAction(() => {
           this.people.replace(
@@ -35,6 +38,14 @@ export class Store {
               return value;
             }),
           );
+        });
+      }
+    });
+
+    AsyncStorage.getItem('settings').then((data) => {
+      if (data) {
+        runInAction(() => {
+          this.settings = observable(JSON.parse(data));
         });
       }
     });
@@ -72,8 +83,6 @@ export class Store {
   public findIndex = (person: Person): number =>
     this.people.findIndex((p) => p.contact.name === person.contact.name)
 
-  public peopleCount = (): number => this.people.length;
-
   public update = (person: Person, properties: object): void => {
     runInAction(() => {
       const index = this.findIndex(person);
@@ -88,7 +97,15 @@ export class Store {
     });
   }
 
+  public setIsPremium = (isPremium: boolean): void => {
+    this.settings.isPremium = isPremium;
+
+    this.save();
+  }
+
   private save = (): void => {
-    AsyncStorage.setItem('store', JSON.stringify(this.people.toJS()));
+    AsyncStorage.setItem('people', JSON.stringify(this.people.toJS()));
+
+    AsyncStorage.setItem('settings', JSON.stringify(this.settings));
   }
 }

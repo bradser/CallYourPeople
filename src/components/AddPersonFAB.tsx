@@ -37,10 +37,10 @@ export default inject('store')(
     private fremiumAddPerson = async (): Promise<any> => {
       const fremium = new Fremium(this.props.store!);
 
-      if (await fremium.canAddContacts()) {
+      if (fremium.canAddContacts()) {
         this.addPerson();
       } else {
-        await fremium.check();
+        await fremium.upgrade();
       }
     }
 
