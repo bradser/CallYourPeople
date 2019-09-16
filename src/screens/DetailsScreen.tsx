@@ -126,5 +126,5 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     marginVertical: materialUILayout.rowMargin,
   },
-  scrollView: { margin: materialUILayout.margin },
+  scrollView: { margin: materialUILayout.margin, padding: materialUILayout.smallSpace  },
 });

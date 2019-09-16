@@ -19,6 +19,7 @@ export default inject('store')(
         return (
           <ItemsPicker
             title={'Dates'}
+            helpText={'Allows you to add the date of a non-phone conversation. For instance, if you talk to someone in person.'}
             selected={this.props.person.nonCall}
             onAdd={this.fremiumAdd}
             onRemove={this.removeDateItem}

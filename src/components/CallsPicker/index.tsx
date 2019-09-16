@@ -6,6 +6,7 @@ import ModalDialog from './ModalDialog';
 
 interface Props {
   title: string;
+  helpText: string;
   log: Call[];
   selected: Call[];
   filter?: (value: Call) => boolean;
@@ -22,6 +23,7 @@ export default class CallsPicker extends Component<Props> {
       <View>
         <ItemsPicker
           title={this.props.title}
+          helpText={this.props.helpText}
           selected={this.props.selected}
           onAdd={this.add}
           onRemove={this.removeCall}

@@ -88,8 +88,5 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     marginHorizontal: materialUILayout.margin,
     marginVertical: materialUILayout.margin * 2,
-  },
-  view: {
-    flexDirection: 'row',
-  },
+  }
 });

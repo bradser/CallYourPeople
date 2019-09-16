@@ -17,6 +17,7 @@ export default inject('store')(
         return (
           <CallsPicker
             title='Add Calls'
+            helpText="Allows you to add calls not associated with a contact's phone number. For instance, if you talk to your father on your mother's mobile phone."
             log={this.props.log}
             selected={this.props.person.added}
             filter={this.filter}
