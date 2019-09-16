@@ -19,7 +19,7 @@ public class AdsModule extends ReactContextBaseJavaModule {
         super(context);
         reactContext = context;
 
-        //AdRegistration.enableTesting(true);
+        AdRegistration.enableTesting(true);
         //AdRegistration.enableLogging(true);
 
         AdRegistration.setAppKey(reactContext.getResources().getString(R.string.amazon_ad_app_key));
