@@ -11,7 +11,7 @@ export default class Fremium {
 
   public initialize = async (): Promise<void> => {
     if (!this.store.settings.isPremium) {
-      const history = await RNIap.getPurchaseHistory();
+      const history = await RNIap.getAvailablePurchases();
 
       this.store.setIsPremium(history.length > 0);
     }
