@@ -23,3 +23,5 @@
 -keep class com.google.android.gms.ads.identifier.AdvertisingIdClient
 
 -keep class com.poseablesoftware.callyourpeople.BuildConfig { *; }
+
+-optimizationpasses 1
