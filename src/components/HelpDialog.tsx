@@ -32,7 +32,7 @@ export default class HelpDialog extends Component<Props, State> {
           visible={this.state.visible}
           contentContainerStyle={styles.modal}
         >
-          <Text>{this.props.text}</Text>
+          <Text style={styles.text}>{this.props.text}</Text>
           <Button style={styles.button} onPress={this.close}>Close</Button>
         </Modal>
       </Portal>
@@ -53,5 +53,8 @@ const styles = StyleSheet.create({
     marginHorizontal: materialUILayout.margin,
     marginVertical: materialUILayout.margin * 2,
     padding: materialUILayout.margin,
+  },
+  text: {
+    fontSize: materialUILayout.margin,
   },
 });
