@@ -1,8 +1,28 @@
+import { Alert } from 'react-native';
 import * as RNIap from 'react-native-iap';
 import Sentry from 'react-native-sentry';
 import { Store } from './Store';
 
 export default class Fremium {
+  public static checkIsPremium = (
+    purchaseHistory: RNIap.Purchase[],
+    now: Date,
+  ): boolean => {
+    let isPremium = false;
+
+    for (const purchase of purchaseHistory) {
+      if (
+        purchase.cancelDateAmazon == null ||
+        parseFloat(purchase.cancelDateAmazon) > now.getTime()
+      ) {
+        isPremium = true;
+        break;
+      }
+    }
+
+    return isPremium;
+  }
+
   private store: Store;
 
   constructor(store: Store) {
@@ -10,10 +30,14 @@ export default class Fremium {
   }
 
   public initialize = async (): Promise<void> => {
-    if (!this.store.settings.isPremium) {
-      const history = await RNIap.getAvailablePurchases();
+    try {
+      const purchaseHistory = await RNIap.getPurchaseHistory();
 
-      this.store.setIsPremium(history.length > 0);
+      const isPremium = Fremium.checkIsPremium(purchaseHistory, new Date());
+
+      this.store.setIsPremium(isPremium);
+    } catch (error) {
+      Sentry.captureException(error);
     }
   }
 
@@ -22,23 +46,29 @@ export default class Fremium {
 
   public upgrade = async (): Promise<void> => {
     try {
-      const products = await RNIap.getProducts(['Premium']);
+      const purchase = await RNIap.buyProduct('Monthly');
 
-      if (products.length <= 0) {
-        Sentry.captureException(new Error('RNIap.getProducts: empty response'));
-      } else {
-        const purchase = await RNIap.buyProduct('Premium');
+      if (purchase && purchase.receiptId) {
+        Sentry.captureMessage(JSON.stringify(purchase));
 
-        if (purchase && purchase.receiptId) {
-          await RNIap.notifyFulfillmentAmazon(purchase.receiptId, 'FULFILLED');
+        await RNIap.notifyFulfillmentAmazon(purchase.receiptId, 'FULFILLED');
 
-          await RNIap.consumeAllItems();
-
-          this.store.setIsPremium(true);
-        }
+        this.store.setIsPremium(true);
       }
     } catch (error) {
-      Sentry.captureException(error);
+      if (error.code === 'E_ALREADY_OWNED') {
+        Alert.alert(
+          'You have already purchased a subscription. Restoring to your device.',
+        );
+
+        this.store.setIsPremium(true);
+      } else {
+        Alert.alert(
+          'There was an error processing the purchase. Please try again later.',
+        );
+
+        Sentry.captureException(error);
+      }
     }
   }
 }

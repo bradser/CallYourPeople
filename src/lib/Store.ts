@@ -6,7 +6,7 @@ import { Call, DateItem, Person } from '../Types';
 export class Store {
   public people = (observable([]) as unknown) as IObservableArray<Person>;
   public settings = observable({
-    isPremium: false,
+    isPremium: true,
   });
 
   constructor() {

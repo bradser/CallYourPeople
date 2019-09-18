@@ -1,5 +1,6 @@
 // tslint:disable: max-classes-per-file
 
+import { ProductPurchase } from 'react-native-iap';
 import { Call, CallType, Frequency } from '../src/Types';
 
 export class CallTestCase {
@@ -43,6 +44,33 @@ export class PersonModifiedCallTestCase extends PersonCallTestCase {
     public daysLeftTillCallNeeded: number,
     public modified: Call[],
   ) {
-    super(name, phoneNumber, frequency, callType, callDurationMinutes, daysDelta, notifyCount, daysLeftTillCallNeeded);
+    super(
+      name,
+      phoneNumber,
+      frequency,
+      callType,
+      callDurationMinutes,
+      daysDelta,
+      notifyCount,
+      daysLeftTillCallNeeded,
+    );
+  }
+}
+
+export class FremiumTestCase {
+  public purchases: ProductPurchase[];
+  constructor(cancelDates: Array<string | undefined | null>, public isPremium: boolean) {
+    // TODO: must disable strictNullChecks to compile/run, due to issues with upstream library
+    this.purchases = cancelDates.map((cancelDateAmazon) => {
+      return {
+        cancelDateAmazon,
+        productId: '',
+        receiptId: '',
+        transactionDate: '',
+        transactionId: '',
+        transactionReceipt: '',
+        userIdAmazon: '',
+      };
+    });
   }
 }

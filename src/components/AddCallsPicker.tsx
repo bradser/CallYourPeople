@@ -17,7 +17,7 @@ export default inject('store')(
         return (
           <CallsPicker
             title='Add Calls'
-            helpText="Allows you to add calls not associated with a contact's phone number. For instance, if you talk to your father on your mother's mobile phone."
+            helpText="Add calls not associated with a contact's phone number. For example, if you talk to your friend contact on your sibling contact's phone."
             log={this.props.log}
             selected={this.props.person.added}
             filter={this.filter}
@@ -27,9 +27,9 @@ export default inject('store')(
       }
 
       private filter = (value: Call): boolean =>
-          !this.props.person.contact.phones.find(
-            (phone) => phone.number === value.phoneNumber,
-          )
+        !this.props.person.contact.phones.find(
+          (phone) => phone.number === value.phoneNumber,
+        )
 
       private addCalls = (newSelected: Call[]): void =>
         this.props.store!.update(this.props.person, {

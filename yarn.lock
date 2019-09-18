@@ -5963,7 +5963,7 @@ react-native-gesture-handler@^1.2.1:
 
 "react-native-iap@https://github.com/bradser/react-native-iap#curious":
   version "2.4.4"
-  resolved "https://github.com/bradser/react-native-iap#ce6a46cc9a5023f2b73092ed9ca549ab6c3c4e6a"
+  resolved "https://github.com/bradser/react-native-iap#5aa5528215856a3283da86705b7d3edc179563a1"
   dependencies:
     dooboolab-welcome "^1.1.0"
 

@@ -17,7 +17,7 @@ export default inject('store')(
         return (
           <CallsPicker
             title='Remove Calls'
-            helpText="Allows you to remove calls from contacts' shared phone number. For instance, if you call your parent's home number, which is set in both your father's and mother's contacts, yet you only speak to one of them."
+            helpText="Remove calls from a contact's shared phone number. For example, if you call your parent's home number, which is set in both your father's and mother's contacts, yet you only speak to one of them."
             log={this.props.log}
             selected={this.props.person.removed}
             filter={this.filter}
@@ -27,9 +27,9 @@ export default inject('store')(
       }
 
       private filter = (value: Call): boolean =>
-      !!this.props.person.contact.phones.find(
-        (phone) => phone.number === value.phoneNumber,
-      )
+        !!this.props.person.contact.phones.find(
+          (phone) => phone.number === value.phoneNumber,
+        )
 
       private removeCalls = (newSelected: Call[]): void =>
         this.props.store!.update(this.props.person, {

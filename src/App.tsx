@@ -34,7 +34,9 @@ const fremium = new Fremium(store);
 fremium.initialize().then(() => {
   PushNotification.configure({
     onNotification: (notification) => {
-      if (store.settings.isPremium) { contactLink(notification.tag); } else {
+      if (store.settings.isPremium) {
+        contactLink(notification.tag);
+      } else {
         NativeModules.Ads.showInterstitial().then(() =>
           contactLink(notification.tag),
         );

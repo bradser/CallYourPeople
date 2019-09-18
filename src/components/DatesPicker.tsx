@@ -18,8 +18,8 @@ export default inject('store')(
       public render() {
         return (
           <ItemsPicker
-            title={'Dates'}
-            helpText={'Allows you to add the date of a non-phone conversation. For instance, if you talk to someone in person.'}
+            title='Dates'
+            helpText='Add a date of a non-phone conversation. For example, if you talk to someone in person.'
             selected={this.props.person.nonCall}
             onAdd={this.fremiumAdd}
             onRemove={this.removeDateItem}
