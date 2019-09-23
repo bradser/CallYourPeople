@@ -165,12 +165,12 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-localize')
     implementation project(':react-native-build-config')
     implementation project(':react-native-iap')
     implementation project(':react-native-code-push')
     implementation project(':appcenter-analytics')
     implementation project(':appcenter')
-    implementation project(':react-native-device-info')
     implementation project(':react-native-reanimated')
     compile project(':react-native-gesture-handler')
     compile project(':react-native-sentry')

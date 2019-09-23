@@ -5,7 +5,7 @@ import codePush from 'react-native-code-push';
 import PushNotification from 'react-native-push-notification-ce';
 import { Sentry } from 'react-native-sentry';
 import App from './src/App';
-import AppLogic from './src/lib/AppLogic';
+import NotificationScheduler from './src/lib/NotificationScheduler';
 import { getLog } from './src/lib/CallLog';
 import { Store } from './src/lib/Store';
 
@@ -15,13 +15,13 @@ Sentry.config(
 
 const MyHeadlessTask = async () => {
   const store = new Store();
+  const log = await getLog();
 
-  await new AppLogic(
-    details => PushNotification.localNotification(details),
-    moment()
-  ).check(getLog, store);
+  await new NotificationScheduler(details =>
+    PushNotification.localNotification(details)
+  ).invoke(store, log, moment());
 
-  BackgroundFetch.finish();
+  BackgroundFetch.finish(BackgroundFetch.FETCH_RESULT_NO_DATA);
 };
 
 BackgroundFetch.registerHeadlessTask(MyHeadlessTask);

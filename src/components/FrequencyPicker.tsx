@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, Menu, Subheading } from 'react-native-paper';
 import { materialUILayout } from '../lib/Constants';
-import { FrequencyText, Person } from '../Types';
+import { FrequencyMap, Person } from '../Types';
 
 interface Props {
   person: Person;
@@ -31,14 +31,14 @@ export default class FrequencyPicker extends PureComponent<Props, State> {
           onDismiss={this.closeMenu}
           anchor={
             <Button mode='outlined' color='black' onPress={this.openMenu}>
-              {FrequencyText[this.props.person.frequency]}
+              {FrequencyMap.get(this.props.person.frequency)!.text}
             </Button>
           }
         >
-          {FrequencyText.map((frequencyText, index) => (
+          {Array.from(FrequencyMap, (entry, index) => (
             <Menu.Item
               key={index}
-              title={frequencyText}
+              title={entry[1].text}
               onPress={() => this.select(index)}
             />
           ))}

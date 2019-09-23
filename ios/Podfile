@@ -16,6 +16,8 @@ target 'CallYourMom' do
 
   pod 'react-native-build-config', :path => '../node_modules/react-native-build-config'
 
+  pod 'RNLocalize', :path => '../node_modules/react-native-localize'
+
   target 'CallYourMomTests' do
     inherit! :search_paths
     # Pods for testing

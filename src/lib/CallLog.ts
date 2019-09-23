@@ -20,6 +20,7 @@ export const getLogWithPermissions: GetLogCallback = async () => {
 };
 
 export const getLog: GetLogCallback = async () => {
+  // TODO: use load(LIMIT); compare to max perodicity, to reduce processing
   const log = (await CallLogs.loadAll()) as Call[];
 
   const phoneNumberUtil = PhoneNumberUtil.getInstance();

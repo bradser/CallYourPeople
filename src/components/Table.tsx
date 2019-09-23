@@ -7,15 +7,15 @@ import { Store } from '../lib/Store';
 import {
   Call,
   DetailsNavigationProps,
-  FrequencyText,
-  ViewPerson,
+  FrequencyMap,
+  NotifyPerson,
 } from '../Types';
 import { materialUILayout } from './../lib/Constants';
 
 interface Props extends NavigationInjectedProps {
   store?: Store;
   daysLabel: string;
-  viewPeople: ViewPerson[];
+  notifyPeople: NotifyPerson[];
   log: Call[];
 }
 
@@ -44,27 +44,35 @@ export default inject('store')(
       }
 
       private getRows = () =>
-        this.props.viewPeople.map((person, index) => (
+        this.props.notifyPeople.map((notifyPerson, index) => (
           <DataTable.Row
             key={index}
             onPress={() =>
               this.props.navigation.navigate(
                 'Details',
-                new DetailsNavigationProps(this.props.log, person.contact),
+                new DetailsNavigationProps(
+                  this.props.log,
+                  notifyPerson.person.contact,
+                ),
               )
             }
           >
             <DataTable.Cell style={styles.cellName}>
-              {person.contact.name}
+              {notifyPerson.person.contact.name}
             </DataTable.Cell>
             <DataTable.Cell numeric style={styles.cellDaysLeft}>
-              {Math.abs(person.daysLeftTillCallNeeded).toString()}
+              {this.getDays(notifyPerson)}
             </DataTable.Cell>
             <DataTable.Cell numeric>
-              {FrequencyText[person.frequency]}
+              {FrequencyMap.get(notifyPerson.person.frequency)!.text}
             </DataTable.Cell>
           </DataTable.Row>
         ))
+
+      private getDays = (notifyPerson: NotifyPerson): string =>
+        Math.abs(
+          Math.round(notifyPerson.daysLeftTillCallNeeded * 10) / 10,
+        ).toString()
     },
   ),
 );

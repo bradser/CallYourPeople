@@ -1,7 +1,7 @@
 import moment from 'moment';
 import AppLogic from '../../src/lib/AppLogic';
 import { CallType, Frequency } from '../../src/Types';
-import { getCall, getPerson } from '../Helpers';
+import { getCall, getPerson, getNotifiedPeopleCount } from '../Helpers';
 import { PersonCallTestCase } from '../Types';
 
 const removedCallsTestCases = [
@@ -12,7 +12,7 @@ const removedCallsTestCases = [
       Frequency.once_Every_Two_Weeks,
       CallType.OUTGOING,
       5,
-      7,
+      -7,
       0,
       7,
     ),
@@ -22,7 +22,7 @@ const removedCallsTestCases = [
       Frequency.once_Every_Two_Weeks,
       CallType.OUTGOING,
       5,
-      7,
+      -7,
       0,
       7,
     ),
@@ -34,7 +34,7 @@ const removedCallsTestCases = [
       Frequency.once_Every_Two_Weeks,
       CallType.OUTGOING,
       5,
-      21,
+      -21,
       2,
       -7,
     ),
@@ -44,7 +44,7 @@ const removedCallsTestCases = [
       Frequency.once_Every_Two_Weeks,
       CallType.OUTGOING,
       5,
-      28,
+      -28,
       2,
       -14,
     ),
@@ -93,9 +93,7 @@ removedCallsTestCases.forEach((testCase, index) => {
 
     const testLog = [firstCall, secondCall, thirdCall];
 
-    const notify = jest.fn();
-
-    const checkedPeople = new AppLogic(notify, now.clone()).checkCallLog(
+    const checkedPeople = new AppLogic(now.clone()).checkCallLog(
       testPeople,
       testLog,
     );
@@ -104,7 +102,7 @@ removedCallsTestCases.forEach((testCase, index) => {
       tc1.daysLeftTillCallNeeded < tc2.daysLeftTillCallNeeded ? -1 : 1,
     );
 
-    expect(notify).toHaveBeenCalledTimes(sortedtestCases[0].notifyCount);
+    expect(getNotifiedPeopleCount(checkedPeople)).toBe(sortedtestCases[0].notifyCount);
 
     expect(checkedPeople[0].daysLeftTillCallNeeded).toBe(
       sortedtestCases[0].daysLeftTillCallNeeded,

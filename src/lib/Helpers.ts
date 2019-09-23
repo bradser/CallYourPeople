@@ -1,5 +1,5 @@
 import { PhoneNumberFormat, PhoneNumberUtil } from 'google-libphonenumber';
-import DeviceInfo from 'react-native-device-info';
+import { getLocales } from 'react-native-localize';
 
 export const formatPhoneNumber = (
   phoneNumberUtil: PhoneNumberUtil,
@@ -32,7 +32,7 @@ const format = (
     if (PhoneNumberUtil.isViablePhoneNumber(phoneNumber)) {
       const parsedPhone = phoneNumberUtil.parse(
         phoneNumber,
-        DeviceInfo.getDeviceCountry(),
+        getLocales()[0].countryCode,
       );
 
       formattedPhone = phoneNumberUtil.format(parsedPhone, formatType);

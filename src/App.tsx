@@ -9,8 +9,6 @@ import SendIntentAndroid from 'react-native-send-intent';
 import { Sentry } from 'react-native-sentry';
 import { createAppContainer, createStackNavigator } from 'react-navigation';
 import { contactLink } from './components/Link';
-import AppLogic from './lib/AppLogic';
-import { getLog } from './lib/CallLog';
 import Fremium from './lib/Fremium';
 import { Store } from './lib/Store';
 import DetailsScreen from './screens/DetailsScreen';
@@ -46,28 +44,8 @@ fremium.initialize().then(() => {
 });
 
 export default class App extends Component {
-  public componentDidMount() {
+  public async componentDidMount() {
     SendIntentAndroid.requestIgnoreBatteryOptimizations();
-
-    BackgroundFetch.configure(
-      {
-        enableHeadless: true,
-        minimumFetchInterval: 12 * 60,
-        startOnBoot: true,
-        stopOnTerminate: false,
-      },
-      async () => {
-        await new AppLogic(
-          (details) => PushNotification.localNotification(details),
-          moment(),
-        ).check(getLog, store);
-
-        BackgroundFetch.finish(BackgroundFetch.FETCH_RESULT_NO_DATA);
-      },
-      (error) => {
-        Sentry.captureException(new Error(error.toString())); // TODO: see if this is an error object
-      },
-    );
 
     BackgroundFetch.status((status) => {
       switch (status) {

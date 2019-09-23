@@ -1139,6 +1139,11 @@ acorn@^6.0.1:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-6.1.1.tgz#7d25ae05bb8ad1f9b699108e1094ecd7884adc1f"
   integrity sha512-jPTiwtOxaHNaAPg/dmrJ/beuzLRnXtB0kQPQ8JpotKJgTB6rX6c8mlf315941pyjBSaPg8NHXS9fhP4u17DpGA==
 
+add@^2.0.6:
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/add/-/add-2.0.6.tgz#248f0a9f6e5a528ef2295dbeec30532130ae2235"
+  integrity sha1-JI8Kn25aUo7yKV2+7DBTITCuIjU=
+
 agent-base@4, agent-base@^4.2.0:
   version "4.3.0"
   resolved "https://registry.yarnpkg.com/agent-base/-/agent-base-4.3.0.tgz#8165f01c436009bccad0b1d122f05ed770efc6ee"
@@ -4483,6 +4488,11 @@ lru-cache@^4.0.1, lru-cache@^4.1.2:
     pseudomap "^1.0.2"
     yallist "^2.1.2"
 
+luxon@^1.3.3:
+  version "1.18.0"
+  resolved "https://registry.yarnpkg.com/luxon/-/luxon-1.18.0.tgz#45217b9e7471c0eda64cde88759e707407890710"
+  integrity sha512-PDaY57G9k1yN46IRdt7M6I55yGd9NFBQYFvNsxLdOtapMfujJICPNdOIvCtYIq67W8hLdK3Zy8HJps+RRbIoAA==
+
 make-dir@^1.0.0, make-dir@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/make-dir/-/make-dir-1.3.0.tgz#79c1033b80515bd6d24ec9933e860ca75ee27f0c"
@@ -5929,6 +5939,10 @@ react-native-build-config@^0.3.1:
   resolved "https://registry.yarnpkg.com/react-native-build-config/-/react-native-build-config-0.3.1.tgz#c92e3b2d2262bcfec506a8ec3faa3d60b17dc625"
   integrity sha512-zCWGZxH/yfVxW1ad/poDBZzkSZekabzXPao61J5SaydIcihYJOqmRSJ7PWdH8i+karAPhsu1h3YoeqDTMxfODA==
 
+"react-native-build-config@github:ismaeldcom/react-native-build-config":
+  version "0.3.1"
+  resolved "https://codeload.github.com/ismaeldcom/react-native-build-config/tar.gz/ec8edf52ee7970329fe01e19a9587c0de743ea54"
+
 react-native-call-log@2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/react-native-call-log/-/react-native-call-log-2.1.1.tgz#37a6625444f4e03c8ff3256435f8011ac5c288fe"
@@ -5947,11 +5961,6 @@ react-native-code-push@^5.6.0:
     semver "^5.6.0"
     xcode "1.0.0"
 
-react-native-device-info@2.1.3:
-  version "2.1.3"
-  resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-2.1.3.tgz#7463f826a420a53210be89cf671345d1fa92843f"
-  integrity sha512-PmF2dHjoxzYfq0VQ+a1E82z2Bf+8svUk2JoYmgkAI/EPrWfbrKYSC3WxRv4/VAUS0RsGMLnYw+Ygtuf4hIXpew==
-
 react-native-gesture-handler@^1.2.1:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-1.3.0.tgz#d0386f565928ccc1849537f03f2e37fd5f6ad43f"
@@ -5966,6 +5975,12 @@ react-native-gesture-handler@^1.2.1:
   resolved "https://github.com/bradser/react-native-iap#5aa5528215856a3283da86705b7d3edc179563a1"
   dependencies:
     dooboolab-welcome "^1.1.0"
+    react-native-build-config "github:ismaeldcom/react-native-build-config"
+
+react-native-localize@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/react-native-localize/-/react-native-localize-1.2.1.tgz#7c68a9275117942763439bf570828f05fb5bbdc7"
+  integrity sha512-givdHOFqu41EMgI6HikNnKhsze4jlJ+BVoznAAHuKFCLWwDr7z6S1tcq7c/C7zHrKlESpE5H1ZqAPU3R5Hhdog==
 
 react-native-paper@^2.15.0:
   version "2.15.2"
@@ -6014,9 +6029,9 @@ react-native-select-contact@1.2.0:
   optionalDependencies:
     "@yfuks/react-native-action-sheet" "^0.0.4"
 
-"react-native-send-intent@https://github.com/bradser/react-native-send-intent#FLAG_ACTIVITY_NEW_TASK":
+"react-native-send-intent@https://github.com/bradser/react-native-send-intent":
   version "1.0.31"
-  resolved "https://github.com/bradser/react-native-send-intent#93b0106b1a6878116647ba092517b7cf6def46ea"
+  resolved "https://github.com/bradser/react-native-send-intent#74ae459806b7a5e77365f0fbc23036c67d746fe6"
 
 react-native-sentry@^0.43.2:
   version "0.43.2"
@@ -6491,6 +6506,15 @@ rimraf@~2.2.6:
   version "2.2.8"
   resolved "https://registry.yarnpkg.com/rimraf/-/rimraf-2.2.8.tgz#e439be2aaee327321952730f99a8929e4fc50582"
   integrity sha1-5Dm+Kq7jJzIZUnMPmaiSnk/FBYI=
+
+rrule@^2.6.2:
+  version "2.6.2"
+  resolved "https://registry.yarnpkg.com/rrule/-/rrule-2.6.2.tgz#f175c6c0b20d6f798739e4e1d979ffb3d79589e8"
+  integrity sha512-xL38CM1zOYOIp4OO8hdD6zHH5UdR9siHMvPiv+CCSh7o0LYJ0owg87QcFW7GXJ0PfpLBHjanEMvvBjJxbRhAcQ==
+  dependencies:
+    tslib "^1.9.0"
+  optionalDependencies:
+    luxon "^1.3.3"
 
 rsvp@^3.3.3:
   version "3.6.2"
@@ -7833,6 +7857,11 @@ yargs@^9.0.0:
     which-module "^2.0.0"
     y18n "^3.2.1"
     yargs-parser "^7.0.0"
+
+yarn@^1.17.3:
+  version "1.17.3"
+  resolved "https://registry.yarnpkg.com/yarn/-/yarn-1.17.3.tgz#60e0b77d079eb78e753bb616f7592b51b6a9adce"
+  integrity sha512-CgA8o7nRZaQvmeF/WBx2FC7f9W/0X59T2IaLYqgMo6637wfp5mMEsM3YXoJtKUspnpmDJKl/gGFhnqS+sON7hA==
 
 yazl@^2.4.1:
   version "2.5.1"

@@ -9,17 +9,11 @@ import { NavigationEvents, NavigationInjectedProps } from 'react-navigation';
 import AddPersonFAB from '../components/AddPersonFAB';
 import Link from '../components/Link';
 import Table from '../components/Table';
-import AppLogic from '../lib/AppLogic';
 import { getLogWithPermissions } from '../lib/CallLog';
 import Fremium from '../lib/Fremium';
+import NotificationScheduler from '../lib/NotificationScheduler';
 import { Store } from '../lib/Store';
-import {
-  Call,
-  CheckOutput,
-  NotifyCallback,
-  Person,
-  ViewPerson,
-} from '../Types';
+import { Call, NotifyCallback, NotifyPerson, Person } from '../Types';
 import { cypGreen, materialUILayout } from './../lib/Constants';
 
 interface Props extends NavigationInjectedProps {
@@ -27,7 +21,7 @@ interface Props extends NavigationInjectedProps {
 }
 
 interface State extends NavigationState<Route> {
-  viewPeople: ViewPerson[];
+  notifyPeople: NotifyPerson[];
   log: Call[];
 }
 
@@ -47,6 +41,7 @@ export default inject('store')(
         this.state = {
           index: 0,
           log: [],
+          notifyPeople: [],
           routes: [
             {
               accessibilityLabel: 'Call these people now!',
@@ -59,7 +54,6 @@ export default inject('store')(
               title: 'Call Soon',
             },
           ],
-          viewPeople: [],
         };
 
         this.fremium = new Fremium(this.props.store!);
@@ -142,51 +136,56 @@ export default inject('store')(
 
       private setIndex = (index) => this.setState({ index });
 
-      private initializeTabIndex = (results: CheckOutput) =>
+      private initializeTabIndex = (notifiedPeople: NotifyPerson[]) =>
         this.setState({
           index:
-            results.viewPeople.filter((p) => p.daysLeftTillCallNeeded <= 0)
-              .length > 0
+            notifiedPeople.filter((p) => p.daysLeftTillCallNeeded <= 0).length > 0
               ? 0
               : 1,
         })
 
       private callNowTable = () =>
         this.callTable(
-          this.state.viewPeople.filter((p) => p.daysLeftTillCallNeeded <= 0),
+          this.state.notifyPeople.filter((p) => p.daysLeftTillCallNeeded <= 0),
           'Days Since',
         )
 
       private callSoonTable = () =>
         this.callTable(
-          this.state.viewPeople.filter((p) => p.daysLeftTillCallNeeded > 0),
+          this.state.notifyPeople.filter((p) => p.daysLeftTillCallNeeded > 0),
           'Days Until',
         )
 
-      private callTable = (viewPeople, daysLabel) => (
+      private callTable = (notifyPeople, daysLabel) => (
         <Table
           navigation={this.props.navigation}
           log={this.state.log}
-          viewPeople={viewPeople}
+          notifyPeople={notifyPeople}
           daysLabel={daysLabel}
         />
       )
 
-      private check = () => this.runAppLogic(() => undefined);
+      private check = async (): Promise<NotifyPerson[]> =>
+        await this.runAppLogic(() => undefined)
 
-      private checkAndNotify = () =>
-        this.runAppLogic((details) =>
+      private checkAndNotify = async (): Promise<NotifyPerson[]> =>
+        await this.runAppLogic((details) =>
           PushNotification.localNotification(details),
         )
 
-      private runAppLogic = (notificationCallback: NotifyCallback) =>
-        new AppLogic(notificationCallback, moment())
-          .check(getLogWithPermissions, this.props.store!)
-          .then((results) => {
-            this.setState(results);
+      private runAppLogic = async (
+        notificationCallback: NotifyCallback,
+      ): Promise<NotifyPerson[]> => {
+        const log = await getLogWithPermissions();
 
-            return results;
-          })
+        const notifyPeople = await new NotificationScheduler(
+          notificationCallback,
+        ).invoke(this.props.store!, log, moment());
+
+        this.setState({ log, notifyPeople });
+
+        return notifyPeople;
+      }
 
       private addPerson = (person: Person): void => {
         this.props.store!.add(person);

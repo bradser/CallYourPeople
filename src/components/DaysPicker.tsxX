@@ -1,0 +1,54 @@
+import React, { Component } from 'react';
+import { View } from 'react-native';
+import { PartialIconProps, Text, ToggleButton } from 'react-native-paper';
+
+interface Props {
+  selected: boolean[];
+  onSelect: (days: boolean[]) => void;
+}
+
+interface State {
+  visible: boolean;
+}
+
+export default class DaysPicker extends Component<Props> {
+
+    public static minimumFetchInterval = (days: Array<Array<{}>>): number => {
+        // flatten array, remove duplicates
+        // return size of smallest hole 
+        days.flatMap(value => value).
+        return 0;
+    }
+
+  public render() {
+    return (
+      <View>
+        {['Sa', 'M', 'T', 'W', 'Th', 'F', 'Su'].map((day, index) =>
+          this.getButton(index, day)
+        )}
+      </View>
+    );
+  }
+
+  private getButton = (index: number, day: string) => (
+    <ToggleButton
+      value={day}
+      icon={this.getIcon(index)}
+      status={this.getStatus(index)()}
+      onPress={this.select(index)}
+    />
+  );
+
+  private getIcon = (index: number) => (props: PartialIconProps): React.ReactNode => (
+    <Text>this.value</Text>
+  )
+
+  private getStatus = (index: number) => ():
+    | 'checked'
+    | 'unchecked'
+    | undefined => {
+    return 'checked';
+  }
+
+  private select = (index: number) => (): void => {};
+}

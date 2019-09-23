@@ -1,6 +1,7 @@
 import moment from 'moment';
+import { RRuleSet } from 'rrule';
 import AppLogic from '../src/lib/AppLogic';
-import { Call, CallType, DateItem, Frequency, Person } from '../src/Types';
+import { Call, CallType, DateItem, Frequency, NotifyPerson, Person } from '../src/Types';
 
 export const getPerson = (
   name: string,
@@ -28,6 +29,7 @@ export const getPerson = (
     removed,
     nonCall,
     '',
+    new RRuleSet(),
   );
 
 export const getCall = (now) => (
@@ -35,21 +37,22 @@ export const getCall = (now) => (
   callType: CallType,
   daysDelta: number,
   callDuration: number,
-): Call =>
-  new Call(
-    '',
+): Call => {
+  const delta = now
+    .clone()
+    // Rather than days, to work around https://github.com/moment/moment/issues/2430
+    .add(daysDelta * 24, 'hours');
+
+  return new Call(
+    delta.toString(),
     callDuration,
     '',
     phoneNumber,
     0,
-    now
-      .clone()
-      // Rather than days, to work around https://github.com/moment/moment/issues/2430
-      .add(daysDelta * 24, 'hours')
-      .valueOf()
-      .toString(),
+    delta.valueOf().toString(),
     callType,
   );
+};
 
 export const runTestCase = (testCase, index) => {
   it(`case #${index}`, () => {
@@ -68,10 +71,18 @@ export const runTestCase = (testCase, index) => {
       ),
     ];
 
-    const notify = jest.fn();
+    const checkedPeople = new AppLogic(now.clone()).checkCallLog(
+      testPeople,
+      testLog,
+    );
 
-    new AppLogic(notify, now.clone()).checkCallLog(testPeople, testLog);
-
-    expect(notify).toHaveBeenCalledTimes(testCase[0].notifyCount);
+    expect(getNotifiedPeopleCount(checkedPeople)).toBe(testCase[0].notifyCount);
   });
 };
+
+export const getNotifiedPeopleCount = (
+  notifiedPeople: NotifyPerson[],
+): number =>
+  notifiedPeople.filter(
+    (notifiedPerson) => notifiedPerson.daysLeftTillCallNeeded <= 0,
+  ).length;

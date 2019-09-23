@@ -1,7 +1,7 @@
 import moment from 'moment';
 import AppLogic from '../../src/lib/AppLogic';
 import { CallType, Frequency } from '../../src/Types';
-import { getCall, getPerson } from '../Helpers';
+import { getCall, getNotifiedPeopleCount, getPerson } from '../Helpers';
 import { PersonCallTestCase } from '../Types';
 
 // same number, different names, same returned delta
@@ -13,7 +13,7 @@ const duplicateTestCases = [
       Frequency.once_Every_Two_Weeks,
       CallType.OUTGOING,
       5,
-      7,
+      -7,
       0,
       7,
     ),
@@ -23,7 +23,7 @@ const duplicateTestCases = [
       Frequency.once_Every_Two_Weeks,
       CallType.OUTGOING,
       5,
-      7,
+      -7,
       0,
       7,
     ),
@@ -35,7 +35,7 @@ const duplicateTestCases = [
       Frequency.once_Every_Two_Weeks,
       CallType.OUTGOING,
       5,
-      21,
+      -21,
       2,
       -7,
     ),
@@ -45,7 +45,7 @@ const duplicateTestCases = [
       Frequency.once_Every_Two_Weeks,
       CallType.OUTGOING,
       5,
-      21,
+      -21,
       2,
       -7,
     ),
@@ -78,14 +78,12 @@ duplicateTestCases.forEach((testCase, index) => {
       ),
     ];
 
-    const notify = jest.fn();
-
-    const checkedPeople = new AppLogic(notify, now.clone()).checkCallLog(
+    const checkedPeople = new AppLogic(now.clone()).checkCallLog(
       testPeople,
       testLog,
     );
 
-    expect(notify).toHaveBeenCalledTimes(testCase[0].notifyCount);
+    expect(getNotifiedPeopleCount(checkedPeople)).toBe(testCase[0].notifyCount);
 
     expect(checkedPeople[0].daysLeftTillCallNeeded).toBe(
       testCase[0].daysLeftTillCallNeeded,

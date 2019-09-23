@@ -1,7 +1,7 @@
 import moment from 'moment';
 import AppLogic from '../../src/lib/AppLogic';
 import { CallType, Frequency } from '../../src/Types';
-import { getCall, getPerson } from '../Helpers';
+import { getCall, getNotifiedPeopleCount, getPerson } from '../Helpers';
 import { PersonCallTestCase } from '../Types';
 
 const addedCallsTestCases = [
@@ -88,9 +88,7 @@ addedCallsTestCases.forEach((testCase, index) => {
 
     const testLog = [firstCall];
 
-    const notify = jest.fn();
-
-    const checkedPeople = new AppLogic(notify, now.clone()).checkCallLog(
+    const checkedPeople = new AppLogic(now.clone()).checkCallLog(
       testPeople,
       testLog,
     );
@@ -99,7 +97,9 @@ addedCallsTestCases.forEach((testCase, index) => {
       tc1.daysLeftTillCallNeeded < tc2.daysLeftTillCallNeeded ? -1 : 1,
     );
 
-    expect(notify).toHaveBeenCalledTimes(sortedtestCases[0].notifyCount);
+    expect(getNotifiedPeopleCount(checkedPeople)).toBe(
+      sortedtestCases[0].notifyCount,
+    );
 
     expect(checkedPeople[0].daysLeftTillCallNeeded).toBe(
       sortedtestCases[0].daysLeftTillCallNeeded,

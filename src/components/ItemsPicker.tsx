@@ -8,7 +8,7 @@ import HelpDialog from './HelpDialog';
 interface Props {
   title: string;
   selected: SelectedItem[];
-  helpText: string;
+  helpText?: string;
   onAdd: () => void;
   onRemove: (removed: SelectedItem) => void;
 }
@@ -28,7 +28,7 @@ export default class ItemsPicker extends Component<Props> {
               style={styles.fab}
               onPress={this.props.onAdd}
             />
-            <IconButton onPress={this.openHelp} icon='help' size={24} />
+            {this.props.helpText && <IconButton onPress={this.openHelp} icon='help' size={24} />}
           </View>
           <View style={styles.viewFullWidth}>
             {this.props.selected.map((item, index) => (
@@ -43,7 +43,7 @@ export default class ItemsPicker extends Component<Props> {
             ))}
           </View>
         </View>
-        <HelpDialog text={this.props.helpText} ref={this.setHelpDialogRef} />
+        <HelpDialog text={this.props.helpText!} ref={this.setHelpDialogRef} />
       </View>
     );
   }
