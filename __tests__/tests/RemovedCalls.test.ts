@@ -1,7 +1,7 @@
 import moment from 'moment';
 import AppLogic from '../../src/lib/AppLogic';
 import { CallType, Frequency } from '../../src/Types';
-import { getCall, getPerson, getNotifiedPeopleCount } from '../Helpers';
+import { getCall, getNotifiedPeopleCount, getPerson } from '../Helpers';
 import { PersonCallTestCase } from '../Types';
 
 const removedCallsTestCases = [

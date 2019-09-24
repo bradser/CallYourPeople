@@ -12,7 +12,6 @@ import com.microsoft.appcenter.reactnative.analytics.AppCenterReactNativeAnalyti
 import com.microsoft.appcenter.reactnative.appcenter.AppCenterReactNativePackage;
 import com.swmansion.reanimated.ReanimatedPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
-import com.learnium.RNDeviceInfo.RNDeviceInfo;
 
 import io.sentry.RNSentryPackage;
 
@@ -25,6 +24,7 @@ import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.streem.selectcontact.SelectContactPackage;
 import com.transistorsoft.rnbackgroundfetch.RNBackgroundFetchPackage;
 import com.wscodelabs.callLogs.CallLogPackage;
+import com.reactcommunity.rnlocalize.RNLocalizePackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -54,7 +54,6 @@ public class MainApplication extends Application implements ReactApplication {
                     new AppCenterReactNativePackage(MainApplication.this),
                     new ReanimatedPackage(),
                     new RNGestureHandlerPackage(),
-                    new RNDeviceInfo(),
                     new RNSentryPackage(),
                     new RNSendIntentPackage(),
                     new AsyncStoragePackage(),
@@ -63,7 +62,8 @@ public class MainApplication extends Application implements ReactApplication {
                     new SelectContactPackage(),
                     new CallLogPackage(),
                     new ReactNativePushNotificationPackage(),
-                    new AdsPackage()
+                    new AdsPackage(),
+                    new RNLocalizePackage()
             );
         }
 

@@ -1,0 +1,27 @@
+{
+  "name": "react-native-build-config",
+  "version": "0.3.1",
+  "summary": "Expose native build config to JS",
+  "homepage": "https://github.com/ismaeldcom/react-native-build-config",
+  "license": "MIT",
+  "authors": "Ismael Martín Alabarce <info@ismaeld.com>",
+  "source": {
+    "git": "https://github.com/ismaeldcom/react-native-build-config",
+    "tag": "v#{s.version}"
+  },
+  "requires_arc": true,
+  "platforms": {
+    "ios": "8.0"
+  },
+  "preserve_paths": [
+    "README.md",
+    "package.json",
+    "lib/index.js"
+  ],
+  "source_files": "ios/*.{h,m}",
+  "dependencies": {
+    "React": [
+
+    ]
+  }
+}

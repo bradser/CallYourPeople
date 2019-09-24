@@ -34,8 +34,11 @@ export class PersonCallTestCase extends CallTestCase {
 
 export class FremiumTestCase {
   public purchases: ProductPurchase[];
-  constructor(cancelDates: Array<string | undefined | null>, public isPremium: boolean) {
-    // TODO: must disable strictNullChecks to compile/run, due to issues with upstream library
+  constructor(
+    cancelDates: Array<string | undefined | null>,
+    public isPremium: boolean,
+  ) {
+    // @ts-ignore: ignore strictNullChecks due to issues with upstream library
     this.purchases = cancelDates.map((cancelDateAmazon) => {
       return {
         cancelDateAmazon,
@@ -48,4 +51,12 @@ export class FremiumTestCase {
       };
     });
   }
+}
+
+export class FetchIntervalLogicTestCase {
+  constructor(
+    public now: Date,
+    public hoursLeftTillCallNeeded: number,
+    public intervalMinutes: number,
+  ) {}
 }

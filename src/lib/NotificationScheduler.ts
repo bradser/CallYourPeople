@@ -63,13 +63,13 @@ export default class NotificationScheduler {
   private handleNotifications = (notifyPeople: NotifyPerson[]) => {
     const intervals = new FetchIntervalLogic(this.now!).getFetchIntervals(notifyPeople);
 
-    for (let i = 0; i < notifyPeople.length; i++){
+    for (let i = 0; i < notifyPeople.length; i++) {
       const notifyPerson = notifyPeople[i];
       const interval = intervals[i];
 
       this.notifyCallback({
         largeIcon: 'ic_contact_phone',
-        message: moment().add(interval, 's').toISOString(),
+        message: moment().add(interval, 'm').toDate().toString(),
         smallIcon: 'ic_contact_phone',
         tag: notifyPerson.person.contact.recordId,
         title: `${notifyPerson.person.contact.name} - ${notifyPerson.daysLeftTillCallNeeded}`,

@@ -1,8 +1,6 @@
 import moment from 'moment';
-import { getTimeZone } from 'react-native-localize';
 import RRule, { RRuleSet } from 'rrule';
 import { NotifyPerson } from '../Types';
-import { Alert } from 'react-native';
 
 export default class FetchIntervalLogic {
   private now: moment.Moment;
@@ -14,15 +12,17 @@ export default class FetchIntervalLogic {
   public getMinimumFetchInterval = (notifyPeople: NotifyPerson[]) => {
     const intervals = this.getFetchIntervals(notifyPeople);
 
-    return Math.min(...intervals, 60 * 12); // TODO: maybe add on some buffer?
+    return Math.min(...intervals, 60); // TODO: maybe add on some buffer?
   }
 
   public getFetchIntervals = (notifyPeople: NotifyPerson[]): number[] => {
     const intervals = notifyPeople.map((notifyPerson) => {
+      const now = this.now.clone().utc(true);
+
       const compareTime =
         notifyPerson.daysLeftTillCallNeeded > 0
-          ? this.now.clone().add(notifyPerson.daysLeftTillCallNeeded, 'd')
-          : this.now.clone();
+          ? now.add(notifyPerson.daysLeftTillCallNeeded * 24 * 60 * 60, 's')
+          : now;
 
       const nextNotificationInterval = this.getNextNotificationInterval(
         notifyPerson,
@@ -60,19 +60,22 @@ export default class FetchIntervalLogic {
           ],
           freq: RRule.DAILY,
           interval: 1,
-          tzid: getTimeZone(),
         }),
       );
     }
 
     const next = reminders.after(compareMoment.utc().toDate(), true);
 
+    // Conversion due to https://github.com/jakubroztocil/rrule#important-use-utc-dates
+    const convertedNext = new Date(next.getUTCFullYear(), next.getUTCMonth(), next.getUTCDate(),
+    next.getUTCHours(), next.getUTCMinutes(), next.getUTCSeconds());
+
     return (
-      next.getTime() -
+      convertedNext.getTime() -
       this.now
         .clone()
         .toDate()
         .getTime()
-    );
+    ) / 1000 / 60; // to get minutes
   }
 }
