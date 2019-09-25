@@ -12,12 +12,12 @@ export default class FetchIntervalLogic {
   public getMinimumFetchInterval = (notifyPeople: NotifyPerson[]) => {
     const intervals = this.getFetchIntervals(notifyPeople);
 
-    return Math.min(...intervals, 60); // TODO: maybe add on some buffer?
+    return Math.min(...intervals);
   }
 
   public getFetchIntervals = (notifyPeople: NotifyPerson[]): number[] => {
     const intervals = notifyPeople.map((notifyPerson) => {
-      const now = this.now.clone().utc(true);
+      const now = this.now.clone()
 
       const compareTime =
         notifyPerson.daysLeftTillCallNeeded > 0
@@ -41,6 +41,9 @@ export default class FetchIntervalLogic {
   ): number => {
     let reminders = notifyPerson.person.reminders;
 
+    // Conversion due to https://github.com/jakubroztocil/rrule#important-use-utc-dates
+    const convertedCompareMomemnt = compareMoment.add(this.now.utcOffset(), 'minutes');
+
     if (!reminders || reminders.count() === 0) {
       reminders = new RRuleSet();
 
@@ -49,24 +52,16 @@ export default class FetchIntervalLogic {
           byhour: [7, 18],
           byminute: [0],
           bysecond: [0],
-          byweekday: [
-            RRule.MO,
-            RRule.TU,
-            RRule.WE,
-            RRule.TH,
-            RRule.FR,
-            RRule.SA,
-            RRule.SU,
-          ],
+          count: 1,
+          dtstart: convertedCompareMomemnt.toDate(),
           freq: RRule.DAILY,
           interval: 1,
         }),
       );
     }
 
-    const next = reminders.after(compareMoment.utc().toDate(), true);
+    const next = reminders.all().shift()!;
 
-    // Conversion due to https://github.com/jakubroztocil/rrule#important-use-utc-dates
     const convertedNext = new Date(next.getUTCFullYear(), next.getUTCMonth(), next.getUTCDate(),
     next.getUTCHours(), next.getUTCMinutes(), next.getUTCSeconds());
 

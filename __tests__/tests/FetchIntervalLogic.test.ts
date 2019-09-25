@@ -10,6 +10,7 @@ const testCases = [
   new FetchIntervalLogicTestCase(new Date(2019, 9, 23, 0, 0, 0), -2, 7),
   new FetchIntervalLogicTestCase(new Date(2019, 9, 23, 6, 0, 0), -2, 1),
   new FetchIntervalLogicTestCase(new Date(2019, 9, 23, 8, 0, 0), -2, 10),
+  new FetchIntervalLogicTestCase(new Date(2019, 9, 23, 16, 0, 0), -28, 2),
 ];
 
 testCases.forEach((testCase, index) => {
