@@ -2,7 +2,7 @@
 import { decorate, observable } from 'mobx';
 import { Contact, PhoneEntry } from 'react-native-select-contact';
 import { NavigationParams } from 'react-navigation';
-import { RRuleSet } from 'rrule';
+import RRule from 'rrule';
 
 export class Person {
   constructor(
@@ -12,7 +12,7 @@ export class Person {
     public removed: Call[],
     public nonCall: DateItem[],
     public note: string,
-    public reminders: RRuleSet,
+    public reminders: RRule[],
   ) {}
 }
 

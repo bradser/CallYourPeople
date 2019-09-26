@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { RRuleSet } from 'rrule';
+import RRule, { RRuleSet } from 'rrule';
 import FetchIntervalLogic from '../../src/lib/FetchIntervalLogic';
 import { FetchIntervalLogicTestCase } from '../Types';
 
@@ -21,7 +21,7 @@ testCases.forEach((testCase, index) => {
         {
           daysLeftTillCallNeeded: testCase.hoursLeftTillCallNeeded / 24,
           // @ts-ignore: Make fake person for test
-          person: { reminders: new RRuleSet() },
+          person: { reminders: [] },
         },
       ]);
 
