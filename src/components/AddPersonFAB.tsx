@@ -1,14 +1,13 @@
-import { PhoneNumberUtil } from 'google-libphonenumber';
 import { inject } from 'mobx-react';
 import React, { PureComponent } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 import { FAB } from 'react-native-paper';
 import { Contact } from 'react-native-select-contact';
 import { NavigationInjectedProps } from 'react-navigation';
-import { cypGreen, materialUILayout } from '../lib/Constants';
+import { cypGreen, defaultReminder, materialUILayout } from '../lib/Constants';
 import Contacts from '../lib/Contacts';
+import Format from '../lib/Format';
 import Fremium from '../lib/Fremium';
-import { formatPhoneNumber } from '../lib/Helpers';
 import { Store } from '../lib/Store';
 import { Frequency, Person } from '../Types';
 
@@ -19,13 +18,13 @@ interface Props extends NavigationInjectedProps {
 
 export default inject('store')(
   class AddPersonFAB extends PureComponent<Props> {
-    private phoneNumberUtil = PhoneNumberUtil.getInstance();
+    private format = new Format();
 
     public render() {
       return (
         <View style={styles.view}>
           <FAB
-            icon='person-add'
+            icon='account-plus'
             onPress={this.fremiumAddPerson}
             style={styles.fab}
             accessibilityLabel={'Add Contact'}
@@ -60,6 +59,7 @@ export default inject('store')(
             [],
             [],
             '',
+            defaultReminder,
           );
 
           this.props.onPress(newPerson);
@@ -69,7 +69,7 @@ export default inject('store')(
 
     private formatPhones = (contact: Contact): Contact => {
       const phones = contact.phones.map((phoneEntry) => ({
-        number: formatPhoneNumber(this.phoneNumberUtil, phoneEntry.number),
+        number: this.format.formatPhoneNumber(phoneEntry.number),
         type: phoneEntry.type,
       }));
 

@@ -2,10 +2,11 @@ import React, { PureComponent } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, Menu, Subheading } from 'react-native-paper';
 import { materialUILayout } from '../lib/Constants';
-import { FrequencyMap, Person } from '../Types';
 
 interface Props {
-  person: Person;
+  title: string;
+  labels: string[];
+  selectedIndex: number;
   onSelect: (index: number) => void;
 }
 
@@ -13,7 +14,7 @@ interface State {
   visible: boolean;
 }
 
-export default class FrequencyPicker extends PureComponent<Props, State> {
+export default class CypMenu extends PureComponent<Props, State> {
   constructor(props) {
     super(props);
 
@@ -25,20 +26,20 @@ export default class FrequencyPicker extends PureComponent<Props, State> {
   public render() {
     return (
       <View style={styles.view}>
-        <Subheading style={styles.label}>Frequency:</Subheading>
+        <Subheading style={styles.label}>{this.props.title}</Subheading>
         <Menu
           visible={this.state.visible}
           onDismiss={this.closeMenu}
           anchor={
             <Button mode='outlined' color='black' onPress={this.openMenu}>
-              {FrequencyMap.get(this.props.person.frequency)!.text}
+              {this.props.labels[this.props.selectedIndex]}
             </Button>
           }
         >
-          {Array.from(FrequencyMap, (entry, index) => (
+          {this.props.labels.map((label, index) => (
             <Menu.Item
               key={index}
-              title={entry[1].text}
+              title={label}
               onPress={() => this.select(index)}
             />
           ))}

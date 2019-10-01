@@ -61,7 +61,7 @@ export default class AppLogic {
           '',
           person.contact.phones[0].number,
           0,
-          nc.getId(),
+          nc.getTime().toString(),
           CallType.INCOMING,
         ),
     );

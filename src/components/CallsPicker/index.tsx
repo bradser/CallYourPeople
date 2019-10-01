@@ -51,9 +51,9 @@ export default class CallsPicker extends Component<Props> {
     this.modalDialog!.open();
   }
 
-  private removeCall = (call: SelectedItem): void =>
+  private removeCall = (call: Call): void =>
     this.props.onSelect(
-      this.props.selected.filter((c: Call) => c.getId() !== call.getId()),
+      this.props.selected.filter((c: Call) => !c.isEqual(call)),
     )
 
   private selectCall = (call: Call): void =>

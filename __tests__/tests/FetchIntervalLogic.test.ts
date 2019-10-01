@@ -1,5 +1,5 @@
 import moment from 'moment';
-import RRule, { RRuleSet } from 'rrule';
+import { defaultReminder } from '../../src/lib/Constants';
 import FetchIntervalLogic from '../../src/lib/FetchIntervalLogic';
 import { FetchIntervalLogicTestCase } from '../Types';
 
@@ -15,15 +15,15 @@ const testCases = [
 
 testCases.forEach((testCase, index) => {
   it(`case #${index}`, () => {
-    const minInterval = new FetchIntervalLogic(moment(testCase.now))
-
-      .getMinimumFetchInterval([
-        {
-          daysLeftTillCallNeeded: testCase.hoursLeftTillCallNeeded / 24,
-          // @ts-ignore: Make fake person for test
-          person: { reminders: [] },
-        },
-      ]);
+    const minInterval = new FetchIntervalLogic(
+      moment(testCase.now),
+    ).getMinimumFetchInterval([
+      {
+        daysLeftTillCallNeeded: testCase.hoursLeftTillCallNeeded / 24,
+        // @ts-ignore: Make fake person for test
+        person: { reminders: defaultReminder },
+      },
+    ]);
 
     expect(minInterval).toBe(testCase.intervalMinutes * 60);
   });

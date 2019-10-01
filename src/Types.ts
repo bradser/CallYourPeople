@@ -3,6 +3,8 @@ import { decorate, observable } from 'mobx';
 import { Contact, PhoneEntry } from 'react-native-select-contact';
 import { NavigationParams } from 'react-navigation';
 import RRule from 'rrule';
+import { weekdaysNarrowPlus } from './lib/Constants';
+import { flatMap, getHourText } from './lib/Helpers';
 
 export class Person {
   constructor(
@@ -22,6 +24,7 @@ decorate(Person, {
   frequency: observable,
   nonCall: observable,
   note: observable,
+  reminders: observable,
   removed: observable,
 });
 
@@ -53,12 +56,12 @@ export const FrequencyMap = new Map<number, FrequencyValues>([
   ],
 ]);
 
-export interface SelectedItem {
+export interface SelectedItem<T> {
   getLabel(): string;
-  getId(): string;
+  isEqual(item: T): boolean;
 }
 
-export class Call implements SelectedItem {
+export class Call implements SelectedItem<Call> {
   constructor(
     public dateTime: string,
     public duration: number,
@@ -70,7 +73,7 @@ export class Call implements SelectedItem {
   ) {}
 
   public getLabel = () => this.dateTime;
-  public getId = () => this.timestamp;
+  public isEqual = (item: Call) => this.timestamp === item.timestamp;
 }
 
 export enum CallType {
@@ -96,7 +99,63 @@ export class DetailsNavigationProps implements NavigationParams {
   constructor(public log: Call[], public contact: Contact) {}
 }
 
-export class DateItem extends Date implements SelectedItem {
+export class DateItem extends Date implements SelectedItem<DateItem> {
   public getLabel = () => this.toDateString();
-  public getId = () => this.valueOf().toString();
+  public isEqual = (item: DateItem) => this.valueOf() === item.valueOf();
+}
+
+export class CypRRule implements SelectedItem<CypRRule> {
+  public static convertFromRRules = (rRules: RRule[]): CypRRule[] => {
+    const converted = flatMap(
+      (rrule) =>
+        rrule.options.byhour.map(
+          (hour) => new CypRRule(new Set<number>(rrule.options.byweekday), hour),
+        ),
+      rRules,
+    );
+
+    return converted;
+  }
+
+  public static convertToRRules = (cypRRules: CypRRule[]): RRule[] => {
+    // from https://stackoverflow.com/a/47752730/11385892
+    const daysMap = cypRRules.reduce(
+      (entryMap, e) =>
+        entryMap.set(JSON.stringify(Array.from(e.days)), [
+          ...(entryMap.get(JSON.stringify(Array.from(e.days))) || []),
+          e.hour,
+        ]),
+      new Map(),
+    );
+
+    const converted = Array.from(
+      daysMap,
+      (entry, index) =>
+        new RRule({
+          byhour: entry[1],
+          byminute: [0],
+          bysecond: [0],
+          byweekday: JSON.parse(entry[0]),
+          count: 1,
+          freq: RRule.DAILY,
+          interval: 1,
+        }),
+    );
+
+    return converted;
+  }
+
+  constructor(public days: Set<number>, public hour: number) {}
+
+  public isEqual = (item: CypRRule) =>
+    [...this.days].sort().toString() === [...item.days].sort().toString() &&
+    this.hour === item.hour
+
+  public getLabel = () =>
+    Array.from(this.days)
+      .sort()
+      .map((day) => weekdaysNarrowPlus[day])
+      .join(', ') +
+    ' - ' +
+    getHourText(this.hour)
 }

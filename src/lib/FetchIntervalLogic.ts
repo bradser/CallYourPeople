@@ -42,34 +42,19 @@ export default class FetchIntervalLogic {
     notifyPerson: NotifyPerson,
     compareMoment: moment.Moment,
   ): number => {
-    let reminders = notifyPerson.person.reminders;
-
-    if (!reminders || reminders.length === 0) {
-      reminders = [
-        new RRule({
-          byhour: [7, 18],
-          byminute: [0],
-          bysecond: [0],
-          count: 1,
-          freq: RRule.DAILY,
-          interval: 1,
-        }),
-      ];
-    }
+    // Conversion due to https://github.com/jakubroztocil/rrule#important-use-utc-dates
+    const convertedCompareMomemnt = compareMoment
+      .add(this.now.utcOffset(), 'minutes')
+      .toDate();
 
     const ruleSet = new RRuleSet();
+    notifyPerson.person.reminders.forEach((rrule) => {
+      const newRRule = new RRule({
+        ...rrule.options,
+        dtstart: convertedCompareMomemnt,
+      });
 
-    // Conversion due to https://github.com/jakubroztocil/rrule#important-use-utc-dates
-    const convertedCompareMomemnt = compareMoment.add(
-      this.now.utcOffset(),
-      'minutes',
-    ).toDate();
-
-    reminders.forEach((rrule) => {
-      // @ts-ignore: Update dtstart only
-      rrule.options.dtstart = convertedCompareMomemnt;
-
-      ruleSet.rrule(rrule);
+      ruleSet.rrule(newRRule);
     });
 
     const next = ruleSet.all().shift()!;

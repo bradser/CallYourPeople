@@ -44,5 +44,9 @@ export default class DeletePersonButton extends Component<Props> {
 }
 
 const styles = StyleSheet.create({
-  deleteButton: { alignSelf: 'center', marginTop: materialUILayout.highRowHeight },
+  deleteButton: {
+    alignSelf: 'center',
+    marginBottom: materialUILayout.smallSpace,
+    marginTop: materialUILayout.highRowHeight,
+  },
 });

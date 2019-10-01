@@ -24,11 +24,11 @@ export default class ItemsPicker extends Component<Props> {
           <View>
             <FAB
               small
-              icon='add'
+              icon='plus'
               style={styles.fab}
               onPress={this.props.onAdd}
             />
-            {this.props.helpText && <IconButton onPress={this.openHelp} icon='help' size={24} />}
+            {this.props.helpText && <IconButton onPress={this.openHelp} icon='help-circle-outline' size={24} />}
           </View>
           <View style={styles.viewFullWidth}>
             {this.props.selected.map((item, index) => (

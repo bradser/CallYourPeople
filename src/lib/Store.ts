@@ -1,7 +1,9 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import { IObservableArray, observable, runInAction } from 'mobx';
 import Sentry from 'react-native-sentry';
+import RRule from 'rrule';
 import { Call, DateItem, Person } from '../Types';
+import { defaultReminder } from './Constants';
 
 export class Store {
   public people = (observable([]) as unknown) as IObservableArray<Person>;
@@ -35,9 +37,22 @@ export class Store {
                 });
               }
 
+              if (key === 'reminders') {
+                const reminders = value.map((item) => new RRule(item.origOptions));
+
+                return reminders;
+              }
+
               return value;
             }),
           );
+
+          // TODO: remove default initialization eventually
+          this.people.forEach((person) => {
+            if (!person.reminders || person.reminders.length === 0) {
+              person.reminders = observable(defaultReminder);
+            }
+          });
         });
       }
     });

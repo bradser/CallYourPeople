@@ -27,7 +27,7 @@
     "react-native-gesture-handler": "^1.2.1",
     "react-native-iap": "https://github.com/bradser/react-native-iap#curious",
     "react-native-localize": "^1.2.1",
-    "react-native-paper": "^2.15.0",
+    "react-native-paper": "3.0.0-alpha.5",
     "react-native-push-notification-ce": "https://github.com/xuwilliam/react-native-push-notification-CE",
     "react-native-reanimated": "^1.0.1",
     "react-native-select-contact": "1.2.0",

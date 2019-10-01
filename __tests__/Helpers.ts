@@ -29,7 +29,7 @@ export const getPerson = (
     removed,
     nonCall,
     '',
-    new RRuleSet(),
+    [],
   );
 
 export const getCall = (now) => (

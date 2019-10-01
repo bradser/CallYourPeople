@@ -26,9 +26,9 @@ export default class NotificationScheduler {
       log,
     );
 
-    const minimumFetchInterval = new FetchIntervalLogic(now).getMinimumFetchInterval(
-      notifyPeople,
-    );
+    const minimumFetchInterval = new FetchIntervalLogic(
+      now,
+    ).getMinimumFetchInterval(notifyPeople);
 
     this.handleBackgroundConfiguration(store, log, minimumFetchInterval);
 
@@ -61,7 +61,9 @@ export default class NotificationScheduler {
   }
 
   private handleNotifications = (notifyPeople: NotifyPerson[]) => {
-    const intervals = new FetchIntervalLogic(this.now!).getFetchIntervals(notifyPeople);
+    const intervals = new FetchIntervalLogic(this.now!).getFetchIntervals(
+      notifyPeople,
+    );
 
     for (let i = 0; i < notifyPeople.length; i++) {
       const notifyPerson = notifyPeople[i];
@@ -69,10 +71,19 @@ export default class NotificationScheduler {
 
       this.notifyCallback({
         largeIcon: 'ic_contact_phone',
-        message: moment().add(interval, 'm').toDate().toString(),
+        message:
+          moment()
+            .add(interval, 'm')
+            .toDate()
+            .toString() +
+          ' : ' +
+          moment()
+            .add(notifyPerson.daysLeftTillCallNeeded * 24 * 60, 'm')
+            .toDate()
+            .toString(),
         smallIcon: 'ic_contact_phone',
         tag: notifyPerson.person.contact.recordId,
-        title: `${notifyPerson.person.contact.name} - ${notifyPerson.daysLeftTillCallNeeded}`,
+        title: `${notifyPerson.person.contact.name}`,
       });
     }
 

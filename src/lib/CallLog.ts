@@ -1,8 +1,7 @@
-import { PhoneNumberUtil } from 'google-libphonenumber';
 import { PermissionsAndroid } from 'react-native';
 import CallLogs from 'react-native-call-log';
+import Format from '../lib/Format';
 import { Call, GetLogCallback } from '../Types';
-import { formatPhoneNumber } from './Helpers';
 
 export const getLogWithPermissions: GetLogCallback = async () => {
   const granted = await PermissionsAndroid.request(
@@ -23,8 +22,6 @@ export const getLog: GetLogCallback = async () => {
   // TODO: use load(LIMIT); compare to max perodicity, to reduce processing
   const log = (await CallLogs.loadAll()) as Call[];
 
-  const phoneNumberUtil = PhoneNumberUtil.getInstance();
-
   const parsedLog = log.map(
     (call) =>
       new Call(
@@ -32,7 +29,7 @@ export const getLog: GetLogCallback = async () => {
         call.duration,
         call.name,
 
-        formatPhoneNumber(phoneNumberUtil, call.phoneNumber),
+        new Format().formatPhoneNumber(call.phoneNumber),
         call.rawType,
         call.timestamp,
         call.type,

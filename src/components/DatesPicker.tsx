@@ -53,9 +53,9 @@ export default inject('store')(
         }
       }
 
-      private removeDateItem = (dateItem: SelectedItem): void => {
+      private removeDateItem = (dateItem: DateItem): void => {
         const filtered = this.props.person.nonCall.filter(
-          (c: DateItem) => c.valueOf().toString() !== dateItem.getId(),
+          (c: DateItem) => !c.isEqual(dateItem),
         );
 
         this.props.store!.update(this.props.person, {

@@ -1,47 +1,6 @@
-import { PhoneNumberFormat, PhoneNumberUtil } from 'google-libphonenumber';
-import { getLocales } from 'react-native-localize';
+import moment from 'moment';
 
-export const formatPhoneNumber = (
-  phoneNumberUtil: PhoneNumberUtil,
-  phoneNumber: string,
-): string => {
-  return format(
-    phoneNumberUtil,
-    phoneNumber,
-    phoneNumber,
-    PhoneNumberFormat.E164,
-  );
-};
+export const getHourText = (hour: number): string =>
+  moment(hour, 'hour').format('ha');
 
-export const prettifyPhoneNumber = (
-  phoneNumberUtil: PhoneNumberUtil,
-  phoneNumber: string,
-): string => {
-  return format(phoneNumberUtil, phoneNumber, '', PhoneNumberFormat.NATIONAL);
-};
-
-const format = (
-  phoneNumberUtil: PhoneNumberUtil,
-  phoneNumber: string,
-  defaultPhoneNumber: string,
-  formatType: number,
-): string => {
-  let formattedPhone;
-
-  try {
-    if (PhoneNumberUtil.isViablePhoneNumber(phoneNumber)) {
-      const parsedPhone = phoneNumberUtil.parse(
-        phoneNumber,
-        getLocales()[0].countryCode,
-      );
-
-      formattedPhone = phoneNumberUtil.format(parsedPhone, formatType);
-    } else {
-      formattedPhone = defaultPhoneNumber;
-    }
-  } catch (error) {
-    formattedPhone = defaultPhoneNumber;
-  }
-
-  return formattedPhone;
-};
+export const flatMap = (f, xs) => xs.reduce((acc, x) => acc.concat(f(x)), []);

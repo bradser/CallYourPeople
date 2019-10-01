@@ -59,6 +59,7 @@ export default inject('store')(
         this.fremium = new Fremium(this.props.store!);
       }
 
+      // TODO: resolve multiple checks in componentDidMount & NavigationEvents' onWillFocus
       public componentDidMount() {
         // If we are being launched by a notification, don't checkAndNotify,
         // otherwise we may generate a new notification to replace

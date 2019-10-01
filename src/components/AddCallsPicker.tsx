@@ -21,7 +21,7 @@ export default inject('store')(
             log={this.props.log}
             selected={this.props.person.added}
             filter={this.filter}
-            onSelect={this.addCalls}
+            onSelect={this.selectedCalls}
           />
         );
       }
@@ -31,7 +31,7 @@ export default inject('store')(
           (phone) => phone.number === value.phoneNumber,
         )
 
-      private addCalls = (newSelected: Call[]): void =>
+      private selectedCalls = (newSelected: Call[]): void =>
         this.props.store!.update(this.props.person, {
           added: newSelected,
         })

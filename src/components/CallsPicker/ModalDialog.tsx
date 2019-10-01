@@ -1,9 +1,8 @@
-import { PhoneNumberUtil } from 'google-libphonenumber';
 import React, { Component } from 'react';
 import { ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { Button, List, Modal, Portal } from 'react-native-paper';
 import { cypGreen, materialUILayout } from '../../lib/Constants';
-import { prettifyPhoneNumber } from '../../lib/Helpers';
+import Format from '../../lib/Format';
 import { Call } from '../../Types';
 
 interface Props {
@@ -16,7 +15,7 @@ interface State {
 }
 
 export default class ModalDialog extends Component<Props, State> {
-  private phoneNumberUtil = PhoneNumberUtil.getInstance();
+  private format = new Format();
 
   constructor(props) {
     super(props);
@@ -58,10 +57,9 @@ export default class ModalDialog extends Component<Props, State> {
 
   private getListItemText = (call: Call): string => {
     return `${call.name ||
-      prettifyPhoneNumber(
-        this.phoneNumberUtil,
-        call.phoneNumber,
-      )} - ${Math.round(call.duration / 60).toString()} minutes`;
+      this.format.prettifyPhoneNumber(call.phoneNumber)} - ${Math.round(
+      call.duration / 60,
+    ).toString()} minutes`;
   }
 
   private selectCall = (call: Call): void => {
@@ -88,5 +86,5 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     marginHorizontal: materialUILayout.margin,
     marginVertical: materialUILayout.margin * 2,
-  }
+  },
 });

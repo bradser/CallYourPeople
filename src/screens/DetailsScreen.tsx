@@ -9,12 +9,14 @@ import { NavigationInjectedProps } from 'react-navigation';
 import AddCallsPicker from '../components/AddCallsPicker';
 import DatesPicker from '../components/DatesPicker';
 import DeletePersonButton from '../components/DeletePersonButton';
-import FrequencyPicker from '../components/FrequencyPicker';
 import { contactLink } from '../components/Link';
+import Menu from '../components/CypMenu';
 import RemoveCallsPicker from '../components/RemoveCallsPicker';
 import { cypGreen, materialUILayout } from '../lib/Constants';
 import { Store } from '../lib/Store';
-import { Call, DetailsNavigationProps, Person } from '../Types';
+import { Call, DetailsNavigationProps, FrequencyMap, Person } from '../Types';
+import RemindersPicker from '../components/RemindersPicker';
+import CypMenu from '../components/CypMenu';
 
 interface Props extends NavigationInjectedProps<DetailsNavigationProps> {
   store?: Store;
@@ -28,7 +30,7 @@ export default inject('store')(
           headerLeft: (
             <IconButton
               onPress={() => navigation.goBack()}
-              icon='arrow-back'
+              icon='arrow-left'
               size={20}
             />
           ),
@@ -64,8 +66,10 @@ export default inject('store')(
               <Icon name='phone' size={30} style={styles.icon} />
               <Title>{person.contact.name}</Title>
             </TouchableOpacity>
-            <FrequencyPicker
-              person={person}
+            <CypMenu
+              title={'Frequency:'}
+              labels={Array.from(FrequencyMap).map((value) => value[1].text)}
+              selectedIndex={person.frequency.valueOf()}
               onSelect={this.frequencyOnSelect(person)}
             />
             <TextInput
@@ -81,6 +85,8 @@ export default inject('store')(
             <RemoveCallsPicker person={person} log={this.log} />
             {this.divider()}
             <DatesPicker person={person} />
+            {this.divider()}
+            <RemindersPicker person={person} />
             <DeletePersonButton person={person} onPress={this.deletePerson} />
           </ScrollView>
         ) : null;
@@ -126,5 +132,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     marginVertical: materialUILayout.rowMargin,
   },
-  scrollView: { margin: materialUILayout.margin, padding: materialUILayout.smallSpace  },
+  scrollView: {
+    margin: materialUILayout.margin,
+    padding: materialUILayout.smallSpace,
+  },
 });
