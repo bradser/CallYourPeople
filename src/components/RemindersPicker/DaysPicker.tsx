@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import { StyleSheet } from 'react-native';
 import { Text, ToggleButton } from 'react-native-paper';
-import { weekdaysNarrowPlus } from '../../lib/Constants';
+import { materialUILayout, weekdaysNarrowPlus } from '../../lib/Constants';
 
 interface Props {
   dayIndexes: Set<number>;
@@ -10,7 +11,7 @@ interface Props {
 export default class DaysPicker extends Component<Props> {
   public render() {
     return (
-      <ToggleButton.Row onValueChange={this.onValueChange}>
+      <ToggleButton.Row onValueChange={this.onValueChange} style={styles.row}>
         {weekdaysNarrowPlus.map((day, index) =>
           this.getButton(index, day),
         )}
@@ -46,3 +47,10 @@ export default class DaysPicker extends Component<Props> {
     this.props.onSelect(this.props.dayIndexes);
   }
 }
+
+const styles = StyleSheet.create({
+  row: {
+    margin: materialUILayout.horizontalSpace,
+    marginBottom: materialUILayout.margin,
+  },
+});

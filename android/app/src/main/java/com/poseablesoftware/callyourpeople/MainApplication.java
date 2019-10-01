@@ -5,6 +5,7 @@ import android.app.Application;
 import com.burnweb.rnsendintent.RNSendIntentPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.facebook.react.ReactApplication;
+import com.wheelpicker.WheelPickerPackage;
 import com.ismaeld.RNBuildConfig.RNBuildConfigPackage;
 import com.dooboolab.RNIap.RNIapPackage;
 import com.microsoft.codepush.react.CodePush;
@@ -47,6 +48,7 @@ public class MainApplication extends Application implements ReactApplication {
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
+            new WheelPickerPackage(),
                     new RNBuildConfigPackage(BuildConfig.class),
                     new RNIapPackage(),
                     new CodePush(getResources().getString(R.string.reactNativeCodePush_androidDeploymentKey), getApplicationContext(), BuildConfig.DEBUG),

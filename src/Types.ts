@@ -3,7 +3,7 @@ import { decorate, observable } from 'mobx';
 import { Contact, PhoneEntry } from 'react-native-select-contact';
 import { NavigationParams } from 'react-navigation';
 import RRule from 'rrule';
-import { weekdaysNarrowPlus } from './lib/Constants';
+import { weekdaysAbbreviations, weekdaysNarrowPlus } from './lib/Constants';
 import { flatMap, getHourText } from './lib/Helpers';
 
 export class Person {
@@ -56,8 +56,11 @@ export const FrequencyMap = new Map<number, FrequencyValues>([
   ],
 ]);
 
-export interface SelectedItem<T> {
+export interface LabelItem {
   getLabel(): string;
+}
+
+export interface SelectedItem<T> extends LabelItem {
   isEqual(item: T): boolean;
 }
 
@@ -145,17 +148,34 @@ export class CypRRule implements SelectedItem<CypRRule> {
     return converted;
   }
 
-  constructor(public days: Set<number>, public hour: number) {}
+  constructor(
+    public days: Set<number> = new Set<number>(),
+    public hour: number = 0,
+  ) {}
 
   public isEqual = (item: CypRRule) =>
     [...this.days].sort().toString() === [...item.days].sort().toString() &&
     this.hour === item.hour
 
   public getLabel = () =>
-    Array.from(this.days)
-      .sort()
-      .map((day) => weekdaysNarrowPlus[day])
-      .join(', ') +
-    ' - ' +
-    getHourText(this.hour)
+    this.abbreviateDays() + ' : ' + getHourText(this.hour)
+
+  private abbreviateDays = (): string => {
+    const weekdays = Array.from(this.days)
+      .filter((day) => day <= 4)
+      .sort();
+
+    let out = weekdaysAbbreviations.has(weekdays.toString())
+      ? weekdaysAbbreviations.get(weekdays.toString())
+      : weekdays.map((day) => weekdaysNarrowPlus[day]).join(', ');
+
+    const weekendDays = Array.from(this.days)
+      .filter((day) => day >= 5);
+
+    if (weekendDays.length > 0) {
+      out += ', ' + weekendDays.sort().map((day) => weekdaysNarrowPlus[day]).join(', ');
+    }
+
+    return out!;
+  }
 }

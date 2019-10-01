@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { Button, List, Modal, Portal } from 'react-native-paper';
-import { cypGreen, materialUILayout } from '../../lib/Constants';
+import { materialUILayout } from '../../lib/Constants';
 import Format from '../../lib/Format';
 import { Call } from '../../Types';
 
@@ -49,7 +49,9 @@ export default class ModalDialog extends Component<Props, State> {
               </TouchableOpacity>
             ))}
           </ScrollView>
-          <Button onPress={this.close}>Close</Button>
+          <Button style={styles.button} onPress={this.close}>
+            Close
+          </Button>
         </Modal>
       </Portal>
     );
@@ -74,17 +76,13 @@ export default class ModalDialog extends Component<Props, State> {
 }
 
 const styles = StyleSheet.create({
-  fab: {
-    backgroundColor: cypGreen,
-    height: 40,
-    marginLeft: materialUILayout.smallSpace,
-    marginRight: materialUILayout.margin,
-    marginTop: materialUILayout.smallSpace,
-    width: 40,
+  button: {
+    marginTop: materialUILayout.margin,
   },
   modal: {
     backgroundColor: 'white',
     marginHorizontal: materialUILayout.margin,
-    marginVertical: materialUILayout.margin * 2,
+    marginVertical: materialUILayout.highRowHeight,
+    padding: materialUILayout.margin,
   },
 });

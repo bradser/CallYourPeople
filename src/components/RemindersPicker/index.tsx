@@ -51,13 +51,13 @@ export default inject('store')(
         this.updateStore(cypRRules.concat(reminder));
       }
 
-      private removeReminder = (cypRRule: CypRRule): void => {
+      private removeReminder = (cypRRule: SelectedItem<CypRRule>): void => {
         const cypRRules = CypRRule.convertFromRRules(
           this.props.person.reminders,
         );
 
         this.updateStore(
-          cypRRules.filter((c: CypRRule) => !c.isEqual(cypRRule)),
+          cypRRules.filter((c: CypRRule) => !cypRRule.isEqual(c)),
         );
       }
 

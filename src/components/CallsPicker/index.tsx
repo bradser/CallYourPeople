@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { Call, SelectedItem } from '../../Types';
 import ItemsPicker from '../ItemsPicker';
 import ModalDialog from './ModalDialog';
@@ -51,9 +51,9 @@ export default class CallsPicker extends Component<Props> {
     this.modalDialog!.open();
   }
 
-  private removeCall = (call: Call): void =>
+  private removeCall = (call: SelectedItem<Call>): void =>
     this.props.onSelect(
-      this.props.selected.filter((c: Call) => !c.isEqual(call)),
+      this.props.selected.filter((c: Call) => !call.isEqual(c)),
     )
 
   private selectCall = (call: Call): void =>

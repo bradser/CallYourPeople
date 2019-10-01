@@ -1,6 +1,6 @@
 import { inject, observer } from 'mobx-react';
 import React, { Component } from 'react';
-import { DatePickerAndroid, StyleSheet } from 'react-native';
+import { DatePickerAndroid } from 'react-native';
 import Sentry from 'react-native-sentry';
 import Fremium from '../lib/Fremium';
 import { Store } from '../lib/Store';
@@ -37,6 +37,7 @@ export default inject('store')(
 
       private add = async (): Promise<void> => {
         try {
+          // @ts-ignore problem with types on DatePickerAndroid
           const { action, year, month, day } = await DatePickerAndroid.open({
             date: new Date(),
           });
@@ -53,9 +54,9 @@ export default inject('store')(
         }
       }
 
-      private removeDateItem = (dateItem: DateItem): void => {
+      private removeDateItem = (dateItem: SelectedItem<DateItem>): void => {
         const filtered = this.props.person.nonCall.filter(
-          (c: DateItem) => !c.isEqual(dateItem),
+          (c: DateItem) => !dateItem.isEqual(c),
         );
 
         this.props.store!.update(this.props.person, {

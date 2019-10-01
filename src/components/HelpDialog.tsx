@@ -51,7 +51,6 @@ const styles = StyleSheet.create({
   modal: {
     backgroundColor: 'white',
     marginHorizontal: materialUILayout.margin,
-    marginVertical: materialUILayout.margin * 2,
     padding: materialUILayout.margin,
   },
   text: {

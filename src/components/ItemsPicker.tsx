@@ -5,15 +5,15 @@ import { cypGreen, materialUILayout } from '../lib/Constants';
 import { SelectedItem } from '../Types';
 import HelpDialog from './HelpDialog';
 
-interface Props {
+interface Props<T> {
   title: string;
-  selected: SelectedItem[];
+  selected: Array<SelectedItem<T>>;
   helpText?: string;
   onAdd: () => void;
-  onRemove: (removed: SelectedItem) => void;
+  onRemove: (removed: SelectedItem<T>) => void;
 }
 
-export default class ItemsPicker extends Component<Props> {
+export default class ItemsPicker<T> extends Component<Props<T>> {
   private helpDialog: HelpDialog | null = null;
 
   public render() {
@@ -28,7 +28,13 @@ export default class ItemsPicker extends Component<Props> {
               style={styles.fab}
               onPress={this.props.onAdd}
             />
-            {this.props.helpText && <IconButton onPress={this.openHelp} icon='help-circle-outline' size={24} />}
+            {this.props.helpText && (
+              <IconButton
+                onPress={this.openHelp}
+                icon='help-circle-outline'
+                size={24}
+              />
+            )}
           </View>
           <View style={styles.viewFullWidth}>
             {this.props.selected.map((item, index) => (

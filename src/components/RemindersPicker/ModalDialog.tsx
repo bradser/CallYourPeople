@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { StyleSheet } from 'react-native';
 import { Button, Modal, Portal } from 'react-native-paper';
-import { cypGreen, materialUILayout } from '../../lib/Constants';
+import { WheelPicker } from 'react-native-wheel-picker-android';
+import { hours, materialUILayout } from '../../lib/Constants';
 import { CypRRule } from '../../Types';
-import CypMenu from '../CypMenu';
 import DaysPicker from './DaysPicker';
 
 interface Props {
@@ -20,13 +20,13 @@ export default class ModalDialog extends Component<Props, State> {
     super(props);
 
     this.state = {
-      cypRRule: new CypRRule(new Set<number>(), 0),
+      cypRRule: new CypRRule(),
       visible: false,
     };
   }
 
   public open = (): void => {
-    this.setState({ cypRRule: new CypRRule(new Set<number>(), 0), visible: true });
+    this.setState({ cypRRule: new CypRRule(), visible: true });
   }
 
   public render() {
@@ -40,39 +40,12 @@ export default class ModalDialog extends Component<Props, State> {
             dayIndexes={new Set<number>(this.state.cypRRule.days)}
             onSelect={this.selectDays}
           />
-          <CypMenu
-            title={'Hour:'}
-            labels={[
-              '12 am',
-              '1 am',
-              '2 am',
-              '3 am',
-              '4 am',
-              '5 am',
-              '6 am',
-              '7 am',
-              '8 am',
-              '9 am',
-              '10 am',
-              '11 am',
-              '12 pm',
-              '1 pm',
-              '2 pm',
-              '3 pm',
-              '4 pm',
-              '5 pm',
-              '6 pm',
-              '7 pm',
-              '8 pm',
-              '9 pm',
-              '10 pm',
-              '11 pm',
-            ]}
-            selectedIndex={this.state.cypRRule.hour}
-            onSelect={this.selectHour}
+          <WheelPicker
+            data={hours}
+            selectedItem={this.state.cypRRule.hour}
+            onItemSelected={this.selectHour}
           />
-
-          <Button onPress={this.close}>Close</Button>
+          <Button onPress={this.close} style={styles.button}>Close</Button>
         </Modal>
       </Portal>
     );
@@ -91,24 +64,25 @@ export default class ModalDialog extends Component<Props, State> {
   }
 
   private close = (): void => {
-    this.setState({ visible: false });
+    if (this.state.cypRRule.days.size > 0) {
+      this.props.onSelect(this.state.cypRRule);
+    }
 
-    this.props.onSelect(this.state.cypRRule);
+    this.setState({ visible: false });
   }
 }
 
 const styles = StyleSheet.create({
-  fab: {
-    backgroundColor: cypGreen,
-    height: 40,
-    marginLeft: materialUILayout.smallSpace,
-    marginRight: materialUILayout.margin,
-    marginTop: materialUILayout.smallSpace,
-    width: 40,
+  button: {
+    alignSelf: 'stretch',
   },
   modal: {
+    alignItems: 'center',
     backgroundColor: 'white',
     marginHorizontal: materialUILayout.margin,
-    marginVertical: materialUILayout.margin * 2,
+    padding: materialUILayout.margin,
+  },
+  wheel: {
+    marginTop: materialUILayout.margin,
   },
 });
