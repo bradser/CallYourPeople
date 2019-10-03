@@ -33,7 +33,7 @@ export default inject('store')(
         headerRight: (
           <Button
             onPress={() => {
-              Alert.alert(`Device ID: ${DeviceInfo.getUniqueID()}`);
+              Alert.alert(`Device ID: ${DeviceInfo.getUniqueID().toLocaleUpperCase().match(/.{1,3}/g)!.join('-')}`);
             }}
           />
         ),
