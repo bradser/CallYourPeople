@@ -81,9 +81,8 @@ project.ext.react = [
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
+apply from: "../../node_modules/@sentry/react-native/sentry.gradle"
 apply from: "../../node_modules/react-native-code-push/android/codepush.gradle"
-
-apply from: "../../node_modules/react-native-sentry/sentry.gradle"
 
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 
@@ -165,6 +164,8 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-device-info')
+    implementation project(':@sentry_react-native')
     implementation project(':react-native-wheel-picker-android')
     implementation project(':react-native-localize')
     implementation project(':react-native-build-config')
@@ -174,7 +175,6 @@ dependencies {
     implementation project(':appcenter')
     implementation project(':react-native-reanimated')
     compile project(':react-native-gesture-handler')
-    compile project(':react-native-sentry')
     compile project(':react-native-send-intent')
     compile project(':@react-native-community_async-storage')
     compile project(':react-native-vector-icons')

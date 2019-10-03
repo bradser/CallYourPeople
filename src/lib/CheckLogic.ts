@@ -1,5 +1,5 @@
+import * as Sentry from '@sentry/react-native';
 import moment from 'moment';
-import { Sentry } from 'react-native-sentry';
 import { Call, CallType, FrequencyMap, Person } from '../Types';
 
 export default class CheckLogic {

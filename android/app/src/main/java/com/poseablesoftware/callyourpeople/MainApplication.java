@@ -5,6 +5,8 @@ import android.app.Application;
 import com.burnweb.rnsendintent.RNSendIntentPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.facebook.react.ReactApplication;
+import com.learnium.RNDeviceInfo.RNDeviceInfo;
+import io.sentry.RNSentryPackage;
 import com.wheelpicker.WheelPickerPackage;
 import com.ismaeld.RNBuildConfig.RNBuildConfigPackage;
 import com.dooboolab.RNIap.RNIapPackage;
@@ -14,7 +16,6 @@ import com.microsoft.appcenter.reactnative.appcenter.AppCenterReactNativePackage
 import com.swmansion.reanimated.ReanimatedPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 
-import io.sentry.RNSentryPackage;
 
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -48,6 +49,8 @@ public class MainApplication extends Application implements ReactApplication {
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
+            new RNDeviceInfo(),
+            new RNSentryPackage(),
             new WheelPickerPackage(),
                     new RNBuildConfigPackage(BuildConfig.class),
                     new RNIapPackage(),
@@ -56,7 +59,6 @@ public class MainApplication extends Application implements ReactApplication {
                     new AppCenterReactNativePackage(MainApplication.this),
                     new ReanimatedPackage(),
                     new RNGestureHandlerPackage(),
-                    new RNSentryPackage(),
                     new RNSendIntentPackage(),
                     new AsyncStoragePackage(),
                     new VectorIconsPackage(),

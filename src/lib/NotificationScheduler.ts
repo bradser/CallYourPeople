@@ -1,6 +1,7 @@
+import * as Sentry from '@sentry/react-native';
 import moment from 'moment';
+import { NativeModules } from 'react-native';
 import BackgroundFetch from 'react-native-background-fetch';
-import { Sentry } from 'react-native-sentry';
 import { Call, NotifyCallback, NotifyPerson } from '../Types';
 import AppLogic from './AppLogic';
 import FetchIntervalLogic from './FetchIntervalLogic';

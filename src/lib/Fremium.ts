@@ -1,6 +1,6 @@
+import * as Sentry from '@sentry/react-native';
 import { Alert } from 'react-native';
 import * as RNIap from 'react-native-iap';
-import Sentry from 'react-native-sentry';
 import { Store } from './Store';
 
 export default class Fremium {

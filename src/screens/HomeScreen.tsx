@@ -1,7 +1,8 @@
 import { inject, observer } from 'mobx-react';
 import moment from 'moment';
 import React, { Component } from 'react';
-import { Dimensions, StyleSheet, View } from 'react-native';
+import { Alert, Dimensions, StyleSheet, View } from 'react-native';
+import DeviceInfo from 'react-native-device-info';
 import { Button, Text } from 'react-native-paper';
 import PushNotification from 'react-native-push-notification-ce';
 import { NavigationState, Route, TabBar, TabView } from 'react-native-tab-view';
@@ -29,6 +30,13 @@ export default inject('store')(
   observer(
     class HomeScreen extends Component<Props, State> {
       public static navigationOptions = {
+        headerRight: (
+          <Button
+            onPress={() => {
+              Alert.alert(`Device ID: ${DeviceInfo.getUniqueID()}`);
+            }}
+          />
+        ),
         headerStyle: { backgroundColor: cypGreen },
         title: 'Call Your People!',
       };

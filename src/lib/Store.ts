@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-community/async-storage';
+import * as Sentry from '@sentry/react-native';
 import { IObservableArray, observable, runInAction } from 'mobx';
-import Sentry from 'react-native-sentry';
 import RRule from 'rrule';
 import { Call, DateItem, Person } from '../Types';
 import { defaultReminder } from './Constants';
