@@ -26,7 +26,7 @@ export default inject('store')(
           <View>
             <ItemsPicker
               title={'Reminders'}
-              helpText={'Choose specific date/times to be reminded.'}
+              helpText={'Choose specific days/times to be reminded.'}
               selected={cypRRules}
               onAdd={this.openDialog}
               onRemove={this.removeReminder}

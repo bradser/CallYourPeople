@@ -1,5 +1,4 @@
 import { Provider } from 'mobx-react';
-import moment from 'moment';
 import React, { Component } from 'react';
 import { NativeModules } from 'react-native';
 import BackgroundFetch from 'react-native-background-fetch';
