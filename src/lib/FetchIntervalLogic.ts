@@ -13,7 +13,7 @@ export default class FetchIntervalLogic {
   public getMinimumFetchInterval = (notifyPeople: NotifyPerson[]): number => {
     if (notifyPeople.length === 0) {
       // @ts-ignore ignore rest of notifyPeople properties
-      notifyPeople = { person: { reminders: defaultReminder }};
+      notifyPeople.push({ person: { reminders: defaultReminder }});
     }
 
     const intervals = this.getFetchIntervals(notifyPeople);
