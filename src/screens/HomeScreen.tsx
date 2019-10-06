@@ -33,7 +33,12 @@ export default inject('store')(
         headerRight: (
           <Button
             onPress={() => {
-              Alert.alert(`Device ID: ${DeviceInfo.getUniqueID().toLocaleUpperCase().match(/.{1,3}/g)!.join('-')}`);
+              Alert.alert(
+                `Device ID: ${DeviceInfo.getUniqueID()
+                  .toLocaleUpperCase()
+                  .match(/.{1,3}/g)!
+                  .join('-')}`,
+              );
             }}
           />
         ),
@@ -67,7 +72,6 @@ export default inject('store')(
         this.fremium = new Fremium(this.props.store!);
       }
 
-      // TODO: resolve multiple checks in componentDidMount & NavigationEvents' onWillFocus
       public componentDidMount() {
         // If we are being launched by a notification, don't checkAndNotify,
         // otherwise we may generate a new notification to replace
@@ -84,7 +88,7 @@ export default inject('store')(
       public render() {
         return (
           <View style={styles.containerView}>
-            <NavigationEvents onWillFocus={this.check} />
+            <NavigationEvents onDidFocus={this.handleBack} />
             <TabView
               navigationState={this.state}
               renderScene={this.renderScene}
@@ -130,6 +134,12 @@ export default inject('store')(
             />
           </View>
         );
+      }
+
+      private handleBack = (event) => {
+        if (event.action.type === 'Navigation/COMPLETE_TRANSITION') {
+          this.check();
+        }
       }
 
       private renderScene = ({ route }) => {

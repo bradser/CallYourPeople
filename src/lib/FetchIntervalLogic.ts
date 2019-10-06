@@ -9,7 +9,7 @@ export default class FetchIntervalLogic {
     this.now = now;
   }
 
-  public getMinimumFetchInterval = (notifyPeople: NotifyPerson[]) => {
+  public getMinimumFetchInterval = (notifyPeople: NotifyPerson[]): number => {
     const intervals = this.getFetchIntervals(notifyPeople);
 
     return Math.min(...intervals);
@@ -43,7 +43,7 @@ export default class FetchIntervalLogic {
     compareMoment: moment.Moment,
   ): number => {
     // Conversion due to https://github.com/jakubroztocil/rrule#important-use-utc-dates
-    const convertedCompareMomemnt = compareMoment
+    const convertedCompareMoment = compareMoment
       .add(this.now.utcOffset(), 'minutes')
       .toDate();
 
@@ -51,7 +51,7 @@ export default class FetchIntervalLogic {
     notifyPerson.person.reminders.forEach((rrule) => {
       const newRRule = new RRule({
         ...rrule.options,
-        dtstart: convertedCompareMomemnt,
+        dtstart: convertedCompareMoment,
       });
 
       ruleSet.rrule(newRRule);
@@ -69,13 +69,13 @@ export default class FetchIntervalLogic {
     );
 
     return (
-      (convertedNext.getTime() -
+      Math.round(((convertedNext.getTime() -
         this.now
-          .clone()
           .toDate()
           .getTime()) /
       1000 /
-      60
-    ); // to get minutes
+      60) // to get minutes
+      + 1) // to round up to the next minute
+    );
   }
 }

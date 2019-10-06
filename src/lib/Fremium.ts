@@ -49,7 +49,11 @@ export default class Fremium {
       const purchase = await RNIap.buyProduct('Monthly');
 
       if (purchase && purchase.receiptId) {
-        Sentry.captureMessage(JSON.stringify(purchase));
+        Sentry.addBreadcrumb({
+          category: 'Purchase',
+          level: Sentry.Severity.Info,
+          message: JSON.stringify(purchase),
+        });
 
         await RNIap.notifyFulfillmentAmazon(purchase.receiptId, 'FULFILLED');
 

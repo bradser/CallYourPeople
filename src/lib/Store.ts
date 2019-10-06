@@ -87,7 +87,11 @@ export class Store {
 
         this.save();
       } else {
-        Sentry.captureMessage('remove: person not found');
+        Sentry.addBreadcrumb({
+          category: 'Store',
+          level: Sentry.Severity.Error,
+          message: 'remove: person not found',
+        });
       }
     });
   }
@@ -107,7 +111,11 @@ export class Store {
 
         this.save();
       } else {
-        Sentry.captureMessage('update: person not found');
+        Sentry.addBreadcrumb({
+          category: 'Store',
+          level: Sentry.Severity.Error,
+          message: 'update: person not found',
+        });
       }
     });
   }

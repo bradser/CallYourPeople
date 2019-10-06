@@ -1,7 +1,7 @@
 import * as Sentry from '@sentry/react-native';
 import moment from 'moment';
-import { NativeModules } from 'react-native';
-import BackgroundFetch from 'react-native-background-fetch';
+import { NativeComponent, NativeModules } from 'react-native';
+import BackgroundFetch, { BackgroundFetchStatus } from 'react-native-background-fetch';
 import { Call, NotifyCallback, NotifyPerson } from '../Types';
 import AppLogic from './AppLogic';
 import FetchIntervalLogic from './FetchIntervalLogic';
@@ -33,6 +33,15 @@ export default class NotificationScheduler {
 
     this.handleBackgroundConfiguration(store, log, minimumFetchInterval);
 
+    NativeModules.Ads.getJobsIntervalMillis().then((millis: number[]) => {
+        const converted = millis.map((milli) => milli / 1000 / 60);
+
+        Sentry.captureMessage(
+          minimumFetchInterval + ' - ' + JSON.stringify(converted),
+        );
+      },
+    );
+
     this.handleNotifications(notifyPeople);
 
     return notifyPeople;
@@ -51,18 +60,28 @@ export default class NotificationScheduler {
         stopOnTerminate: false,
       },
       async () => {
+        Sentry.addBreadcrumb({
+          category: 'Scheduling',
+          level: Sentry.Severity.Info,
+          message: 'BackgroundFetch',
+        });
+
         await this.invoke(store, log, moment());
 
         BackgroundFetch.finish(BackgroundFetch.FETCH_RESULT_NO_DATA);
       },
-      (error) => {
-        Sentry.captureException(new Error(error.toString())); // TODO: see if this is an error object
+      (status: BackgroundFetchStatus) => {
+        Sentry.addBreadcrumb({
+          category: 'Scheduling',
+          level: Sentry.Severity.Error,
+          message: 'BackgroundFetchStatus: ' + status.toString(),
+        });
       },
     );
   }
 
   private handleNotifications = (notifyPeople: NotifyPerson[]) => {
-    const intervals = new FetchIntervalLogic(this.now!).getFetchIntervals(
+    /*const intervals = new FetchIntervalLogic(this.now!).getFetchIntervals(
       notifyPeople,
     );
 
@@ -86,9 +105,9 @@ export default class NotificationScheduler {
         tag: notifyPerson.person.contact.recordId,
         title: `${notifyPerson.person.contact.name}`,
       });
-    }
+    }*/
 
-    /*notifyPeople
+    notifyPeople
       .filter((notifyPerson) => notifyPerson.daysLeftTillCallNeeded <= 0)
       .forEach((notifyPerson) =>
         this.notifyCallback({
@@ -98,6 +117,6 @@ export default class NotificationScheduler {
           tag: notifyPerson.person.contact.recordId,
           title: `Call ${notifyPerson.person.contact.name} now!`,
         }),
-      );*/
+      );
   }
 }

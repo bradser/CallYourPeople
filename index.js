@@ -17,6 +17,12 @@ const MyHeadlessTask = async () => {
   const store = new Store();
   const log = await getLog();
 
+  Sentry.addBreadcrumb({
+    category: 'Scheduling',
+    message: 'MyHeadlessTask',
+    level: Sentry.Severity.Info
+  });
+  
   await new NotificationScheduler(details =>
     PushNotification.localNotification(details)
   ).invoke(store, log, moment());
