@@ -20,9 +20,10 @@ target 'CallYourMom' do
 
 
 
-  pod 'RNSentry', :path => '../node_modules/@sentry/react-native'
 
   pod 'RNDeviceInfo', :path => '../node_modules/react-native-device-info'
+
+  pod 'SentryReactNative', :path => '../node_modules/react-native-sentry'
 
   target 'CallYourMomTests' do
     inherit! :search_paths

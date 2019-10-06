@@ -1,26 +1,26 @@
-import * as Sentry from '@sentry/react-native';
 import moment from 'moment';
 import { AppRegistry } from 'react-native';
 import BackgroundFetch from 'react-native-background-fetch';
 import codePush from 'react-native-code-push';
 import PushNotification from 'react-native-push-notification-ce';
+import Sentry, { SentrySeverity } from 'react-native-sentry';
 import App from './src/App';
 import { getLog } from './src/lib/CallLog';
 import NotificationScheduler from './src/lib/NotificationScheduler';
 import { Store } from './src/lib/Store';
 
-Sentry.init({
-  dsn: 'https://72a046a322314e0e8d387ff7a2ca1ab6@sentry.io/1410623'
-});
+Sentry.config(
+  'https://72a046a322314e0e8d387ff7a2ca1ab6@sentry.io/1410623'
+).install();
 
 const MyHeadlessTask = async () => {
   const store = new Store();
   const log = await getLog();
 
-  Sentry.addBreadcrumb({
+  Sentry.captureBreadcrumb({
     category: 'Scheduling',
     message: 'MyHeadlessTask',
-    level: Sentry.Severity.Info
+    level: SentrySeverity.Info
   });
   
   await new NotificationScheduler(details =>

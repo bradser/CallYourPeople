@@ -1,6 +1,7 @@
 import moment from 'moment';
 import RRule, { RRuleSet } from 'rrule';
 import { NotifyPerson } from '../Types';
+import { defaultReminder } from './Constants';
 
 export default class FetchIntervalLogic {
   private now: moment.Moment;
@@ -10,6 +11,11 @@ export default class FetchIntervalLogic {
   }
 
   public getMinimumFetchInterval = (notifyPeople: NotifyPerson[]): number => {
+    if (notifyPeople.length === 0) {
+      // @ts-ignore ignore rest of notifyPeople properties
+      notifyPeople = { person: { reminders: defaultReminder }};
+    }
+
     const intervals = this.getFetchIntervals(notifyPeople);
 
     return Math.min(...intervals);

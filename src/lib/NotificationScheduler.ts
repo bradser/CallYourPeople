@@ -1,7 +1,7 @@
-import * as Sentry from '@sentry/react-native';
 import moment from 'moment';
-import { NativeComponent, NativeModules } from 'react-native';
+import { NativeModules } from 'react-native';
 import BackgroundFetch, { BackgroundFetchStatus } from 'react-native-background-fetch';
+import Sentry, { SentrySeverity } from 'react-native-sentry';
 import { Call, NotifyCallback, NotifyPerson } from '../Types';
 import AppLogic from './AppLogic';
 import FetchIntervalLogic from './FetchIntervalLogic';
@@ -60,9 +60,9 @@ export default class NotificationScheduler {
         stopOnTerminate: false,
       },
       async () => {
-        Sentry.addBreadcrumb({
+        Sentry.captureBreadcrumb({
           category: 'Scheduling',
-          level: Sentry.Severity.Info,
+          level: SentrySeverity.Info,
           message: 'BackgroundFetch',
         });
 
@@ -71,9 +71,9 @@ export default class NotificationScheduler {
         BackgroundFetch.finish(BackgroundFetch.FETCH_RESULT_NO_DATA);
       },
       (status: BackgroundFetchStatus) => {
-        Sentry.addBreadcrumb({
+        Sentry.captureBreadcrumb({
           category: 'Scheduling',
-          level: Sentry.Severity.Error,
+          level: SentrySeverity.Error,
           message: 'BackgroundFetchStatus: ' + status.toString(),
         });
       },

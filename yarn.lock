@@ -975,7 +975,7 @@
     "@sentry/utils" "5.6.1"
     tslib "^1.9.3"
 
-"@sentry/cli@^1.44.2":
+"@sentry/cli@^1.43.0", "@sentry/cli@^1.44.2":
   version "1.47.2"
   resolved "https://registry.yarnpkg.com/@sentry/cli/-/cli-1.47.2.tgz#75a23d2816300b333d4e34163c85feeef93bc062"
   integrity sha512-bUJGyxZQzB8mqnCL3RoeLl169XleoLnn2a1w/xqc8IOBt70IEtpVQQ86jgpZfpY1HqPZlczqEkm1U5kfjCaqLw==
@@ -1025,10 +1025,10 @@
     "@sentry/types" "5.6.1"
     tslib "^1.9.3"
 
-"@sentry/react-native@^1.0.6":
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/@sentry/react-native/-/react-native-1.0.6.tgz#c43d366f5f850044a852f680189b50515a6143f7"
-  integrity sha512-+haC2n9FSoCAxGmbZ813BeRnLdmDNZF6jhIN7cyPXnOlUte0x5TSrmgo+eY7RUR/jwQsZbvz2+8opuUawfVxrQ==
+"@sentry/react-native@^1.0.7":
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/@sentry/react-native/-/react-native-1.0.7.tgz#b6ee001fc5aef2d35346cb32fd5af2db9eb3750a"
+  integrity sha512-miJn8N0HtnnlAVvkf5FRvjNLx3bY7CXyBXhDdlcmxpt+LbrhasDPIPdMU6+dGy0TQ7Mw+NQcCmPx3NuN3r8p4Q==
   dependencies:
     "@sentry/browser" "^5.6.3"
     "@sentry/core" "^5.6.2"
@@ -1049,6 +1049,22 @@
   dependencies:
     "@sentry/types" "5.6.1"
     tslib "^1.9.3"
+
+"@sentry/wizard@^0.13.0":
+  version "0.13.0"
+  resolved "https://registry.yarnpkg.com/@sentry/wizard/-/wizard-0.13.0.tgz#9eb2c2a9051f849815856293bca086725ecfc298"
+  integrity sha512-tI1B9NVIWZvAjgGOdI6JZuHVzIxOoO2JDNWJHD4voS4JyImko0zqGCDz15Nm4vh6RJKdHBUR841PTV2X3k2WaQ==
+  dependencies:
+    "@sentry/cli" "^1.43.0"
+    chalk "^2.4.1"
+    glob "^7.1.3"
+    inquirer "^6.2.0"
+    lodash "^4.17.11"
+    opn "^5.4.0"
+    r2 "^2.0.1"
+    read-env "^1.3.0"
+    xcode "2.0.0"
+    yargs "^12.0.2"
 
 "@sentry/wizard@^1.0.0":
   version "1.0.1"
@@ -1081,10 +1097,10 @@
   dependencies:
     tslib "^1.9.3"
 
-"@snyk/cocoapods-lockfile-parser@2.0.2":
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/@snyk/cocoapods-lockfile-parser/-/cocoapods-lockfile-parser-2.0.2.tgz#6a3c236483d1c952f40a6d46f290e967235f7f19"
-  integrity sha512-DSSlljXGhSECdx7KhK7QlBiGC82fM2dZMzhcWxOsqyUVqzjArRGS9i4CRl/WMK5WDlLgc5bn5Xmpmp/g5Hf9YQ==
+"@snyk/cocoapods-lockfile-parser@2.0.4":
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/@snyk/cocoapods-lockfile-parser/-/cocoapods-lockfile-parser-2.0.4.tgz#296421454ba2ee9248ce1f13da57aa1b10b54de7"
+  integrity sha512-d57bajPjqCiNXMuyMmt9Zt98zbjABZUFw+91B705flzV6oB7OThgtA40Eoin6iatYoStIx28bC3T6b0mScy/iA==
   dependencies:
     "@snyk/dep-graph" "^1.11.0"
     "@snyk/ruby-semver" "^2.0.4"
@@ -1137,13 +1153,13 @@
   dependencies:
     lodash "^4.17.14"
 
-"@snyk/snyk-cocoapods-plugin@1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@snyk/snyk-cocoapods-plugin/-/snyk-cocoapods-plugin-1.0.2.tgz#2d9012fc2be35917f8225b50da83635330fbb59a"
-  integrity sha512-eb8cawvz2vDLg/DRyzDDgv7+oZhsojNXxF8anX2Iq4ws8GZjd9CrMMMaSU7QehcT4h7jH5ITzbB1HOp+XHm3rw==
+"@snyk/snyk-cocoapods-plugin@1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@snyk/snyk-cocoapods-plugin/-/snyk-cocoapods-plugin-1.0.3.tgz#eb685590e6a478e1d86f1042c9493426f2f9764a"
+  integrity sha512-AHAA7z23nPi1eHODsDxeSkl73Ze3yphuqJjMl39ie323EzBDcb9g6uAACrk0Qn2K/K2D8uyxMAf2zDtc+JGQfw==
   dependencies:
     "@snyk/cli-interface" "1.5.0"
-    "@snyk/cocoapods-lockfile-parser" "2.0.2"
+    "@snyk/cocoapods-lockfile-parser" "2.0.4"
     "@snyk/dep-graph" "1.13.0"
     source-map-support "^0.5.7"
     tslib "^1.9.3"
@@ -1237,9 +1253,9 @@
   integrity sha512-SGGAhXLHDx+PK4YLNcNGa6goPf9XRWQNAUUbffkwVGGXIxmDKWyGGL4inzq2sPmExu431Ekb9aEMn9BkPqEYFA==
 
 "@types/node@*":
-  version "12.7.10"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.7.10.tgz#942c128c37b5d780aff5441fd457cd7ffdc18b36"
-  integrity sha512-ObiPa43kJCkgjG+7usRCoxWhqKCmT5JWvi+8bg54KMkP2CvTliYLmKR9uHLaz+51JDOX/8MjWc6Xz18xHTs7XQ==
+  version "12.7.11"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.7.11.tgz#be879b52031cfb5d295b047f5462d8ef1a716446"
+  integrity sha512-Otxmr2rrZLKRYIybtdG/sgeO+tHY20GxeDjcGmUnmmlCWyEnv2a2x1ZXBo3BTec4OiTXMQCiazB8NMBf0iRlFw==
 
 "@types/node@^6.14.4":
   version "6.14.7"
@@ -1371,7 +1387,7 @@ add@^2.0.6:
   resolved "https://registry.yarnpkg.com/add/-/add-2.0.6.tgz#248f0a9f6e5a528ef2295dbeec30532130ae2235"
   integrity sha1-JI8Kn25aUo7yKV2+7DBTITCuIjU=
 
-agent-base@4, agent-base@^4.2.0, agent-base@^4.3.0:
+agent-base@4, agent-base@^4.2.0:
   version "4.3.0"
   resolved "https://registry.yarnpkg.com/agent-base/-/agent-base-4.3.0.tgz#8165f01c436009bccad0b1d122f05ed770efc6ee"
   integrity sha512-salcGninV0nPrwpGNn4VTXBb1SOuXQBiqbrNXoeizJsHrsL6ERFM2Ne3JUSBWRE6aeNJI2ROP/WEEIDUiDe3cg==
@@ -3657,13 +3673,6 @@ http-signature@~1.2.0:
     assert-plus "^1.0.0"
     jsprim "^1.2.2"
     sshpk "^1.7.0"
-
-"https-proxy-agent-snyk-fork@git://github.com/snyk/node-https-proxy-agent#fix/https-agent-vuln":
-  version "2.2.2-fixed-mitm-vuln"
-  resolved "git://github.com/snyk/node-https-proxy-agent#5e86ccb682d0c833c8daa25ee6f91c670161cd66"
-  dependencies:
-    agent-base "^4.3.0"
-    debug "^3.1.0"
 
 https-proxy-agent@^2.2.1:
   version "2.2.1"
@@ -6028,15 +6037,16 @@ pac-proxy-agent@^2.0.1:
     raw-body "^2.2.0"
     socks-proxy-agent "^3.0.0"
 
-"pac-proxy-agent@git://github.com/snyk/node-pac-proxy-agent.git#fix/https-proxy-agent-vuln":
+pac-proxy-agent@^3.0.0:
   version "3.0.0"
-  resolved "git://github.com/snyk/node-pac-proxy-agent.git#e962ea0fe8db650a55e349e1b422e3ac99bfe451"
+  resolved "https://registry.yarnpkg.com/pac-proxy-agent/-/pac-proxy-agent-3.0.0.tgz#11d578b72a164ad74bf9d5bac9ff462a38282432"
+  integrity sha512-AOUX9jES/EkQX2zRz0AW7lSx9jD//hQS8wFXBvcnd/J2Py9KaMJMqV/LPqJssj1tgGufotb2mmopGPR15ODv1Q==
   dependencies:
     agent-base "^4.2.0"
     debug "^3.1.0"
     get-uri "^2.0.0"
     http-proxy-agent "^2.1.0"
-    https-proxy-agent-snyk-fork "git://github.com/snyk/node-https-proxy-agent#fix/https-agent-vuln"
+    https-proxy-agent "^2.2.1"
     pac-resolver "^3.0.0"
     raw-body "^2.2.0"
     socks-proxy-agent "^4.0.1"
@@ -6359,6 +6369,20 @@ protocols@^1.1.0, protocols@^1.4.0:
   resolved "https://registry.yarnpkg.com/protocols/-/protocols-1.4.7.tgz#95f788a4f0e979b291ffefcf5636ad113d037d32"
   integrity sha512-Fx65lf9/YDn3hUX08XUc0J8rSux36rEsyiv21ZGUC1mOyeM3lTRpZLcrm8aAolzS4itwVfm7TAPyxC2E5zd6xg==
 
+proxy-agent@*:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/proxy-agent/-/proxy-agent-3.1.0.tgz#3cf86ee911c94874de4359f37efd9de25157c113"
+  integrity sha512-IkbZL4ClW3wwBL/ABFD2zJ8iP84CY0uKMvBPk/OceQe/cEjrxzN1pMHsLwhbzUoRhG9QbSxYC+Z7LBkTiBNvrA==
+  dependencies:
+    agent-base "^4.2.0"
+    debug "^3.1.0"
+    http-proxy-agent "^2.1.0"
+    https-proxy-agent "^2.2.1"
+    lru-cache "^4.1.2"
+    pac-proxy-agent "^3.0.0"
+    proxy-from-env "^1.0.0"
+    socks-proxy-agent "^4.0.1"
+
 proxy-agent@2:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/proxy-agent/-/proxy-agent-2.3.1.tgz#3d49d863d46cf5f37ca8394848346ea02373eac6"
@@ -6372,19 +6396,6 @@ proxy-agent@2:
     pac-proxy-agent "^2.0.1"
     proxy-from-env "^1.0.0"
     socks-proxy-agent "^3.0.0"
-
-"proxy-agent@git://github.com/snyk/node-proxy-agent.git#fix/https-agent-vuln":
-  version "3.1.0"
-  resolved "git://github.com/snyk/node-proxy-agent.git#c25ef74cbe593a4d60a71ff3053466e4b3171711"
-  dependencies:
-    agent-base "^4.2.0"
-    debug "^3.1.0"
-    http-proxy-agent "^2.1.0"
-    https-proxy-agent-snyk-fork "git://github.com/snyk/node-https-proxy-agent#fix/https-agent-vuln"
-    lru-cache "^4.1.2"
-    pac-proxy-agent "git://github.com/snyk/node-pac-proxy-agent.git#fix/https-proxy-agent-vuln"
-    proxy-from-env "^1.0.0"
-    socks-proxy-agent "^4.0.1"
 
 proxy-from-env@^1.0.0:
   version "1.0.0"
@@ -6465,6 +6476,11 @@ range-parser@~1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/range-parser/-/range-parser-1.2.0.tgz#f49be6b487894ddc40dcc94a322f611092e00d5e"
   integrity sha1-9JvmtIeJTdxA3MlKMi9hEJLgDV4=
+
+raven-js@^3.27.1:
+  version "3.27.2"
+  resolved "https://registry.yarnpkg.com/raven-js/-/raven-js-3.27.2.tgz#6c33df952026cd73820aa999122b7b7737a66775"
+  integrity sha512-mFWQcXnhRFEQe5HeFroPaEghlnqy7F5E2J3Fsab189ondqUzcjwSVi7el7F36cr6PvQYXoZ1P2F5CSF2/azeMQ==
 
 raw-body@^2.2.0:
   version "2.4.1"
@@ -6623,6 +6639,14 @@ react-native-select-contact@1.2.0:
 "react-native-send-intent@https://github.com/bradser/react-native-send-intent":
   version "1.0.31"
   resolved "https://github.com/bradser/react-native-send-intent#74ae459806b7a5e77365f0fbc23036c67d746fe6"
+
+react-native-sentry@^0.43.2:
+  version "0.43.2"
+  resolved "https://registry.yarnpkg.com/react-native-sentry/-/react-native-sentry-0.43.2.tgz#1505d16d334656f25f4d515e004d0c5a4ac5a01b"
+  integrity sha512-MDrMkt/ntyQhhn+b3EVUuB/lXvQbSLvCOpkAvioNOzddoyo2R6i3rVZ3aZmPN1oK3O9GFE4tSa0M+eTHni7AaQ==
+  dependencies:
+    "@sentry/wizard" "^0.13.0"
+    raven-js "^3.27.1"
 
 react-native-tab-view@2.7.0:
   version "2.7.0"
@@ -7649,14 +7673,14 @@ snyk-try-require@1.3.1, snyk-try-require@^1.1.1, snyk-try-require@^1.3.1:
     then-fs "^2.0.0"
 
 snyk@^1.192.3:
-  version "1.230.5"
-  resolved "https://registry.yarnpkg.com/snyk/-/snyk-1.230.5.tgz#d47a012af6facefe05065c935afe332b5ea889de"
-  integrity sha512-kzy6FHMyneVXcezBVO0xRbEDSZSPj9Z/fDH4HFwOm5cpm/HErQ8B86fO6KtfSNIsruWUFcobEzP1q41nOdleAQ==
+  version "1.231.0"
+  resolved "https://registry.yarnpkg.com/snyk/-/snyk-1.231.0.tgz#3ec82cacd3e7d542f1dee9171046d984002666e0"
+  integrity sha512-7DOIRdntuK4dgmy2Xiy/PFwXbY7YUiudW5kWJ+z975bOQ7ENltsah0yVgWaJx77b9dt0+eyvV6POdXOMHbdTig==
   dependencies:
     "@snyk/cli-interface" "^2.0.3"
     "@snyk/dep-graph" "1.12.0"
     "@snyk/gemfile" "1.2.0"
-    "@snyk/snyk-cocoapods-plugin" "1.0.2"
+    "@snyk/snyk-cocoapods-plugin" "1.0.3"
     "@types/agent-base" "^4.2.0"
     "@types/restify" "^4.3.6"
     abbrev "^1.1.1"
@@ -7672,7 +7696,6 @@ snyk@^1.192.3:
     needle "^2.2.4"
     opn "^5.5.0"
     os-name "^3.0.0"
-    proxy-agent "git://github.com/snyk/node-proxy-agent.git#fix/https-agent-vuln"
     proxy-from-env "^1.0.0"
     semver "^6.0.0"
     snyk-config "^2.2.1"

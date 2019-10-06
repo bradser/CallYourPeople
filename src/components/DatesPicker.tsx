@@ -1,7 +1,7 @@
-import * as Sentry from '@sentry/react-native';
 import { inject, observer } from 'mobx-react';
 import React, { Component } from 'react';
 import { DatePickerAndroid } from 'react-native';
+import Sentry from 'react-native-sentry';
 import Fremium from '../lib/Fremium';
 import { Store } from '../lib/Store';
 import { DateItem, Person, SelectedItem } from '../Types';

@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-community/async-storage';
-import * as Sentry from '@sentry/react-native';
 import { IObservableArray, observable, runInAction } from 'mobx';
+import Sentry, { SentrySeverity } from 'react-native-sentry';
 import RRule from 'rrule';
 import { Call, DateItem, Person } from '../Types';
 import { defaultReminder } from './Constants';
@@ -87,9 +87,9 @@ export class Store {
 
         this.save();
       } else {
-        Sentry.addBreadcrumb({
+        Sentry.captureBreadcrumb({
           category: 'Store',
-          level: Sentry.Severity.Error,
+          level: SentrySeverity.Error,
           message: 'remove: person not found',
         });
       }
@@ -111,9 +111,9 @@ export class Store {
 
         this.save();
       } else {
-        Sentry.addBreadcrumb({
+        Sentry.captureBreadcrumb({
           category: 'Store',
-          level: Sentry.Severity.Error,
+          level: SentrySeverity.Error,
           message: 'update: person not found',
         });
       }

@@ -1,6 +1,6 @@
-import * as Sentry from '@sentry/react-native';
 import { Alert } from 'react-native';
 import * as RNIap from 'react-native-iap';
+import Sentry, { SentrySeverity } from 'react-native-sentry';
 import { Store } from './Store';
 
 export default class Fremium {
@@ -49,9 +49,9 @@ export default class Fremium {
       const purchase = await RNIap.buyProduct('Monthly');
 
       if (purchase && purchase.receiptId) {
-        Sentry.addBreadcrumb({
+        Sentry.captureBreadcrumb({
           category: 'Purchase',
-          level: Sentry.Severity.Info,
+          level: SentrySeverity.Info,
           message: JSON.stringify(purchase),
         });
 
