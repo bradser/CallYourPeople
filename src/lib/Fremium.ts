@@ -33,6 +33,10 @@ export default class Fremium {
     try {
       const purchaseHistory = await RNIap.getPurchaseHistory();
 
+      if (purchaseHistory.length > 0) {
+        this.store.setUserIdAmazon(purchaseHistory[purchaseHistory.length - 1].userIdAmazon);
+      }
+
       const isPremium = Fremium.checkIsPremium(purchaseHistory, new Date());
 
       this.store.setIsPremium(isPremium);
@@ -62,12 +66,14 @@ export default class Fremium {
     } catch (error) {
       if (error.code === 'E_ALREADY_OWNED') {
         Alert.alert(
-          'You have already purchased a subscription. Restoring to your device.',
+          'Already Purchased',
+          'You have already purchased a subscription, thanks! Restoring to your device.',
         );
 
         this.store.setIsPremium(true);
       } else {
         Alert.alert(
+          "We've encountered a small problem",
           'There was an error processing the purchase. Please try again later.',
         );
 

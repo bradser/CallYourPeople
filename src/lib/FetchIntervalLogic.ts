@@ -13,7 +13,7 @@ export default class FetchIntervalLogic {
   public getMinimumFetchInterval = (notifyPeople: NotifyPerson[]): number => {
     if (notifyPeople.length === 0) {
       // @ts-ignore ignore rest of notifyPeople properties
-      notifyPeople.push({ person: { reminders: defaultReminder }});
+      notifyPeople.push({ person: { reminders: defaultReminder } });
     }
 
     const intervals = this.getFetchIntervals(notifyPeople);
@@ -57,31 +57,45 @@ export default class FetchIntervalLogic {
     notifyPerson.person.reminders.forEach((rrule) => {
       const newRRule = new RRule({
         ...rrule.options,
+        count: 2, // TODO: remove eventually
         dtstart: convertedCompareMoment,
       });
 
       ruleSet.rrule(newRRule);
     });
 
-    const next = ruleSet.all().shift()!;
+    const nextDates = ruleSet.all();
 
+    const nextInterval = this.getNextIntervalFromDates(nextDates);
+
+    return nextInterval;
+  }
+
+  private getNextIntervalFromDates = (nextDates: Date[]): number => {
+    let nextInterval = this.getIntervalFromDate(nextDates[0]);
+
+    // If we are within 5% of the 12 hours (36) minutes, interval is too short, so skip to the next interval.
+    // 5% of the specified period is the flex time that the JobScheduler uses.
+    if (nextInterval <= 40) {
+      nextInterval = this.getIntervalFromDate(nextDates[1]);
+    }
+
+    return nextInterval;
+  }
+
+  private getIntervalFromDate = (nextDate: Date): number => {
+    // Conversion due to https://github.com/jakubroztocil/rrule#important-use-utc-dates
     const convertedNext = new Date(
-      next.getUTCFullYear(),
-      next.getUTCMonth(),
-      next.getUTCDate(),
-      next.getUTCHours(),
-      next.getUTCMinutes(),
-      next.getUTCSeconds(),
+      nextDate.getUTCFullYear(),
+      nextDate.getUTCMonth(),
+      nextDate.getUTCDate(),
+      nextDate.getUTCHours(),
+      nextDate.getUTCMinutes(),
+      nextDate.getUTCSeconds(),
     );
 
-    return (
-      Math.round(((convertedNext.getTime() -
-        this.now
-          .toDate()
-          .getTime()) /
-      1000 /
-      60) // to get minutes
-      + 1) // to round up to the next minute
+    return Math.ceil(
+      (convertedNext.getTime() - this.now.toDate().getTime()) / 1000 / 60, // to get minutes
     );
   }
 }

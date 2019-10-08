@@ -20,7 +20,7 @@ export const defaultReminder = [
     byminute: [0],
     bysecond: [0],
     byweekday: [0, 1, 2, 3, 4, 5, 6],
-    count: 1,
+    count: 2, // To allow for handling of JobScheduler imprecision
     freq: RRule.DAILY,
     interval: 1,
   }),

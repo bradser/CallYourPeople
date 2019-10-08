@@ -1,6 +1,9 @@
 import moment from 'moment';
+import { string } from 'prop-types';
 import { NativeModules } from 'react-native';
-import BackgroundFetch, { BackgroundFetchStatus } from 'react-native-background-fetch';
+import BackgroundFetch, {
+  BackgroundFetchStatus
+} from 'react-native-background-fetch';
 import Sentry, { SentrySeverity } from 'react-native-sentry';
 import { Call, NotifyCallback, NotifyPerson } from '../Types';
 import AppLogic from './AppLogic';
@@ -33,11 +36,15 @@ export default class NotificationScheduler {
 
     this.handleBackgroundConfiguration(store, log, minimumFetchInterval);
 
-    NativeModules.Ads.getJobsIntervalMillis().then((millis: number[]) => {
-        const converted = millis.map((milli) => milli / 1000 / 60);
+    NativeModules.Ads.getJobsIntervalMillis().then(
+      (millis) => {
+        /*const converted = new Map<string, number>();
+        millis.forEach((value, key) => {
+          converted.set(key, value / 1000 / 60);
+        });*/
 
         Sentry.captureMessage(
-          minimumFetchInterval + ' - ' + JSON.stringify(converted),
+          JSON.stringify(millis) + ' - ' + this.now!.toDate().toString(),
         );
       },
     );
@@ -81,32 +88,6 @@ export default class NotificationScheduler {
   }
 
   private handleNotifications = (notifyPeople: NotifyPerson[]) => {
-    /*const intervals = new FetchIntervalLogic(this.now!).getFetchIntervals(
-      notifyPeople,
-    );
-
-    for (let i = 0; i < notifyPeople.length; i++) {
-      const notifyPerson = notifyPeople[i];
-      const interval = intervals[i];
-
-      this.notifyCallback({
-        largeIcon: 'ic_contact_phone',
-        message:
-          moment()
-            .add(interval, 'm')
-            .toDate()
-            .toString() +
-          ' : ' +
-          moment()
-            .add(notifyPerson.daysLeftTillCallNeeded * 24 * 60, 'm')
-            .toDate()
-            .toString(),
-        smallIcon: 'ic_contact_phone',
-        tag: notifyPerson.person.contact.recordId,
-        title: `${notifyPerson.person.contact.name}`,
-      });
-    }*/
-
     notifyPeople
       .filter((notifyPerson) => notifyPerson.daysLeftTillCallNeeded <= 0)
       .forEach((notifyPerson) =>

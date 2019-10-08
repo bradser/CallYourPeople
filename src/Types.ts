@@ -140,7 +140,7 @@ export class CypRRule implements SelectedItem<CypRRule> {
           byminute: [0],
           bysecond: [0],
           byweekday: JSON.parse(entry[0]),
-          count: 1,
+          count: 2, // To allow for handling of JobScheduler imprecision
           freq: RRule.DAILY,
           interval: 1,
         }),

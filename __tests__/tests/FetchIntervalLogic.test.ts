@@ -25,6 +25,20 @@ testCases.forEach((testCase, index) => {
       },
     ]);
 
-    expect(minInterval).toBe(testCase.intervalMinutes * 60);
+    expect(minInterval).toBe(testCase.intervalHours * 60);
   });
+});
+
+it(`case skip to next interval`, () => {
+  const minInterval = new FetchIntervalLogic(
+    moment(new Date(2019, 9, 23, 6, 30, 0)),
+  ).getMinimumFetchInterval([
+    {
+      daysLeftTillCallNeeded: -2 / 24,
+      // @ts-ignore: Make fake person for test
+      person: { reminders: defaultReminder },
+    },
+  ]);
+
+  expect(minInterval).toBe(12 * 60 - 30); // 12 hours ahead, minus the 30 minutes from the start datetime
 });

@@ -9,6 +9,7 @@ export class Store {
   public people = (observable([]) as unknown) as IObservableArray<Person>;
   public settings = observable({
     isPremium: true,
+    userIdAmazon: '',
   });
 
   constructor() {
@@ -122,6 +123,12 @@ export class Store {
 
   public setIsPremium = (isPremium: boolean): void => {
     this.settings.isPremium = isPremium;
+
+    this.save();
+  }
+
+  public setUserIdAmazon = (userIdAmazon: string): void => {
+    this.settings.userIdAmazon = userIdAmazon;
 
     this.save();
   }

@@ -7,16 +7,15 @@ import { Contact } from 'react-native-select-contact';
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 import { NavigationInjectedProps } from 'react-navigation';
 import AddCallsPicker from '../components/AddCallsPicker';
+import CypMenu from '../components/CypMenu';
 import DatesPicker from '../components/DatesPicker';
 import DeletePersonButton from '../components/DeletePersonButton';
-import { contactLink } from '../components/Link';
-import Menu from '../components/CypMenu';
+import RemindersPicker from '../components/RemindersPicker';
 import RemoveCallsPicker from '../components/RemoveCallsPicker';
 import { cypGreen, materialUILayout } from '../lib/Constants';
+import { fremiumCheckedLaunchContact as fremiumCheckedLaunchContact } from '../lib/Helpers';
 import { Store } from '../lib/Store';
 import { Call, DetailsNavigationProps, FrequencyMap, Person } from '../Types';
-import RemindersPicker from '../components/RemindersPicker';
-import CypMenu from '../components/CypMenu';
 
 interface Props extends NavigationInjectedProps<DetailsNavigationProps> {
   store?: Store;
@@ -61,7 +60,7 @@ export default inject('store')(
           <ScrollView style={styles.scrollView}>
             <TouchableOpacity
               style={styles.name}
-              onPress={this.contactLink(person)}
+              onPress={this.launchContact(person)}
             >
               <Icon name='phone' size={30} style={styles.icon} />
               <Title>{person.contact.name}</Title>
@@ -94,8 +93,8 @@ export default inject('store')(
 
       private divider = () => <Divider style={styles.divide} />;
 
-      private contactLink = (person: Person) => (): void => {
-        contactLink(person.contact.recordId);
+      private launchContact = (person: Person) => (): void => {
+        fremiumCheckedLaunchContact(this.props.store!, person.contact.recordId);
       }
 
       private frequencyOnSelect = (person: Person) => (index: number): void => {

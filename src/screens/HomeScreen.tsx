@@ -29,22 +29,31 @@ interface State extends NavigationState<Route> {
 export default inject('store')(
   observer(
     class HomeScreen extends Component<Props, State> {
-      public static navigationOptions = {
-        headerRight: (
-          <Button
-            onPress={() => {
-              Alert.alert(
-                `Device ID: ${DeviceInfo.getUniqueID()
+      public static navigationOptions = ({ navigation }) => {
+        return {
+          headerRight: (
+            <Button
+              onPress={() => {
+                let output = `Device ID: ${DeviceInfo.getUniqueID()
                   .toLocaleUpperCase()
                   .match(/.{1,3}/g)!
-                  .join('-')}`,
-              );
-            }}
-          />
-        ),
-        headerStyle: { backgroundColor: cypGreen },
-        title: 'Call Your People!',
-      };
+                  .join('-')}`;
+
+                const userIdAmazon = (navigation.getParam('store') as Store)
+                  .settings.userIdAmazon;
+
+                if (userIdAmazon) {
+                  output += `\n\nAmazon User ID: ${userIdAmazon}`;
+                }
+
+                Alert.alert('IDs', output);
+              }}
+            />
+          ),
+          headerStyle: { backgroundColor: cypGreen },
+          title: 'Call Your People!',
+        };
+      }
 
       private fremium: Fremium;
 
@@ -70,6 +79,8 @@ export default inject('store')(
         };
 
         this.fremium = new Fremium(this.props.store!);
+
+        this.props.navigation.setParams({ store: this.props.store });
       }
 
       public componentDidMount() {
@@ -137,6 +148,7 @@ export default inject('store')(
       }
 
       private handleBack = (event) => {
+        // An actual 'back', vs. other navigation.
         if (event.action.type === 'Navigation/COMPLETE_TRANSITION') {
           this.check();
         }

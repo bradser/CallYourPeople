@@ -57,6 +57,6 @@ export class FetchIntervalLogicTestCase {
   constructor(
     public now: Date,
     public hoursLeftTillCallNeeded: number,
-    public intervalMinutes: number,
+    public intervalHours: number,
   ) {}
 }

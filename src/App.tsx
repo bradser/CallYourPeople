@@ -1,14 +1,13 @@
 import { Provider } from 'mobx-react';
 import React, { Component } from 'react';
-import { NativeModules } from 'react-native';
 import BackgroundFetch from 'react-native-background-fetch';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import PushNotification from 'react-native-push-notification-ce';
 import SendIntentAndroid from 'react-native-send-intent';
 import Sentry from 'react-native-sentry';
 import { createAppContainer, createStackNavigator } from 'react-navigation';
-import { contactLink } from './components/Link';
 import Fremium from './lib/Fremium';
+import { fremiumCheckedLaunchContact } from './lib/Helpers';
 import { Store } from './lib/Store';
 import DetailsScreen from './screens/DetailsScreen';
 import HomeScreen from './screens/HomeScreen';
@@ -31,13 +30,7 @@ const fremium = new Fremium(store);
 fremium.initialize().then(() => {
   PushNotification.configure({
     onNotification: (notification) => {
-      if (store.settings.isPremium) {
-        contactLink(notification.tag);
-      } else {
-        NativeModules.Ads.showInterstitial().then(() =>
-          contactLink(notification.tag),
-        );
-      }
+      fremiumCheckedLaunchContact(store, notification.tag);
     },
   });
 });
