@@ -9,7 +9,7 @@ const addedCallsTestCases = [
     new PersonCallTestCase(
       'Joe Serbus',
       '+3136385505',
-      Frequency.once_Every_Two_Weeks,
+      Frequency.onceEveryTwoWeeks,
       CallType.OUTGOING,
       5,
       -7,
@@ -19,7 +19,7 @@ const addedCallsTestCases = [
     new PersonCallTestCase(
       'Gayle Serbus',
       '+8106385505',
-      Frequency.once_Every_Two_Weeks,
+      Frequency.onceEveryTwoWeeks,
       CallType.OUTGOING,
       5,
       -21,
@@ -31,7 +31,7 @@ const addedCallsTestCases = [
     new PersonCallTestCase(
       'Joe Serbus',
       '+3136385505',
-      Frequency.once_Every_Two_Weeks,
+      Frequency.onceEveryTwoWeeks,
       CallType.OUTGOING,
       5,
       -21,
@@ -41,7 +41,7 @@ const addedCallsTestCases = [
     new PersonCallTestCase(
       'Gayle Serbus',
       '+8106385505',
-      Frequency.once_Every_Two_Weeks,
+      Frequency.onceEveryTwoWeeks,
       CallType.OUTGOING,
       5,
       -28,

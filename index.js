@@ -7,14 +7,16 @@ import Sentry, { SentrySeverity } from 'react-native-sentry';
 import App from './src/App';
 import { getLog } from './src/lib/CallLog';
 import NotificationScheduler from './src/lib/NotificationScheduler';
-import { Store } from './src/lib/Store';
+import { PeopleStoreImpl } from './src/lib/store/People';
+import { RemindContactsStoreImpl } from './src/lib/store/RemindContacts';
 
 Sentry.config(
   'https://72a046a322314e0e8d387ff7a2ca1ab6@sentry.io/1410623'
 ).install();
 
 const MyHeadlessTask = async () => {
-  const store = new Store();
+  const peopleStore = new PeopleStoreImpl();
+  const remindContactsStore = new RemindContactsStoreImpl();
   const log = await getLog();
 
   Sentry.captureBreadcrumb({
@@ -22,10 +24,10 @@ const MyHeadlessTask = async () => {
     message: 'MyHeadlessTask',
     level: SentrySeverity.Info
   });
-  
-  await new NotificationScheduler(details =>
+
+  await new NotificationScheduler(peopleStore, remindContactsStore, details =>
     PushNotification.localNotification(details)
-  ).invoke(store, log, moment());
+  ).notifyStoredSetReminders(moment(), log);
 
   BackgroundFetch.finish(BackgroundFetch.FETCH_RESULT_NO_DATA);
 };

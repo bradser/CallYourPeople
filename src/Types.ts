@@ -30,13 +30,13 @@ decorate(Person, {
 });
 
 export enum Frequency {
-  twice_A_Week,
-  once_A_Week,
-  once_Every_Two_Weeks,
-  once_Every_Three_Weeks,
-  once_Every_Month,
-  once_Every_Two_Months,
-  once_Every_Quarter_Year,
+  twiceAWeek,
+  onceAWeek,
+  onceEveryTwoWeeks,
+  onceEveryThreeWeeks,
+  onceEveryMonth,
+  onceEveryTwoMonths,
+  onceEveryQuarterYear,
 }
 
 export interface FrequencyValues {
@@ -44,15 +44,15 @@ export interface FrequencyValues {
   value: number;
 }
 
-export const FrequencyMap = new Map<number, FrequencyValues>([
-  [Frequency.twice_A_Week, { text: '2/week', value: 7 / 2 }],
-  [Frequency.once_A_Week, { text: '1 week', value: 7 }],
-  [Frequency.once_Every_Two_Weeks, { text: '2 weeks', value: 14 }],
-  [Frequency.once_Every_Three_Weeks, { text: '3 weeks', value: 21 }],
-  [Frequency.once_Every_Month, { text: '1 month', value: 28 }],
-  [Frequency.once_Every_Two_Months, { text: '2 months', value: 60 }],
+export const FREQUENCY_MAP = new Map<number, FrequencyValues>([
+  [Frequency.twiceAWeek, { text: '2/week', value: 7 / 2 }],
+  [Frequency.onceAWeek, { text: '1 week', value: 7 }],
+  [Frequency.onceEveryTwoWeeks, { text: '2 weeks', value: 14 }],
+  [Frequency.onceEveryThreeWeeks, { text: '3 weeks', value: 21 }],
+  [Frequency.onceEveryMonth, { text: '1 month', value: 28 }],
+  [Frequency.onceEveryTwoMonths, { text: '2 months', value: 60 }],
   [
-    Frequency.once_Every_Quarter_Year,
+    Frequency.onceEveryQuarterYear,
     { text: '1/4 year', value: (365 / 12) * 3 },
   ],
 ]);
@@ -173,9 +173,11 @@ export class CypRRule implements SelectedItem<CypRRule> {
     const weekendDays = Array.from(this.days).filter((day) => day >= 5);
 
     if (weekendDays.length > 0) {
-      out +=
-        ', ' +
-        weekendDays
+      if (out!.length > 0) {
+        out += ', ';
+      }
+
+      out += weekendDays
           .sort()
           .map((day) => weekdaysNarrowPlus[day])
           .join(', ');

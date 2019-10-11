@@ -9,7 +9,7 @@ const removedCallsTestCases = [
     new PersonCallTestCase(
       'Joe Serbus',
       '+3136385505',
-      Frequency.once_Every_Two_Weeks,
+      Frequency.onceEveryTwoWeeks,
       CallType.OUTGOING,
       5,
       -7,
@@ -19,7 +19,7 @@ const removedCallsTestCases = [
     new PersonCallTestCase(
       'Gayle Serbus',
       '+8106385505',
-      Frequency.once_Every_Two_Weeks,
+      Frequency.onceEveryTwoWeeks,
       CallType.OUTGOING,
       5,
       -7,
@@ -31,7 +31,7 @@ const removedCallsTestCases = [
     new PersonCallTestCase(
       'Joe Serbus',
       '+3136385505',
-      Frequency.once_Every_Two_Weeks,
+      Frequency.onceEveryTwoWeeks,
       CallType.OUTGOING,
       5,
       -21,
@@ -41,7 +41,7 @@ const removedCallsTestCases = [
     new PersonCallTestCase(
       'Gayle Serbus',
       '+8106385505',
-      Frequency.once_Every_Two_Weeks,
+      Frequency.onceEveryTwoWeeks,
       CallType.OUTGOING,
       5,
       -28,
@@ -98,11 +98,14 @@ removedCallsTestCases.forEach((testCase, index) => {
       testLog,
     );
 
-    const sortedtestCases = testCase.sort((tc1, tc2) =>
-      tc1.daysLeftTillCallNeeded < tc2.daysLeftTillCallNeeded ? -1 : 1,
+    const sortedtestCases = testCase.sort(
+      (tc1, tc2) =>
+        tc1.daysLeftTillCallNeeded < tc2.daysLeftTillCallNeeded ? -1 : 1,
     );
 
-    expect(getNotifiedPeopleCount(checkedPeople)).toBe(sortedtestCases[0].notifyCount);
+    expect(getNotifiedPeopleCount(checkedPeople)).toBe(
+      sortedtestCases[0].notifyCount,
+    );
 
     expect(checkedPeople[0].daysLeftTillCallNeeded).toBe(
       sortedtestCases[0].daysLeftTillCallNeeded,

@@ -8,11 +8,13 @@ import Sentry from 'react-native-sentry';
 import { createAppContainer, createStackNavigator } from 'react-navigation';
 import Fremium from './lib/Fremium';
 import { fremiumCheckedLaunchContact } from './lib/Helpers';
-import { Store } from './lib/Store';
+import { PeopleStoreImpl } from './lib/store/People';
+import { RemindContactsStoreImpl } from './lib/store/RemindContacts';
+import { SettingsStoreImpl } from './lib/store/Settings';
 import DetailsScreen from './screens/DetailsScreen';
 import HomeScreen from './screens/HomeScreen';
 
-const AppNavigator = createStackNavigator(
+const appNavigator = createStackNavigator(
   {
     Details: DetailsScreen,
     Home: HomeScreen,
@@ -22,15 +24,18 @@ const AppNavigator = createStackNavigator(
   },
 );
 
-const AppContainer = createAppContainer(AppNavigator);
+// @ts-ignore: Must be capitalized as it's used in markup
+const AppContainer = createAppContainer(appNavigator);
 
-const store = new Store();
+const peopleStore = new PeopleStoreImpl();
+const remindContactsStore = new RemindContactsStoreImpl();
+const settingsStore = new SettingsStoreImpl();
 
-const fremium = new Fremium(store);
+const fremium = new Fremium(peopleStore, settingsStore);
 fremium.initialize().then(() => {
   PushNotification.configure({
     onNotification: (notification) => {
-      fremiumCheckedLaunchContact(store, notification.tag);
+      fremiumCheckedLaunchContact(settingsStore, notification.tag);
     },
   });
 });
@@ -64,7 +69,7 @@ export default class App extends Component {
 
   public render() {
     return (
-      <Provider store={store}>
+      <Provider peopleStore={peopleStore} remindContactsStore={remindContactsStore} settingsStore={settingsStore}>
         <PaperProvider theme={theme}>
           <AppContainer />
         </PaperProvider>

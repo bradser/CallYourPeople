@@ -3,16 +3,18 @@ import React, { Component } from 'react';
 import { DatePickerAndroid } from 'react-native';
 import Sentry from 'react-native-sentry';
 import Fremium from '../lib/Fremium';
-import { Store } from '../lib/Store';
+import { PeopleStore } from '../lib/store/People';
+import { SettingsStore } from '../lib/store/Settings';
 import { DateItem, Person, SelectedItem } from '../Types';
 import ItemsPicker from './ItemsPicker';
 
 interface Props {
-  store?: Store;
+  peopleStore?: PeopleStore;
+  settingsStore?: SettingsStore;
   person: Person;
 }
 
-export default inject('store')(
+export default inject('peopleStore', 'settingsStore')(
   observer(
     class DatesPicker extends Component<Props> {
       public render() {
@@ -28,10 +30,10 @@ export default inject('store')(
       }
 
       private fremiumAdd = async (): Promise<any> => {
-        if (this.props.store!.settings.isPremium) {
+        if (this.props.settingsStore!.isPremium.get()) {
           await this.add();
         } else {
-          await new Fremium(this.props.store!).upgrade();
+          await new Fremium(this.props.peopleStore!, this.props.settingsStore!).upgrade();
         }
       }
 
@@ -43,7 +45,7 @@ export default inject('store')(
           });
 
           if (action !== DatePickerAndroid.dismissedAction) {
-            this.props.store!.update(this.props.person, {
+            this.props.peopleStore!.update(this.props.person, {
               nonCall: this.props.person.nonCall.concat(
                 new DateItem(year, month, day),
               ),
@@ -59,7 +61,7 @@ export default inject('store')(
           (c: DateItem) => !dateItem.isEqual(c),
         );
 
-        this.props.store!.update(this.props.person, {
+        this.props.peopleStore!.update(this.props.person, {
           nonCall: filtered,
         });
       }

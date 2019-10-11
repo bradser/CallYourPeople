@@ -1,7 +1,8 @@
 import { Alert } from 'react-native';
 import * as RNIap from 'react-native-iap';
 import Sentry, { SentrySeverity } from 'react-native-sentry';
-import { Store } from './Store';
+import { PeopleStore } from './store/People';
+import { SettingsStore } from './store/Settings';
 
 export default class Fremium {
   public static checkIsPremium = (
@@ -23,33 +24,48 @@ export default class Fremium {
     return isPremium;
   }
 
-  private store: Store;
-
-  constructor(store: Store) {
-    this.store = store;
-  }
+  constructor(
+    private peopleStore: PeopleStore,
+    private settingsStore: SettingsStore,
+  ) {}
 
   public initialize = async (): Promise<void> => {
     try {
+      const isLoggedIn = await this.checkLogin();
+      if (!isLoggedIn) {
+        return;
+      }
+
       const purchaseHistory = await RNIap.getPurchaseHistory();
 
       if (purchaseHistory.length > 0) {
-        this.store.setUserIdAmazon(purchaseHistory[purchaseHistory.length - 1].userIdAmazon);
+        this.settingsStore.userIdAmazon =
+          purchaseHistory[purchaseHistory.length - 1].userIdAmazon;
       }
 
       const isPremium = Fremium.checkIsPremium(purchaseHistory, new Date());
 
-      this.store.setIsPremium(isPremium);
+      this.settingsStore.setIsPremium(isPremium);
     } catch (error) {
       Sentry.captureException(error);
     }
   }
 
   public canAddContacts = (): boolean =>
-    this.store.people.length < 4 || this.store.settings.isPremium
+    this.peopleStore.people.length < 4 || this.settingsStore.isPremium.get()
 
   public upgrade = async (): Promise<void> => {
     try {
+      const isLoggedIn = await this.checkLogin();
+      if (!isLoggedIn) {
+        Alert.alert(
+          'Not Logged In',
+          'Please log into the Amazon Appstore on your device.',
+        );
+
+        return;
+      }
+
       const purchase = await RNIap.buyProduct('Monthly');
 
       if (purchase && purchase.receiptId) {
@@ -61,7 +77,7 @@ export default class Fremium {
 
         await RNIap.notifyFulfillmentAmazon(purchase.receiptId, 'FULFILLED');
 
-        this.store.setIsPremium(true);
+        this.settingsStore.setIsPremium(true);
       }
     } catch (error) {
       if (error.code === 'E_ALREADY_OWNED') {
@@ -70,15 +86,19 @@ export default class Fremium {
           'You have already purchased a subscription, thanks! Restoring to your device.',
         );
 
-        this.store.setIsPremium(true);
+        this.settingsStore.setIsPremium(true);
       } else {
-        Alert.alert(
-          "We've encountered a small problem",
-          'There was an error processing the purchase. Please try again later.',
-        );
-
         Sentry.captureException(error);
       }
     }
+  }
+
+  private checkLogin = async (): Promise<boolean> => {
+    let userData;
+    try {
+      userData = await RNIap.getUserData();
+    } catch (error) {}
+
+    return Boolean(userData);
   }
 }

@@ -7,7 +7,7 @@ const voicemailTestCases = [
     new CallTestCase(
       CallType.OUTGOING,
       1,
-      Frequency.once_Every_Two_Weeks,
+      Frequency.onceEveryTwoWeeks,
       -21,
       1,
     ),
@@ -16,7 +16,7 @@ const voicemailTestCases = [
     new CallTestCase(
       CallType.OUTGOING,
       1,
-      Frequency.once_Every_Two_Weeks,
+      Frequency.onceEveryTwoWeeks,
       -15,
       1,
     ),
@@ -25,7 +25,7 @@ const voicemailTestCases = [
     new CallTestCase(
       CallType.OUTGOING,
       1,
-      Frequency.once_Every_Two_Weeks,
+      Frequency.onceEveryTwoWeeks,
       -14,
       1,
     ),
@@ -34,7 +34,7 @@ const voicemailTestCases = [
     new CallTestCase(
       CallType.OUTGOING,
       1,
-      Frequency.once_Every_Two_Weeks,
+      Frequency.onceEveryTwoWeeks,
       -13,
       1,
     ),
@@ -43,7 +43,7 @@ const voicemailTestCases = [
     new CallTestCase(
       CallType.OUTGOING,
       1,
-      Frequency.once_Every_Two_Weeks,
+      Frequency.onceEveryTwoWeeks,
       -3,
       1,
     ),
@@ -52,7 +52,7 @@ const voicemailTestCases = [
     new CallTestCase(
       CallType.OUTGOING,
       1,
-      Frequency.once_Every_Two_Weeks,
+      Frequency.onceEveryTwoWeeks,
       -2,
       1,
     ),
@@ -61,7 +61,7 @@ const voicemailTestCases = [
     new CallTestCase(
       CallType.OUTGOING,
       1,
-      Frequency.once_Every_Two_Weeks,
+      Frequency.onceEveryTwoWeeks,
       -1.9,
       0,
     ),
@@ -70,7 +70,7 @@ const voicemailTestCases = [
     new CallTestCase(
       CallType.OUTGOING,
       1,
-      Frequency.once_Every_Two_Weeks,
+      Frequency.onceEveryTwoWeeks,
       -1,
       0,
     ),
@@ -80,7 +80,7 @@ const voicemailTestCases = [
     new CallTestCase(
       CallType.INCOMING,
       1,
-      Frequency.once_Every_Two_Weeks,
+      Frequency.onceEveryTwoWeeks,
       -21,
       1,
     ),
@@ -89,7 +89,7 @@ const voicemailTestCases = [
     new CallTestCase(
       CallType.INCOMING,
       1,
-      Frequency.once_Every_Two_Weeks,
+      Frequency.onceEveryTwoWeeks,
       -7,
       1,
     ),
@@ -98,7 +98,7 @@ const voicemailTestCases = [
     new CallTestCase(
       CallType.INCOMING,
       1,
-      Frequency.once_Every_Two_Weeks,
+      Frequency.onceEveryTwoWeeks,
       -3,
       1,
     ),
@@ -107,7 +107,7 @@ const voicemailTestCases = [
     new CallTestCase(
       CallType.INCOMING,
       1,
-      Frequency.once_Every_Two_Weeks,
+      Frequency.onceEveryTwoWeeks,
       -2,
       1,
     ),
@@ -116,7 +116,7 @@ const voicemailTestCases = [
     new CallTestCase(
       CallType.INCOMING,
       1,
-      Frequency.once_Every_Two_Weeks,
+      Frequency.onceEveryTwoWeeks,
       -1,
       1,
     ),

@@ -2,18 +2,25 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { IObservableArray, observable, runInAction } from 'mobx';
 import Sentry, { SentrySeverity } from 'react-native-sentry';
 import RRule from 'rrule';
-import { Call, DateItem, Person } from '../Types';
-import { defaultReminder } from './Constants';
+import { Call, DateItem, Person } from '../../Types';
+import { defaultReminder } from './../Constants';
 
-export class Store {
+export interface PeopleStore {
+  people: IObservableArray<Person>;
+  add(person: Person): void;
+  remove(person: Person): void;
+  find(personName: string): Person | undefined;
+  findIndex(person: Person): number;
+  update(person: Person, properties: object): void;
+}
+
+export class PeopleStoreImpl implements PeopleStore {
+  private static storageKey = 'people';
+
   public people = (observable([]) as unknown) as IObservableArray<Person>;
-  public settings = observable({
-    isPremium: true,
-    userIdAmazon: '',
-  });
 
   constructor() {
-    AsyncStorage.getItem('people').then((data) => {
+    AsyncStorage.getItem(PeopleStoreImpl.storageKey).then((data) => {
       if (data) {
         runInAction(() => {
           this.people.replace(
@@ -39,7 +46,9 @@ export class Store {
               }
 
               if (key === 'reminders') {
-                const reminders = value.map((item) => new RRule(item.origOptions));
+                const reminders = value.map(
+                  (item) => new RRule(item.origOptions),
+                );
 
                 return reminders;
               }
@@ -54,14 +63,6 @@ export class Store {
               person.reminders = observable(defaultReminder);
             }
           });
-        });
-      }
-    });
-
-    AsyncStorage.getItem('settings').then((data) => {
-      if (data) {
-        runInAction(() => {
-          this.settings = observable(JSON.parse(data));
         });
       }
     });
@@ -121,21 +122,7 @@ export class Store {
     });
   }
 
-  public setIsPremium = (isPremium: boolean): void => {
-    this.settings.isPremium = isPremium;
-
-    this.save();
-  }
-
-  public setUserIdAmazon = (userIdAmazon: string): void => {
-    this.settings.userIdAmazon = userIdAmazon;
-
-    this.save();
-  }
-
   private save = (): void => {
-    AsyncStorage.setItem('people', JSON.stringify(this.people.toJS()));
-
-    AsyncStorage.setItem('settings', JSON.stringify(this.settings));
+    AsyncStorage.setItem(PeopleStoreImpl.storageKey, JSON.stringify(this.people));
   }
 }

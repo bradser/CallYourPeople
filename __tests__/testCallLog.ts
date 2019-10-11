@@ -452,7 +452,7 @@ export default [
   },
   {
     phoneNumber: '-1',
-// tslint:disable-next-line: object-literal-sort-keys
+    // tslint:disable-next-line: object-literal-sort-keys
     callDate: '1543003777065',
     callDuration: '0',
     callDayTime: 'Fri Nov 23 15:09:37 EST 2018',

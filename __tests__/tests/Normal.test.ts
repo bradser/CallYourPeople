@@ -7,7 +7,7 @@ const normalTestCases = [
     new CallTestCase(
       CallType.OUTGOING,
       5,
-      Frequency.once_Every_Two_Weeks,
+      Frequency.onceEveryTwoWeeks,
       -21,
       1,
     ),
@@ -16,7 +16,7 @@ const normalTestCases = [
     new CallTestCase(
       CallType.OUTGOING,
       5,
-      Frequency.once_Every_Two_Weeks,
+      Frequency.onceEveryTwoWeeks,
       -7,
       0,
     ),
@@ -25,7 +25,7 @@ const normalTestCases = [
     new CallTestCase(
       CallType.INCOMING,
       5,
-      Frequency.once_Every_Two_Weeks,
+      Frequency.onceEveryTwoWeeks,
       -21,
       1,
     ),
@@ -34,7 +34,7 @@ const normalTestCases = [
     new CallTestCase(
       CallType.INCOMING,
       5,
-      Frequency.once_Every_Two_Weeks,
+      Frequency.onceEveryTwoWeeks,
       -7,
       0,
     ),

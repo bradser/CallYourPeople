@@ -7,7 +7,7 @@ const edgeTestCases = [
     new CallTestCase(
       CallType.INCOMING,
       5,
-      Frequency.once_Every_Two_Weeks,
+      Frequency.onceEveryTwoWeeks,
       -15,
       1,
     ),
@@ -16,7 +16,7 @@ const edgeTestCases = [
     new CallTestCase(
       CallType.INCOMING,
       5,
-      Frequency.once_Every_Two_Weeks,
+      Frequency.onceEveryTwoWeeks,
       -14,
       1,
     ),
@@ -25,7 +25,7 @@ const edgeTestCases = [
     new CallTestCase(
       CallType.INCOMING,
       5,
-      Frequency.once_Every_Two_Weeks,
+      Frequency.onceEveryTwoWeeks,
       -13,
       0,
     ),
@@ -34,7 +34,7 @@ const edgeTestCases = [
     new CallTestCase(
       CallType.OUTGOING,
       5,
-      Frequency.once_Every_Two_Weeks,
+      Frequency.onceEveryTwoWeeks,
       -15,
       1,
     ),
@@ -43,7 +43,7 @@ const edgeTestCases = [
     new CallTestCase(
       CallType.OUTGOING,
       5,
-      Frequency.once_Every_Two_Weeks,
+      Frequency.onceEveryTwoWeeks,
       -14,
       1,
     ),
@@ -52,7 +52,7 @@ const edgeTestCases = [
     new CallTestCase(
       CallType.OUTGOING,
       5,
-      Frequency.once_Every_Two_Weeks,
+      Frequency.onceEveryTwoWeeks,
       -13,
       0,
     ),

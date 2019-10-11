@@ -1,10 +1,14 @@
 {
   "defaultSeverity": "error",
-  "extends": ["tslint:recommended"],
+  "extends": ["tslint:recommended", "tslint:latest", "tslint-react"],
   "jsRules": {},
   "rules": {
     "interface-name": [true, "never-prefix"],
-    "quotemark": [true, "single", "avoid-escape"]
+    "quotemark": [true, "single", "avoid-escape"],
+    "variable-name": [
+      true,
+      "allow-leading-underscore"
+    ]
   },
   "rulesDirectory": []
 }

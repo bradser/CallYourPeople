@@ -2,17 +2,17 @@ import { inject, observer } from 'mobx-react';
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import { defaultReminder } from '../../lib/Constants';
-import { Store } from '../../lib/Store';
+import { PeopleStore } from '../../lib/store/People';
 import { CypRRule, Person, SelectedItem } from '../../Types';
 import ItemsPicker from '../ItemsPicker';
 import ModalDialog from './ModalDialog';
 
 interface Props {
-  store?: Store;
+  peopleStore?: PeopleStore;
   person: Person;
 }
 
-export default inject('store')(
+export default inject('peopleStore')(
   observer(
     class RemindersPicker extends Component<Props> {
       private modalDialog: ModalDialog | null = null;
@@ -68,7 +68,7 @@ export default inject('store')(
           reminders = defaultReminder;
         }
 
-        this.props.store!.update(this.props.person, {
+        this.props.peopleStore!.update(this.props.person, {
           reminders,
         });
       }

@@ -53,7 +53,7 @@ export class FremiumTestCase {
   }
 }
 
-export class FetchIntervalLogicTestCase {
+export class RemindIntervalLogicTestCase {
   constructor(
     public now: Date,
     public hoursLeftTillCallNeeded: number,

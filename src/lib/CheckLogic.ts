@@ -1,6 +1,6 @@
 import moment from 'moment';
 import Sentry from 'react-native-sentry';
-import { Call, CallType, FrequencyMap, Person } from '../Types';
+import { Call, CallType, FREQUENCY_MAP, Person } from '../Types';
 
 export default class CheckLogic {
   private static VOICEMAIL_LENGTH = 2 * 60;
@@ -35,7 +35,7 @@ export default class CheckLogic {
       return 0;
     }
 
-    const frequencyDays = FrequencyMap.get(person.frequency)!.value;
+    const frequencyDays = FREQUENCY_MAP.get(person.frequency)!.value;
 
     return frequencyDays + daysSince;
   }

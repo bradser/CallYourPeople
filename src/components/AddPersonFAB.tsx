@@ -8,15 +8,17 @@ import { cypGreen, defaultReminder, materialUILayout } from '../lib/Constants';
 import Contacts from '../lib/Contacts';
 import Format from '../lib/Format';
 import Fremium from '../lib/Fremium';
-import { Store } from '../lib/Store';
+import { PeopleStore } from '../lib/store/People';
+import { SettingsStore } from '../lib/store/Settings';
 import { Frequency, Person } from '../Types';
 
 interface Props extends NavigationInjectedProps {
+  peopleStore?: PeopleStore;
+  settingsStore?: SettingsStore;
   onPress: (person: Person) => void;
-  store?: Store;
 }
 
-export default inject('store')(
+export default inject('peopleStore', 'settingsStore')(
   class AddPersonFAB extends PureComponent<Props> {
     private format = new Format();
 
@@ -34,7 +36,7 @@ export default inject('store')(
     }
 
     private fremiumAddPerson = async (): Promise<any> => {
-      const fremium = new Fremium(this.props.store!);
+      const fremium = new Fremium(this.props.peopleStore!, this.props.settingsStore!);
 
       if (fremium.canAddContacts()) {
         this.addPerson();
@@ -54,7 +56,7 @@ export default inject('store')(
 
           const newPerson = new Person(
             this.formatPhones(selectedContact),
-            Frequency.once_A_Week,
+            Frequency.onceAWeek,
             [],
             [],
             [],

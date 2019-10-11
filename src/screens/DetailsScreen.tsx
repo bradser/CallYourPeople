@@ -13,25 +13,27 @@ import DeletePersonButton from '../components/DeletePersonButton';
 import RemindersPicker from '../components/RemindersPicker';
 import RemoveCallsPicker from '../components/RemoveCallsPicker';
 import { cypGreen, materialUILayout } from '../lib/Constants';
-import { fremiumCheckedLaunchContact as fremiumCheckedLaunchContact } from '../lib/Helpers';
-import { Store } from '../lib/Store';
-import { Call, DetailsNavigationProps, FrequencyMap, Person } from '../Types';
+import { fremiumCheckedLaunchContact } from '../lib/Helpers';
+import { PeopleStore } from '../lib/store/People';
+import { SettingsStore } from '../lib/store/Settings';
+import { Call, DetailsNavigationProps, FREQUENCY_MAP, Person } from '../Types';
 
 interface Props extends NavigationInjectedProps<DetailsNavigationProps> {
-  store?: Store;
+  peopleStore?: PeopleStore;
+  settingsStore?: SettingsStore;
 }
 
-export default inject('store')(
+export default inject('peopleStore', 'settingsStore')(
   observer(
     class DetailsScreen extends Component<Props> {
       public static navigationOptions = ({ navigation }) => {
+        const goBack = (): void => {
+          navigation.goBack();
+        };
+
         return {
           headerLeft: (
-            <IconButton
-              onPress={() => navigation.goBack()}
-              icon='arrow-left'
-              size={20}
-            />
+            <IconButton onPress={goBack} icon='arrow-left' size={20} />
           ),
           headerStyle: { backgroundColor: cypGreen },
           title: 'Details',
@@ -54,7 +56,7 @@ export default inject('store')(
       public render() {
         // May be null upon delete
         const person =
-          this.contact && this.props.store!.find(this.contact.name);
+          this.contact && this.props.peopleStore!.find(this.contact.name);
 
         return person ? (
           <ScrollView style={styles.scrollView}>
@@ -67,7 +69,7 @@ export default inject('store')(
             </TouchableOpacity>
             <CypMenu
               title={'Frequency:'}
-              labels={Array.from(FrequencyMap).map((value) => value[1].text)}
+              labels={Array.from(FREQUENCY_MAP).map((value) => value[1].text)}
               selectedIndex={person.frequency.valueOf()}
               onSelect={this.frequencyOnSelect(person)}
             />
@@ -94,19 +96,22 @@ export default inject('store')(
       private divider = () => <Divider style={styles.divide} />;
 
       private launchContact = (person: Person) => (): void => {
-        fremiumCheckedLaunchContact(this.props.store!, person.contact.recordId);
+        fremiumCheckedLaunchContact(
+          this.props.settingsStore!,
+          person.contact.recordId,
+        );
       }
 
       private frequencyOnSelect = (person: Person) => (index: number): void => {
-        this.props.store!.update(person, { frequency: index });
+        this.props.peopleStore!.update(person, { frequency: index });
       }
 
       private saveNote = (person: Person) => (text: string): void => {
-        this.props.store!.update(person, { note: text });
+        this.props.peopleStore!.update(person, { note: text });
       }
 
       private deletePerson = (person: Person): void => {
-        this.props.store!.remove(person);
+        this.props.peopleStore!.remove(person);
 
         this.props.navigation.goBack();
       }

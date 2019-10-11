@@ -15,7 +15,7 @@ export const getLogWithPermissions: GetLogCallback = async () => {
     },
   );
 
-  return granted === PermissionsAndroid.RESULTS.GRANTED ? await getLog() : [];
+  return granted === PermissionsAndroid.RESULTS.GRANTED ? getLog() : [];
 };
 
 export const getLog: GetLogCallback = async () => {

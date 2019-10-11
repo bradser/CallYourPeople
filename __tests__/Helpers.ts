@@ -1,7 +1,14 @@
 import moment from 'moment';
 import { RRuleSet } from 'rrule';
 import AppLogic from '../src/lib/AppLogic';
-import { Call, CallType, DateItem, Frequency, NotifyPerson, Person } from '../src/Types';
+import {
+  Call,
+  CallType,
+  DateItem,
+  Frequency,
+  NotifyPerson,
+  Person,
+} from '../src/Types';
 
 export const getPerson = (
   name: string,

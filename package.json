@@ -7,7 +7,8 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "test": "jest __tests__/tests",
-    "prettier": "prettier --single-quote --write '**/*.{ts,tsx,.js}'"
+    "prettier": "prettier --single-quote --write '**/*.{ts,tsx,.js}'",
+    "tslint": "tslint -c tslint.json 'src/**/*.ts'"
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.6.1",
@@ -57,7 +58,8 @@
     "react-test-renderer": "16.8.3",
     "regenerator-runtime": "0.13.2",
     "ts-jest": "24.0.2",
-    "tslint": "5.15.0",
+    "tslint": "^5.20.0",
+    "tslint-react": "^4.1.0",
     "typescript": "3.4.3"
   }
 }
