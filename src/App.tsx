@@ -34,8 +34,8 @@ const settingsStore = new SettingsStoreImpl();
 const fremium = new Fremium(peopleStore, settingsStore);
 fremium.initialize().then(() => {
   PushNotification.configure({
-    onNotification: (notification) => {
-      fremiumCheckedLaunchContact(settingsStore, notification.tag);
+    onNotification: async (notification) => {
+      await fremiumCheckedLaunchContact(settingsStore, notification.tag);
     },
   });
 });
@@ -69,7 +69,11 @@ export default class App extends Component {
 
   public render() {
     return (
-      <Provider peopleStore={peopleStore} remindContactsStore={remindContactsStore} settingsStore={settingsStore}>
+      <Provider
+        peopleStore={peopleStore}
+        remindContactsStore={remindContactsStore}
+        settingsStore={settingsStore}
+      >
         <PaperProvider theme={theme}>
           <AppContainer />
         </PaperProvider>

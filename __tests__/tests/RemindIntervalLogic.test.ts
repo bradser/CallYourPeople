@@ -13,10 +13,14 @@ const testCases = [
   new RemindIntervalLogicTestCase(new Date(2019, 9, 23, 16, 0, 0), -28, 2),
 ];
 
+// 12 hour interval
+const previousRemindIntervalMillis = 12 * 60 * 60 * 1000;
+
 testCases.forEach((testCase, index) => {
   it(`case #${index}`, () => {
     const intervals = new RemindIntervalLogic().getRemindIntervals(
       moment(testCase.now),
+      previousRemindIntervalMillis,
       [
         {
           daysLeftTillCallNeeded: testCase.hoursLeftTillCallNeeded / 24,
@@ -35,6 +39,7 @@ testCases.forEach((testCase, index) => {
 it(`case skip to next interval`, () => {
   const intervals = new RemindIntervalLogic().getRemindIntervals(
     moment(new Date(2019, 9, 23, 6, 30, 0)),
+    previousRemindIntervalMillis,
     [
       {
         daysLeftTillCallNeeded: -2 / 24,

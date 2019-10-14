@@ -1,21 +1,32 @@
 import { PermissionsAndroid } from 'react-native';
 import CallLogs from 'react-native-call-log';
+import Sentry from 'react-native-sentry';
 import Format from '../lib/Format';
 import { Call, GetLogCallback } from '../Types';
 
-export const getLogWithPermissions: GetLogCallback = async () => {
-  const granted = await PermissionsAndroid.request(
-    PermissionsAndroid.PERMISSIONS.READ_CALL_LOG,
-    {
-      buttonPositive: 'Ok',
-      message:
-        'Call Your People needs access to your call log ' +
-        'so it can tell you when to call.',
-      title: 'Call Your People Call Log Permission',
-    },
-  );
+export const getLogWithPermissions: GetLogCallback = async (): Promise<
+  Call[]
+> => {
+  try {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.READ_CALL_LOG,
+      {
+        buttonPositive: 'Ok',
+        message:
+          'Call Your People needs access to your call log ' +
+          'so it can tell you who and when to call.',
+        title: 'Call Your People Call Log Permission',
+      },
+    );
 
-  return granted === PermissionsAndroid.RESULTS.GRANTED ? getLog() : [];
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      return await getLog();
+    }
+  } catch (error) {
+    Sentry.captureException(error);
+  }
+
+  return [];
 };
 
 export const getLog: GetLogCallback = async () => {

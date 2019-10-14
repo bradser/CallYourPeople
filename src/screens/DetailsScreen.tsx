@@ -93,7 +93,7 @@ export default inject('peopleStore', 'settingsStore')(
         ) : null;
       }
 
-      private divider = () => <Divider style={styles.divide} />;
+      private divider = (): React.ReactNode => <Divider style={styles.divide} />;
 
       private launchContact = (person: Person) => (): void => {
         fremiumCheckedLaunchContact(

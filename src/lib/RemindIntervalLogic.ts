@@ -5,6 +5,7 @@ import { NotifyPerson } from '../Types';
 export default class RemindIntervalLogic {
   public getRemindIntervals = (
     now: moment.Moment,
+    previousIntervalMillis: number,
     notifyPeople: NotifyPerson[],
   ): number[] => {
     const intervals = notifyPeople.map((notifyPerson) => {
@@ -12,6 +13,7 @@ export default class RemindIntervalLogic {
 
       const nextNotificationInterval = this.getNextNotificationInterval(
         now,
+        previousIntervalMillis,
         notifyPerson,
         compareMoment,
       );
@@ -29,6 +31,7 @@ export default class RemindIntervalLogic {
 
   private getNextNotificationInterval = (
     now: moment.Moment,
+    previousIntervalMillis: number,
     notifyPerson: NotifyPerson,
     compareMoment: moment.Moment,
   ): number => {
@@ -50,24 +53,38 @@ export default class RemindIntervalLogic {
 
     const nextDates = ruleSet.all();
 
-    const nextInterval = this.getNextIntervalFromDates(now, nextDates);
+    const nextInterval = this.getNextIntervalFromDates(
+      now,
+      previousIntervalMillis,
+      nextDates,
+    );
 
     return nextInterval;
   }
 
-  private getNextIntervalFromDates = (now: moment.Moment, nextDates: Date[]): number => {
+  private getNextIntervalFromDates = (
+    now: moment.Moment,
+    previousIntervalMillis: number,
+    nextDates: Date[],
+  ): number => {
     let nextInterval = this.getIntervalFromDate(now, nextDates[0]);
 
-    // If we are within 5% of the 12 hours (36) minutes, interval is too short, so skip to the next interval.
-    // 5% of the specified period is the flex time that the JobScheduler uses.
-    if (nextInterval <= 40) {
+    const fivePercentMinutes =
+      Math.ceil(previousIntervalMillis / 1000 / 60 / 20) + 1;
+
+    // If we are within 5% of the interval, interval is too short, so skip to the next interval.
+    // 5% of the specified interval is the flex time that the JobScheduler uses.
+    if (nextInterval <= fivePercentMinutes) {
       nextInterval = this.getIntervalFromDate(now, nextDates[1]);
     }
 
     return nextInterval;
   }
 
-  private getIntervalFromDate = (now: moment.Moment, nextDate: Date): number => {
+  private getIntervalFromDate = (
+    now: moment.Moment,
+    nextDate: Date,
+  ): number => {
     // Conversion due to https://github.com/jakubroztocil/rrule#important-use-utc-dates
     const convertedNext = new Date(
       nextDate.getUTCFullYear(),

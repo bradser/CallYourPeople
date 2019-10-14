@@ -29,11 +29,12 @@ import Link from '../components/Link';
 import Table from '../components/Table';
 import { getLogWithPermissions } from '../lib/CallLog';
 import Fremium from '../lib/Fremium';
+import { fremiumCheckedLaunchContact } from '../lib/Helpers';
 import NotificationScheduler from '../lib/NotificationScheduler';
 import { PeopleStore } from '../lib/store/People';
 import { RemindContactsStore } from '../lib/store/RemindContacts';
 import { SettingsStore } from '../lib/store/Settings';
-import { Call, NotifyCallback, NotifyPerson, Person } from '../Types';
+import { Call, NotifyPerson, Person } from '../Types';
 import { cypGreen, materialUILayout } from './../lib/Constants';
 
 interface Props extends NavigationInjectedProps {
@@ -109,13 +110,12 @@ export default inject('peopleStore', 'remindContactsStore', 'settingsStore')(
       }
 
       public componentDidMount() {
-        // If we are being launched by a notification, don't checkAndNotify,
-        // otherwise we may generate a new notification to replace
-        // the one that just launched the app.
         PushNotification.showInitialNotification((result) => {
-          result ? this.check() : this.checkAndNotify();
-
           PushNotification.appStart();
+
+          result
+            ? fremiumCheckedLaunchContact(this.props.settingsStore!, result.tag)
+            : this.runAppLogic();
         });
       }
 
@@ -147,7 +147,7 @@ export default inject('peopleStore', 'remindContactsStore', 'settingsStore')(
       private handleBack = (payload: NavigationEventPayload): void => {
         // An actual 'back', vs. other navigation.
         if (payload.action.type === 'Navigation/COMPLETE_TRANSITION') {
-          this.check();
+          this.runAppLogic();
         }
       }
 
@@ -231,23 +231,13 @@ export default inject('peopleStore', 'remindContactsStore', 'settingsStore')(
         />
       )
 
-      private check = async (): Promise<void> =>
-        this.runAppLogic(() => undefined)
-
-      private checkAndNotify = async (): Promise<void> =>
-        this.runAppLogic((details) =>
-          PushNotification.localNotification(details),
-        )
-
-      private runAppLogic = async (
-        notificationCallback: NotifyCallback,
-      ): Promise<void> => {
+      private runAppLogic = async (): Promise<void> => {
         const log = await getLogWithPermissions();
 
         const notifyPeople = await new NotificationScheduler(
           this.props.peopleStore!,
           this.props.remindContactsStore!,
-          notificationCallback,
+          () => undefined,
         ).setReminders(moment(), log);
 
         this.initializeTabIndex(notifyPeople);
@@ -258,7 +248,7 @@ export default inject('peopleStore', 'remindContactsStore', 'settingsStore')(
       private addPerson = (person: Person): void => {
         this.props.peopleStore!.add(person);
 
-        this.check();
+        this.runAppLogic();
       }
 
       private fremiumUpgrade = (): void => {

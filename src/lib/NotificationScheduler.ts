@@ -52,28 +52,31 @@ export default class NotificationScheduler {
       log,
     );
 
-    const fetchIntervals = new RemindIntervalLogic().getRemindIntervals(
+    const previousRemindIntervalMillis = await NativeModules.Ads.getJobsIntervalMillis();
+
+    const fetchIntervals = await new RemindIntervalLogic().getRemindIntervals(
       now,
+      previousRemindIntervalMillis,
       notifyPeople,
     );
 
-    const minimumFetchInterval = this.getMinimumFetchInterval(fetchIntervals);
+    const minimumRemindInterval = this.getMinimumRemindInterval(fetchIntervals);
 
     this.remindContactsStore.remindContacts = notifyPeople
       .filter(
-        (notifyPerson, index) => fetchIntervals[index] === minimumFetchInterval,
+        (notifyPerson, index) => fetchIntervals[index] === minimumRemindInterval,
       )
       .map((notifyPerson) => notifyPerson.person.contact);
 
-    NativeModules.Ads.getJobsIntervalMillis().then((millis) => {
-      Sentry.captureMessage(
-        millis / 1000 / 60 +
-          ' - ' +
-          this.remindContactsStore.remindContacts.map((contact) => contact.name),
-      );
-    });
+    Sentry.captureMessage(
+      previousRemindIntervalMillis / 1000 / 60 +
+        ' - ' +
+        minimumRemindInterval +
+        ' - ' +
+        this.remindContactsStore.remindContacts.map((contact) => contact.name),
+    );
 
-    this.handleBackgroundConfiguration(minimumFetchInterval);
+    this.handleBackgroundConfiguration(minimumRemindInterval);
 
     return notifyPeople;
   }
@@ -81,7 +84,7 @@ export default class NotificationScheduler {
   // Pin to MAX_SAFE_INTEGER so that if the user has deleted all their contacts
   // from CYP!, we 'disable' the background task by setting the period to a large number
   // (as there is no way to cancel it)
-  private getMinimumFetchInterval = (fetchIntervals: number[]): number =>
+  private getMinimumRemindInterval = (fetchIntervals: number[]): number =>
     Math.min(...fetchIntervals, Number.MAX_SAFE_INTEGER)
 
   private handleBackgroundConfiguration = (

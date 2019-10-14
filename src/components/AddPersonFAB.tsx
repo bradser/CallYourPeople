@@ -5,7 +5,7 @@ import { FAB } from 'react-native-paper';
 import { Contact } from 'react-native-select-contact';
 import { NavigationInjectedProps } from 'react-navigation';
 import { cypGreen, defaultReminder, materialUILayout } from '../lib/Constants';
-import Contacts from '../lib/Contacts';
+import Contacts, { chooseContactWithPermissions } from '../lib/Contacts';
 import Format from '../lib/Format';
 import Fremium from '../lib/Fremium';
 import { PeopleStore } from '../lib/store/People';
@@ -35,38 +35,41 @@ export default inject('peopleStore', 'settingsStore')(
       );
     }
 
-    private fremiumAddPerson = async (): Promise<any> => {
-      const fremium = new Fremium(this.props.peopleStore!, this.props.settingsStore!);
+    private fremiumAddPerson = async (): Promise<void> => {
+      const fremium = new Fremium(
+        this.props.peopleStore!,
+        this.props.settingsStore!,
+      );
 
       if (fremium.canAddContacts()) {
-        this.addPerson();
+        await this.addPerson();
       } else {
         await fremium.upgrade();
       }
     }
 
-    private addPerson = (): void => {
-      Contacts().then((selectedContact) => {
-        if (selectedContact) {
-          if (!selectedContact.phones || selectedContact.phones.length === 0) {
-            Alert.alert('This contact has no phone number.');
+    private addPerson = async (): Promise<void> => {
+      const selectedContact = await chooseContactWithPermissions();
 
-            return;
-          }
+      if (selectedContact) {
+        if (!selectedContact.phones || selectedContact.phones.length === 0) {
+          Alert.alert('This contact has no phone number.');
 
-          const newPerson = new Person(
-            this.formatPhones(selectedContact),
-            Frequency.onceAWeek,
-            [],
-            [],
-            [],
-            '',
-            defaultReminder,
-          );
-
-          this.props.onPress(newPerson);
+          return;
         }
-      });
+
+        const newPerson = new Person(
+          this.formatPhones(selectedContact),
+          Frequency.onceAWeek,
+          [],
+          [],
+          [],
+          '',
+          defaultReminder,
+        );
+
+        this.props.onPress(newPerson);
+      }
     }
 
     private formatPhones = (contact: Contact): Contact => {
