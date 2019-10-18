@@ -9,7 +9,6 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import DeviceInfo from 'react-native-device-info';
 import { Button, Text } from 'react-native-paper';
 import PushNotification from 'react-native-push-notification-ce';
 import {
@@ -36,6 +35,7 @@ import { RemindContactsStore } from '../lib/store/RemindContacts';
 import { SettingsStore } from '../lib/store/Settings';
 import { Call, NotifyPerson, Person } from '../Types';
 import { cypGreen, materialUILayout } from './../lib/Constants';
+import DevAlert from '../components/DevAlert';
 
 interface Props extends NavigationInjectedProps {
   peopleStore?: PeopleStore;
@@ -53,20 +53,7 @@ export default inject('peopleStore', 'remindContactsStore', 'settingsStore')(
     class HomeScreen extends Component<Props, State> {
       public static navigationOptions = ({ navigation }) => {
         const hiddenDevAlert = (): void => {
-          let output = `Device ID: ${DeviceInfo.getUniqueID()
-            .toLocaleUpperCase()
-            .match(/.{1,3}/g)!
-            .join('-')}`;
-
-          const userIdAmazon = (navigation.getParam(
-            'settingsStore',
-          ) as SettingsStore).userIdAmazon;
-
-          if (userIdAmazon) {
-            output += `\n\nAmazon User ID: ${userIdAmazon}`;
-          }
-
-          Alert.alert('IDs', output);
+          DevAlert(navigation);
         };
 
         return {

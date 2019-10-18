@@ -114,8 +114,8 @@ android {
         applicationId "com.poseablesoftware.callyourpeople"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 7
-        versionName "0.96"
+        versionCode 8
+        versionName "0.97"
         flavorDimensions "all"
         productFlavors {
             amazon {

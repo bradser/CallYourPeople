@@ -97,7 +97,13 @@ export default class Fremium {
     let userData;
     try {
       userData = await RNIap.getUserData();
-    } catch (error) {}
+    } catch (error) {
+      if (error.code === 'E_BILLING_RESPONSE_JSON_PARSE_ERROR') {
+        return true;
+      } else {
+        Sentry.captureException(error);
+      }
+    }
 
     return Boolean(userData);
   }

@@ -40,19 +40,20 @@ export default class NotificationScheduler {
   ): Promise<void> => {
     this.handleNotifications(this.remindContactsStore.remindContacts);
 
-    await this.setReminders(now, log);
+    const previousRemindIntervalMillis = await NativeModules.Ads.getJobsIntervalMillis();
+
+    await this.setReminders(now, log, previousRemindIntervalMillis);
   }
 
   public setReminders = async (
     now: moment.Moment,
     log: Call[],
+    previousRemindIntervalMillis: number = 0,
   ): Promise<NotifyPerson[]> => {
     const notifyPeople = await new AppLogic(now).checkCallLog(
       this.peopleStore.people,
       log,
     );
-
-    const previousRemindIntervalMillis = await NativeModules.Ads.getJobsIntervalMillis();
 
     const fetchIntervals = await new RemindIntervalLogic().getRemindIntervals(
       now,
@@ -73,7 +74,9 @@ export default class NotificationScheduler {
         ' - ' +
         minimumRemindInterval +
         ' - ' +
-        this.remindContactsStore.remindContacts.map((contact) => contact.name),
+        this.remindContactsStore.remindContacts.map((contact) => contact.name), {
+          level: 'debug',
+        },
     );
 
     this.handleBackgroundConfiguration(minimumRemindInterval);

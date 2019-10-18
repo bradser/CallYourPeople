@@ -1,15 +1,29 @@
 package com.poseablesoftware.callyourpeople;
 
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.Context;
+
 import com.amazon.device.ads.Ad;
 import com.amazon.device.ads.AdError;
 import com.amazon.device.ads.AdProperties;
 import com.amazon.device.ads.AdRegistration;
 import com.amazon.device.ads.DefaultAdListener;
 import com.amazon.device.ads.InterstitialAd;
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.NativeArray;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableNativeArray;
+import com.facebook.react.bridge.WritableMap;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class AdsModule extends ReactContextBaseJavaModule {
     private static ReactApplicationContext reactContext;
@@ -38,6 +52,20 @@ public class AdsModule extends ReactContextBaseJavaModule {
         this.interstitialAd.setListener(new MyCustomAdListener(promise));
 
         this.interstitialAd.loadAd();
+    }
+
+    @ReactMethod
+    public void getJobsIntervalMillis(Promise promise) {
+        final JobScheduler jobScheduler = (JobScheduler) reactContext.getSystemService(reactContext.JOB_SCHEDULER_SERVICE);
+
+        for (JobInfo jobInfo : jobScheduler.getAllPendingJobs()) {
+            if (jobInfo.getId() == 999) {
+                promise.resolve((int) jobInfo.getIntervalMillis());
+                return;
+            }
+        }
+
+        promise.resolve(null);
     }
 
     class MyCustomAdListener extends DefaultAdListener {
