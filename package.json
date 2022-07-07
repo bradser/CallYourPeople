@@ -9,7 +9,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "moment": "^2.22.2",
+    "moment": "^2.29.4",
     "react": "16.6.1",
     "react-native": "0.57.5",
     "react-native-background-task": "^0.2.1",
